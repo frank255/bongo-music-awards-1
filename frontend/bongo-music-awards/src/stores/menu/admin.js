@@ -11,6 +11,10 @@ export const useAdminStore = defineStore("admin", {
           icon: "mdi-calendar",
           text: "Events & Awards",
           path: "/admin/eventsandawards",
+        },{
+          icon: "mdi-vote",
+          text: "Votes",
+          path: "/admin/votes",
         }, {
           icon: "mdi-account-group",
           text: "Users",
