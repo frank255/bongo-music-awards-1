@@ -11,7 +11,7 @@
       <q-icon
         color="primary"
         class="q-mr-md"
-        name="mdi-account-group"
+        name="mdi-source-branch"
         size="2rem"
       />
     </div>
