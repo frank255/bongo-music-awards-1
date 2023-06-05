@@ -56,40 +56,93 @@
             </q-icon>
           </template>
         </q-input>
+        <q-stepper-navigation>
+          <q-btn color="primary" label="Continue" @click="addStep()" />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step :done="STEP > 2" :name="2" prefix="2" title="Genre">
-        <div class="text-sm text-red text-bold">*If genres are not available you can add them bellow</div>
-        <q-input
-          v-model="addEvent.id_number"
-          class="q-ma-lg"
-          dense
-          label="Add new genres"
-          outlined
-        />
-        <div class="text-sm text-green text-bold">*You can apply all genres bellow or modify as you need</div>
-
-        <q-banner inline-actions  v-if="genre_data != ''" :genres_data="genresData" class="q-ml-xs q-mt-md bordered">
-          <div>
-            <q-chip
-              v-for="(genre, index) in genre_data"
-              :key="index"
-              :label="genre"
-              class="chip-margin"
-              color="primary"
-              removable
-              outlined
-            />
+        <q-banner
+          inline-actions
+          v-if="genre_data != ''"
+          class="q-ml-xs q-mt-md bordered"
+        >
+          <div class="text-sm text-green text-bold">
+            *Genre suggestions, select all that apply by clicking X
           </div>
-          <template v-slot:action>
+          <q-chip
+            v-for="(genre, index) in genre_data"
+            :key="index"
+            :label="genre"
+            class="chip-margin"
+            color="primary"
+            removable
+            @remove="handleRemove(genre)"
+            outlined
+          />
+
+          <!-- <template v-slot:action>
             <q-btn
               class="text-capitalize"
               color="primary"
               label="add genres"
               @click="addGenres()"
             />
-          </template>
+          </template> -->
         </q-banner>
+        <div class="text-sm text-red q-pa-lg text-bold">
+          *If genres are not available you can add them bellow
+        </div>
+        <div class="row flex justify-center q-gutter-x-sm">
+          <q-input
+            v-model="newGenre"
+            style="width: 85%"
+            dense
+            label="Add new genres"
+            outlined
+          />
+          <q-btn
+            label="Add Genre"
+            color="primary"
+            class="text-capitalize"
+            @click="removeOrAddChip"
+          ></q-btn>
+        </div>
+        <q-banner
+          inline-actions
+          v-if="selected_genres != ''"
+          class="q-ml-xs q-mt-md bordered"
+        >
+          <div class="text-sm text-green text-bold">*selected genres</div>
+          <q-chip
+            v-for="(genre, index) in selected_genres"
+            :key="index"
+            :label="genre"
+            class="chip-margin"
+            color="primary"
+            outlined
+          />
+
+          <!-- <template v-slot:action>
+            <q-btn
+              class="text-capitalize"
+              color="primary"
+              label="add genres"
+              @click="addGenres()"
+            />
+          </template> -->
+        </q-banner>
+        <q-stepper-navigation>
+          <q-btn color="primary" label="Continue" @click="eventSubmit()" />
+          <q-btn
+            v-if="STEP > 1"
+            class="q-ml-sm"
+            color="primary"
+            flat
+            label="Back"
+            @click="$refs.stepper.previous()"
+          />
+        </q-stepper-navigation>
       </q-step>
 
       <q-step :name="3" prefix="3" title="Categories">
@@ -105,7 +158,9 @@
             outlined
           />
         </div>
-        <div class="text-sm text-red text-bold">*If categories are not available you can add them bellow</div>
+        <div class="text-sm text-red text-bold">
+          *If categories are not available you can add them bellow
+        </div>
         <q-input
           v-model="addEvent.id_number"
           class="q-ma-lg"
@@ -113,9 +168,16 @@
           label="Add new categories"
           outlined
         />
-        <div class="text-sm text-green text-bold">*You can apply all categories bellow or modify as you need</div>
+        <div class="text-sm text-green text-bold">
+          *You can apply all categories bellow or modify as you need
+        </div>
 
-        <q-banner inline-actions  v-if="category_data != ''" :categories_data="categoriesData" class="q-ml-xs q-mt-md bordered">
+        <q-banner
+          inline-actions
+          v-if="category_data != ''"
+          :categories_data="categoriesData"
+          class="q-ml-xs q-mt-md bordered"
+        >
           <div>
             <q-chip
               v-for="(category, index) in category_data"
@@ -136,18 +198,12 @@
             />
           </template>
         </q-banner>
-      </q-step>
-
-      <template #navigation>
+        <template #navigation>
         <q-stepper-navigation>
           <q-btn
-            ref="continueBtn"
-            :label="STEP === 3 ? 'Finish' : 'Continue'"
+            label="Finish"
             color="primary"
-            @click="
-              $refs.stepper.next();
-              submitUser();
-            "
+            @click="STEP === 3 ? submitCategories() : $refs.stepper.next()"
           />
           <q-btn
             v-if="STEP > 1"
@@ -159,6 +215,7 @@
           />
         </q-stepper-navigation>
       </template>
+      </q-step>
     </q-stepper>
   </q-page>
 </template>
@@ -166,7 +223,8 @@
 <script setup>
 import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
-import { useQuasar } from "quasar";
+import { Notify, useQuasar } from "quasar";
+
 import { useRouter } from "vue-router";
 const router = useRouter();
 const $q = useQuasar();
@@ -176,62 +234,97 @@ const branches = ref([]);
 const addEvent = ref({
   event_name: "",
   event_number: "",
-  profile_image: null,
-  id_type: "",
-  id_img: null,
-  id_number: "",
-  event_date: "2019/02/01",
-  permission: "",
-  branch_id: "",
+  event_date: "",
+  event_genres: [],
 });
-const genre_data = ref(['award of the year', 'album of the year','singeli','bongo fleva'])
-const category_data = ref(['Best artist of the year', 'Best album of the year','Best video of the year'])
+const newGenre = ref("");
+const genre_data = ref([]);
+const selected_genres = ref([]);
+const handleRemove = (genre) => {
+  // remove genre from genres array
+  const index = genre_data.value.indexOf(genre);
+  if (index !== -1) {
+    genre_data.value.splice(index, 1);
+  }
+  // add removed chip to removedChips array
+  selected_genres.value.push(genre);
+  console.log(selected_genres);
+};
+const removeOrAddChip = () => {
+  // find chip with matching name and remove it from chips array
+  const index = genre_data.value.findIndex((genre) => genre === newGenre.value);
+  if (index !== -1) {
+    const selected_genre = genre_data.value.splice(index, 1)[0];
+    // add removed chip to selected_genres array
+    selected_genres.value.push(selected_genre);
+  } else {
+    // create new genre object and add it to  selected_genres array
+    const selected_genre = newGenre.value;
+    selected_genres.value.push(selected_genre);
+  }
+  newGenre.value = ""; // clear input field after removing/adding chip
+};
+const category_data = ref([
+  "Best artist of the year",
+  "Best album of the year",
+  "Best video of the year",
+]);
 const form_data = () => {
   const formData = new FormData();
   formData.append("event_name", addEvent.value.event_name);
   formData.append("event_number", addEvent.value.event_number);
-  formData.append("profile_image", addEvent.value.profile_image);
-  formData.append("id_type", addEvent.value.id_type);
-  formData.append("id_img", addEvent.value.id_img);
-  formData.append("id_number", addEvent.value.id_number);
   formData.append("event_date", addEvent.value.event_date);
-  formData.append("branch_id", addEvent.value.branch_id);
-  formData.append("permission", addEvent.value.permission);
+  formData.append("event_genres", selected_genres.value.event_genres);
   return formData;
 };
 const continueBtn = ref(null);
-const submitUser = async () => {
-  if (continueBtn.value.label === "Finish") {
-    try {
-      const { data } = await api.post("a/users", form_data());
-      router.push("/a/users");
-    } catch (err) {}
-  }
+const addStep = ()=> {
+  STEP.value = 2;
+};
+const eventSubmit = async () => {
+  // try {
+  //   const { data } = await api.post("/events", form_data());
+  //   console.log(data);
+  // } catch (err) {}
+
+  try {
+    const { status, data } = await api.post(
+      "/events",
+      form_data()
+    );
+    // sessionStorage.removeItem("customer_id");
+    // sessionStorage.setItem("customer_id", data.data.customer.customer_id);
+    if (status === 200 && data.status === "Request was successful") {
+      STEP.value = 2;
+    }
+  } catch (error) {
+    Notify.create({
+      type: "negative",
+      message: error.response.data.message,
+    });
+}
 };
 
 const roles = async () => {
   try {
-    const roles = await api.get("a/roles");
+    const roles = await api.get("/roles");
     rol.value = roles.data.data;
   } catch (error) {}
 };
 
-const getBranches = async () => {
+const getGenres = async () => {
   try {
-    const data = await api.get("a/branches");
-
-    data.data.data.forEach((element) => {
-      branches.value.push({
-        label: element.branch_name,
-        value: element.branch_id,
-      });
-    });
+    const response = await api.get("/genres");
+    const { data } = response;
+    // Extract just the genre names using map() and array destructuring
+    const names = data.data.map(({ genre_name }) => genre_name);
+    genre_data.value = names;
   } catch (error) {}
 };
 
 onMounted(() => {
-  roles();
-  getBranches();
+  // roles();
+  getGenres();
 });
 </script>
 <style lang="scss" scoped></style>
