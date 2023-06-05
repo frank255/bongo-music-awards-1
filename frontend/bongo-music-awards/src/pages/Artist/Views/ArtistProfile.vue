@@ -1,16 +1,148 @@
 <template>
   <q-page padding>
-    <div class="q-my-l q-mt-xl">
-      <q-card class="column relative items-center">
-        <div class="card flex ">
-          <q-avatar size="90px" class="avatar">
-            <img src="https://cdn.quasar.dev/img/avatar.png" />
-          </q-avatar>
-        </div>
-        <div class="text-h6">Ally Kiba</div>
-        <div class="text-bold">Bongo Fleva Artist</div>
-      </q-card>
-    </div>
+    <q-card class="shaddow q-mt-lg q-pa-sm column items-center relative">
+      <div class="card bg-grey-2 flex justify-center items-center">
+        <q-avatar size="90px" class="avatar">
+          <img src="https://cdn.quasar.dev/img/avatar.png" />
+        </q-avatar>
+      </div>
+      <div class="q-mt-xl column flex justify-center items-center">
+        <p class="text-h6">Ally Kiba</p>
+      </div>
+      <div class="q-mt-xs column flex justify-center items-center">
+        <p class="text-subtitle1">Genres | Afropop,R&B,Bongo Flava</p>
+        <p class="text-subtitle2 q-px-xl" style="text-align: center">
+          Ali Saleh Kiba (26 November 1986), best known as Ali Kiba or sometimes
+          King Kiba, is a Tanzanian musician and songwriter. He is from Kigoma
+          and the owner of Kings Music label. According to BASATA Alikiba is one
+          of the most successful Bongo Flava singers and considered the greatest
+          of all time having often been referred to by many contemporaries as
+          the "King of Bongo flava".His musical style has been defined as
+          polyhedric, with his style being characterized by several influences
+          from other genres, mainly Afro pop, R&B and Rhumba. His lyrics develop
+          predominantly over themes of romance, fast life, desire, regret, and
+          emotional conflict. He also collaborated with R. Kelly and other
+          African musicians on the One8 project.In 2017 he became the director
+          of Rockstar4000.
+        </p>
+      </div>
+    </q-card>
+    <q-card class="row shaddow q-mt-sm q-pa-sm justify-between">
+      <div class="q-pa-sm">
+        <p class="text-h6 q-pa-sm">Informations</p>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-phone" />
+            </q-item-section>
+            <q-item-section>Phone</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>+255766830442</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-web" />
+            </q-item-section>
+            <q-item-section>Website</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>www.alikiba.com</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-gmail" />
+            </q-item-section>
+            <q-item-section>Email</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>alikiba@gmail.com</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
+      <div class="q-pa-sm">
+        <p class="text-h6 q-pa-sm">Social Media</p>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-facebook" />
+            </q-item-section>
+            <q-item-section>Facebook</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>Ally Kiba</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-twitter" />
+            </q-item-section>
+            <q-item-section>Twitter</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>@alikiba</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+        <q-list padding>
+          <q-item>
+            <q-item-section avatar>
+              <q-icon color="green" name="mdi-instagram" />
+            </q-item-section>
+            <q-item-section>Instagram</q-item-section>
+            <q-item-section side>
+              <q-item-label caption>@alikiba</q-item-label>
+            </q-item-section>
+          </q-item>
+        </q-list>
+      </div>
+      <div class="q-pa-sm">
+        <p class="text-h6 q-pa-sm">Other Info</p>
+        <q-list padding>
+          <q-item class="column flex">
+            <q-item-section avatar>
+              <div class="row flex">
+                <q-icon
+                  color="green"
+                  size="25px"
+                  class="q-ma-xs"
+                  name="mdi-account-hard-hat"
+                />
+                <p class="text-h6">Occupations</p>
+              </div>
+            </q-item-section>
+            <div class="row flex">
+              <q-chip label="Actor" color="amber" />
+              <q-chip label="Singer" color="amber" />
+              <q-chip label="Director" color="amber" />
+              <q-chip label="Footballer" color="amber" />
+            </div>
+          </q-item>
+          <q-item class="column flex">
+            <q-item-section avatar>
+              <div class="row flex">
+                <q-icon
+                  color="green"
+                  size="35px"
+                  class=""
+                  name="mdi-record-rec"
+                />
+                <p class="text-h6">Labels</p>
+              </div>
+            </q-item-section>
+            <div class="row flex">
+              <q-chip label="Rock" color="amber" />
+              <q-chip label="Kings Music" color="amber" />
+              <q-chip label="Sony Music Entertainment" color="amber" />
+            </div>
+          </q-item>
+        </q-list>
+      </div>
+    </q-card>
   </q-page>
 </template>
 
@@ -24,7 +156,7 @@
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
 .avatar {
-  top: -50px;
+  bottom: -30px;
   width: 100px;
   height: 100px;
   border-radius: 50%;
