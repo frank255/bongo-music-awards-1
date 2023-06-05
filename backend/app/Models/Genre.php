@@ -20,4 +20,8 @@ class Genre extends Model
     {
         return $this->belongsTo(Event::class, 'event_id');
     }
+
+    public function category() {
+        return $this->hasMany(Category::class,'genre_id');
+    }
 }

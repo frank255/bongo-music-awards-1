@@ -8,6 +8,7 @@ use App\Models\Event;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 
 class EventsController extends Controller
@@ -26,10 +27,22 @@ class EventsController extends Controller
      * Store a newly created resource in storage.
      */
     public function store(Request $request)
-        //: EventResource
     {
-        //validations
-        $event = Event::create($request->validated());
+        $validator = Validator::make($request->all(),[
+            'event_title' => 'required|string',
+            'event_number' => 'required',
+            'event_date' => 'required',
+            'event_status' => 'required',
+        ]);
+
+        if ($validator->fails()){
+            return response()->json([
+                'message' => $validator->messages(),
+                'status' => Response::HTTP_FORBIDDEN,
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+
+        $event = Event::create($validator->safe()->all());
         return new EventResource($event);
     }
 
