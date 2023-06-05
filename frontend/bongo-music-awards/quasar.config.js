@@ -12,7 +12,7 @@
 const { configure } = require('quasar/wrappers');
 
 
-module.exports = configure(function (/* ctx */) {
+module.exports = configure(function (ctx ) {
   return {
     eslint: {
       // fix: true,
@@ -69,7 +69,17 @@ module.exports = configure(function (/* ctx */) {
 
       // publicPath: '/',
       // analyze: true,
-      // env: {},
+      env: {
+        API_URL: ctx.dev
+          ? "http://127.0.0.1:8000/api/"
+          : "https://api.example.com",
+        SANCTUM_URL: ctx.dev
+          ? "http://127.0.0.1:8000"
+          : "https://api.example.com",
+        STORAGE_URL: ctx.dev
+          ? "http://127.0.0.1:8000/storage"
+          : "https://api.example.com",
+      },
       // rawDefine: {}
       // ignorePublicFolder: true,
       // minify: false,
@@ -106,7 +116,7 @@ module.exports = configure(function (/* ctx */) {
       // directives: [],
 
       // Quasar plugins
-      plugins: []
+      plugins: ["Notify","Dialog"]
     },
 
     // animations: 'all', // --- includes all animations
