@@ -18,7 +18,7 @@
     >
       <q-step :done="STEP > 1" :name="1" prefix="1" title="Event">
         <q-input
-          v-model="addEvent.event_name"
+          v-model="addEvent.event_title"
           class="q-ma-lg"
           dense
           label="Event name"
@@ -57,7 +57,7 @@
           </template>
         </q-input>
         <q-stepper-navigation>
-          <q-btn color="primary" label="Continue" @click="addStep()" />
+          <q-btn color="primary" label="Continue" @click="eventSubmit()" />
         </q-stepper-navigation>
       </q-step>
 
@@ -133,7 +133,7 @@
           </template> -->
         </q-banner>
         <q-stepper-navigation>
-          <q-btn color="primary" label="Continue" @click="eventSubmit()" />
+          <q-btn color="primary" label="Continue" @click="genresSubmit()" />
           <q-btn
             v-if="STEP > 1"
             class="q-ml-sm"
@@ -199,22 +199,22 @@
           </template>
         </q-banner>
         <template #navigation>
-        <q-stepper-navigation>
-          <q-btn
-            label="Finish"
-            color="primary"
-            @click="STEP === 3 ? submitCategories() : $refs.stepper.next()"
-          />
-          <q-btn
-            v-if="STEP > 1"
-            class="q-ml-sm"
-            color="primary"
-            flat
-            label="Back"
-            @click="$refs.stepper.previous()"
-          />
-        </q-stepper-navigation>
-      </template>
+          <q-stepper-navigation>
+            <q-btn
+              label="Finish"
+              color="primary"
+              @click="STEP === 3 ? submitCategories() : $refs.stepper.next()"
+            />
+            <q-btn
+              v-if="STEP > 1"
+              class="q-ml-sm"
+              color="primary"
+              flat
+              label="Back"
+              @click="$refs.stepper.previous()"
+            />
+          </q-stepper-navigation>
+        </template>
       </q-step>
     </q-stepper>
   </q-page>
@@ -232,10 +232,10 @@ const STEP = ref(1);
 const rol = ref([]);
 const branches = ref([]);
 const addEvent = ref({
-  event_name: "",
+  event_title: "",
   event_number: "",
   event_date: "",
-  event_genres: [],
+  event_status: "closed",
 });
 const newGenre = ref("");
 const genre_data = ref([]);
@@ -271,16 +271,17 @@ const category_data = ref([
 ]);
 const form_data = () => {
   const formData = new FormData();
-  formData.append("event_name", addEvent.value.event_name);
+  formData.append("event_title", addEvent.value.event_title);
   formData.append("event_number", addEvent.value.event_number);
   formData.append("event_date", addEvent.value.event_date);
-  formData.append("event_genres", selected_genres.value.event_genres);
+  formData.append("event_status", addEvent.value.event_status);
+  // formData.append("event_genres", selected_genres.value.event_genres);
   return formData;
 };
 const continueBtn = ref(null);
-const addStep = ()=> {
-  STEP.value = 2;
-};
+// const addStep = ()=> {
+//   STEP.value = 2;
+// };
 const eventSubmit = async () => {
   // try {
   //   const { data } = await api.post("/events", form_data());
@@ -288,21 +289,33 @@ const eventSubmit = async () => {
   // } catch (err) {}
 
   try {
-    const { status, data } = await api.post(
-      "/events",
-      form_data()
-    );
-    // sessionStorage.removeItem("customer_id");
-    // sessionStorage.setItem("customer_id", data.data.customer.customer_id);
-    if (status === 200 && data.status === "Request was successful") {
+    const { status, data } = await api.post("/events", form_data());
+    console.log(data);
+    sessionStorage.removeItem("event_id");
+    sessionStorage.setItem("event_id", data.data.event_id);
+    if (status === 200) {
       STEP.value = 2;
     }
   } catch (error) {
-    Notify.create({
-      type: "negative",
-      message: error.response.data.message,
-    });
-}
+    // Notify.create({
+    //   type: "negative",
+    //   message: error.response.data.message,
+    // });
+  }
+};
+const genresSubmit = async () => {
+
+  try {
+    const { status, data } = await api.post("/events", form_data());
+    console.log(data);
+    sessionStorage.removeItem("event_id");
+    sessionStorage.setItem("event_id", data.data.event_id);
+    if (status === 200) {
+      STEP.value = 2;
+    }
+  } catch (error) {
+  
+  }
 };
 
 const roles = async () => {
