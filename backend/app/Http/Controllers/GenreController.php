@@ -26,7 +26,20 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $validator = Validator::make($request->all(),[
+           'genre_name'=>['required','string','max:255'],
+           'event_id'=>['required','string']
+        ]);
+
+        if ($validator->fails()){
+            return response()->json([
+                'message' => $validator->messages(),
+                'status' => Response::HTTP_FORBIDDEN,
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+
+        $genre = Genre::create($validator->safe()->all());
+        return new GenreResource($genre);
     }
 
     /**
