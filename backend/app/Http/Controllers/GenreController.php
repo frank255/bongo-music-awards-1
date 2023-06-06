@@ -28,7 +28,7 @@ class GenreController extends Controller
     {
         $validator = Validator::make($request->all(),[
            'genre_name'=>['required','string','max:255'],
-           'event_id'=>['required','string']
+           'event_id'=>['required','integer']
         ]);
 
         if ($validator->fails()){
