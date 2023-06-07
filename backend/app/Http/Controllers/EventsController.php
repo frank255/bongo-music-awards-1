@@ -32,7 +32,7 @@ class EventsController extends Controller
             'event_title' => 'required|string|max:255',
             'event_number' => 'required|string|max:255',
             'event_date' => 'required',
-            'event_status' => 'required',
+            'event_status' => 'required|in:closed,opened',
         ]);
 
         if ($validator->fails()){

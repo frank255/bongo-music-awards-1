@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\EventsController;
 use App\Http\Controllers\GenreController;
 use \App\Http\Controllers\CategoryController;
+use \App\Http\Controllers\ArtistProfileController;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,3 +25,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::apiResource('/events',EventsController::class);
 Route::apiResource('/genres',GenreController::class);
 Route::apiResource('/categories',CategoryController::class);
+Route::apiResource('/artist_profile',ArtistProfileController::class);
