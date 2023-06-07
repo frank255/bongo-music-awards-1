@@ -153,7 +153,8 @@
             dense
             emit-value
             map-options
-            :options="branches"
+            @update:model-value="selectedCat(addEvent.branch_id)"
+            :options="genres_category"
             label="Choose Genre"
             outlined
           />
@@ -162,7 +163,8 @@
           *If categories are not available you can add them bellow
         </div>
         <q-input
-          v-model="addEvent.id_number"
+        v-if="show"
+          v-model="cat_name"
           class="q-ma-lg"
           dense
           label="Add new categories"
@@ -240,6 +242,7 @@ const addEvent = ref({
 const newGenre = ref("");
 const genre_data = ref([]);
 const selected_genres = ref([]);
+const genres_category=ref([]);
 const handleRemove = (genre) => {
   // remove genre from genres array
   const index = genre_data.value.indexOf(genre);
@@ -306,16 +309,35 @@ const eventSubmit = async () => {
 const genresSubmit = async () => {
 
   try {
-    const { status, data } = await api.post("/events", form_data());
-    console.log(data);
-    sessionStorage.removeItem("event_id");
-    sessionStorage.setItem("event_id", data.data.event_id);
-    if (status === 200) {
-      STEP.value = 2;
-    }
-  } catch (error) {
-  
-  }
+    const eventId = sessionStorage.getItem("event_id");
+    // Loop through the selected_genres array and append the event ID to each value
+    // selected_genres.value.forEach((genre, index) => {
+    //   selected_genres.value[index] = `${event_id}_${genre}`;
+    // });
+
+    const payload = {
+      event_id: eventId,
+      genre_names: selected_genres.value,
+    };
+
+    // // Append the selected_genres array to the form data object
+    // selected_genres.value.forEach((genre) => {
+    //   formData.append("selected_genres[]", genre);
+    // });
+
+    const { data } = await api.post("/genres", payload);
+    STEP.value = 3;
+    data.forEach(element => {
+      genres_category.value.push({
+      value:element.genre_id,
+      label: element.genre_name,
+    })
+    });
+
+    console.log(genres_category.value);
+    // sessionStorage.removeItem("event_id");
+
+  } catch (error) {}
 };
 
 const roles = async () => {
@@ -334,7 +356,24 @@ const getGenres = async () => {
     genre_data.value = names;
   } catch (error) {}
 };
+const gen_id=ref();
+const selectedCat=(genre_id)=>{
+  gen_id.value=genre_id
+}
 
+const cat_data=ref([]);
+
+const cat_name=ref();
+const addCategory=()=>{
+  cat_data.value.push({
+    genre:{
+      genre_id:gen_id.value,
+      cat_name: cat_name.value
+    }
+  })
+
+  console.log(cat_data.value);
+}
 onMounted(() => {
   // roles();
   getGenres();
