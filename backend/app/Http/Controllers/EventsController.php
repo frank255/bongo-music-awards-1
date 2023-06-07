@@ -43,7 +43,7 @@ class EventsController extends Controller
         }
 
         $event = Event::create($validator->safe()->all());
-        return new EventResource($event);
+        return (new EventResource($event))->response()->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**
