@@ -3,10 +3,19 @@
     <!--Albums/EPs table-->
     <div class="row items-center q-mt-xl">
       <p class="font-body-small q-pl-md col">
-        <span class="text-weight-bolder text-capitalize text-h6">Albums and EPs</span>
+        <span class="text-weight-bolder text-capitalize text-h6"
+          >Albums and EPs</span
+        >
       </p>
       <p class="flex justify-end width col">
-        <q-btn class="text-capitalize" to="/artist/works/addnew">add new</q-btn>
+        <q-btn
+          @click="
+            // approveLoan(props.row.loan_id);
+            ALBUM_DIALOG = true
+          "
+          class="text-capitalize"
+          >add new</q-btn
+        >
       </p>
     </div>
     <q-table
@@ -27,7 +36,7 @@
             color="primary"
             size="10px"
           >
-          <q-tooltip>edit</q-tooltip>
+            <q-tooltip>edit</q-tooltip>
             <!-- <q-menu>
               <div class="row no-wrap q-pa-md">
                 <div class="column">
@@ -73,7 +82,14 @@
         <span class="text-weight-bolder text-capitalize text-h6">Singles</span>
       </p>
       <p class="flex justify-end width col">
-        <q-btn class="text-capitalize" to="/artist/works/addnew">add new</q-btn>
+        <q-btn
+          @click="
+            // approveLoan(props.row.loan_id);
+            SINGLE_DIALOG = true
+          "
+          class="text-capitalize"
+          >add new</q-btn
+        >
       </p>
     </div>
     <q-table
@@ -94,7 +110,7 @@
             color="primary"
             size="10px"
           >
-          <q-tooltip>edit</q-tooltip>
+            <q-tooltip>edit</q-tooltip>
             <!-- <q-menu>
               <div class="row no-wrap q-pa-md">
                 <div class="column">
@@ -134,11 +150,78 @@
         </q-input>
       </template>
     </q-table>
+    <q-dialog v-model="ALBUM_DIALOG" position="right">
+      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
+        <q-card-section>
+          <div class="text-h6">Fill the form bellow</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none q-gutter-y-md">
+          <q-input v-model="artwork_name" dense outlined label="Album/Ep Name" />
+          <q-input v-model="artwork_link" dense outlined label="Number of trucks" />
+          <q-input v-model="artwork_link" dense outlined label="Release Date" />
+          <q-input v-model="artwork_link" dense outlined label="Link" />
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn
+            flat
+            outline
+            color="negative"
+            label="Cancel"
+            @click="declineLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+          <q-btn
+            color="primary"
+            label="Save"
+            @click="approveLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <q-dialog v-model="SINGLE_DIALOG" position="right">
+      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
+        <q-card-section>
+          <div class="text-h6">Fill the form bellow</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none q-gutter-y-md">
+          <q-input v-model="artwork_name" dense outlined label="Truck Name" />
+          <q-input v-model="artwork_link" dense outlined label="Release Date" />
+          <q-input v-model="artwork_link" dense outlined label="Link" />
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn
+            flat
+            outline
+            color="negative"
+            label="Cancel"
+            @click="declineLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+          <q-btn
+            color="primary"
+            label="Save"
+            @click="approveLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
 import { ref } from "vue";
+const SINGLE_DIALOG = ref(false);
+const ALBUM_DIALOG = ref(false);
 const columns = ref([
   {
     name: "album_name",

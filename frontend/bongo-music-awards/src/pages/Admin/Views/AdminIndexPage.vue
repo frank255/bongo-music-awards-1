@@ -146,6 +146,11 @@
 
 <script setup>
 import { ref } from "vue";
+import pdfMake from 'pdfmake/build/pdfmake';
+import pdfFonts from 'pdfmake/build/vfs_fonts';
+import jsPDF from 'jspdf';
+// import 'jspdf-autotable';
+
 import ArtistCard from "src/pages/Admin/components/ArtistCard.vue";
 import NomineesCard from "src/pages/Admin/components/NomineesCard.vue";
 import EventsCard from "src/pages/Admin/components/EventsCard.vue";
@@ -199,6 +204,18 @@ const rows = [
   },
   // Add more rows as needed
 ];
+const downloadPDF =()=> {
+    // Create a new instance of jsPDF
+    const doc = new jsPDF();
+    // Add the table to the PDF document
+    doc.autoTable({
+      head: [columns],
+      body: rows
+    });
+
+    // Download the PDF file
+    doc.save('table.pdf');
+  }
 </script>
 
 <style lang="scss" scoped></style>

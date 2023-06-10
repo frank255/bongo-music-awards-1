@@ -45,6 +45,7 @@
             dense
             color="primary"
             size="10px"
+            to="/artist/awardsnominations"
           >
             <!-- <q-menu>
               <div class="row no-wrap q-pa-md">

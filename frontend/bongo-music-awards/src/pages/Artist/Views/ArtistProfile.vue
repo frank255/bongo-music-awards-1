@@ -146,7 +146,19 @@
   </q-page>
 </template>
 
-<script setup></script>
+<script setup>
+import { api } from "src/boot/axios";
+import { onMounted, reactive, ref } from "vue";
+const getProfile = async () => {
+  try {
+    const response = await api.get("/artist_profile");
+    console.log(response);
+  } catch (error) {}
+};
+onMounted (()=>{
+  getProfile();
+});
+</script>
 
 <style>
 .card {
