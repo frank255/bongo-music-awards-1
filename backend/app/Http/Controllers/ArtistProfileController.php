@@ -51,7 +51,8 @@ class ArtistProfileController extends Controller
         }
 
         $artist_profile = ArtistProfile::create($validator->safe()->all());
-        return new ArtistProfileResource($artist_profile);
+        return \response(new ArtistProfileResource($artist_profile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**

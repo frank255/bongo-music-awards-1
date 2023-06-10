@@ -31,7 +31,7 @@ class EventsController extends Controller
         $validator = Validator::make($request->all(),[
             'event_title' => 'required|string|max:255',
             'event_number' => 'required|string|max:255',
-            'event_date' => 'required|date_format:Y-m-d|after:today',
+            'event_date' => 'required|date_format:Y/m/d|after:today',
             'event_status' => 'required|in:closed,opened',
         ]);
 
@@ -43,7 +43,9 @@ class EventsController extends Controller
         }
 
         $event = Event::create($validator->safe()->all());
-        return (new EventResource($event))->response()->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
+        return (new EventResource($event))
+            ->response()
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**

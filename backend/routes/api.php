@@ -26,3 +26,5 @@ Route::apiResource('/events',EventsController::class);
 Route::apiResource('/genres',GenreController::class);
 Route::apiResource('/categories',CategoryController::class);
 Route::apiResource('/artist_profile',ArtistProfileController::class);
+
+//Route::get('/distinct_genres',[GenreController::class,'getGenres']);
