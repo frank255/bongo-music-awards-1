@@ -12,8 +12,11 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@types/jspdf": "^2.0.0",
     "axios": "^0.21.1",
     "cjs": "^0.0.11",
+    "jspdf": "^2.5.1",
+    "pdfmake": "^0.2.7",
     "pinia": "^2.0.11",
     "quasar": "^2.6.0",
     "vue": "^3.0.0",

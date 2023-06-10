@@ -146,7 +146,7 @@
       </q-step>
 
       <q-step :name="3" prefix="3" title="Categories">
-        <div class="q-gutter-sm">
+        <!-- <div class="q-gutter-sm">
           <q-select
             v-model="addEvent.branch_id"
             class="q-ma-lg"
@@ -199,7 +199,24 @@
               @click="addCategory()"
             />
           </template>
-        </q-banner>
+        </q-banner> -->
+        <q-table :rows="rows" :columns="columns" :row-key="'id'">
+          <template v-slot:body-cell-categories="props">
+            <q-td :props="props" :key="props.key">
+              <q-item
+                v-for="(category, index) in props.row.categories"
+                :key="index"
+              >
+                <q-item-section>
+                  <q-chip removable @remove="removeCategory(props.row, index)">
+                    {{ category }}
+                  </q-chip>
+                </q-item-section>
+              </q-item>
+            </q-td>
+          </template>
+        </q-table>
+
         <template #navigation>
           <q-stepper-navigation>
             <q-btn
@@ -242,7 +259,33 @@ const addEvent = ref({
 const newGenre = ref("");
 const genre_data = ref([]);
 const selected_genres = ref([]);
-const genres_category=ref([]);
+const genres_category = ref([]);
+const rows = [
+  {
+    id: 1,
+    genre: "Action",
+    categories: ["Shooter", "Fighting", "Adventure", "Shooter", "Fighting"],
+  },
+  {
+    id: 2,
+    genre: "Adventure",
+    categories: ["RPG", "Platformer", "Simulation"],
+  },
+  { id: 3, genre: "Sports", categories: ["Football", "Basketball", "Tennis"] },
+  // add more data as per your requirement
+];
+const columns = [
+  { name: "genre", align: "left", label: "Genre", field: "genre" },
+  {
+    name: "categories",
+    align: "left",
+    label: "Categories",
+    field: "categories",
+  },
+];
+const removeCategory = (row, index) => {
+  row.categories.splice(index, 1);
+};
 const handleRemove = (genre) => {
   // remove genre from genres array
   const index = genre_data.value.indexOf(genre);
@@ -286,58 +329,54 @@ const continueBtn = ref(null);
 //   STEP.value = 2;
 // };
 const eventSubmit = async () => {
+  STEP.value = 2;
   // try {
-  //   const { data } = await api.post("/events", form_data());
-  //   console.log(data);
-  // } catch (err) {}
-
-  try {
-    const { status, data } = await api.post("/events", form_data());
-    console.log(data);
-    sessionStorage.removeItem("event_id");
-    sessionStorage.setItem("event_id", data.data.event_id);
-    if (status === 200) {
-      STEP.value = 2;
-    }
-  } catch (error) {
-    // Notify.create({
-    //   type: "negative",
-    //   message: error.response.data.message,
-    // });
-  }
+  //   const { status, data } = await api.post("/events", form_data());
+  //   sessionStorage.removeItem("event_id");
+  //   sessionStorage.setItem("event_id", data.data.event_id);
+  //   if (status === 200) {
+  //     STEP.value = 2;
+  //   }
+  // } catch (error) {
+  //   // Notify.create({
+  //   //   type: "negative",
+  //   //   message: error.response.data.message,
+  //   // });
+  // }
 };
 const genresSubmit = async () => {
+  STEP.value = 3;
 
-  try {
-    const eventId = sessionStorage.getItem("event_id");
-    // Loop through the selected_genres array and append the event ID to each value
-    // selected_genres.value.forEach((genre, index) => {
-    //   selected_genres.value[index] = `${event_id}_${genre}`;
-    // });
+  // try {
+  //   const eventId = sessionStorage.getItem("event_id");
+  //   // Loop through the selected_genres array and append the event ID to each value
+  //   // selected_genres.value.forEach((genre, index) => {
+  //   //   selected_genres.value[index] = `${event_id}_${genre}`;
+  //   // });
 
-    const payload = {
-      event_id: eventId,
-      genre_names: selected_genres.value,
-    };
+  //   const payload = {
+  //     event_id: eventId,
+  //     genre_names: selected_genres.value,
+  //   };
 
-    // // Append the selected_genres array to the form data object
-    // selected_genres.value.forEach((genre) => {
-    //   formData.append("selected_genres[]", genre);
-    // });
+  //   // // Append the selected_genres array to the form data object
+  //   // selected_genres.value.forEach((genre) => {
+  //   //   formData.append("selected_genres[]", genre);
+  //   // });
 
-    const { data } = await api.post("/genres", payload);
-    STEP.value = 3;
-    data.forEach(element => {
-      genres_category.value.push({
-      value:element.genre_id,
-      label: element.genre_name,
-    })
-    });
+  //   const { data } = await api.post("/genres", payload);
+  //   STEP.value = 3;
+  //   data.forEach(element => {
+  //     genres_category.value.push({
+  //     value:element.genre_id,
+  //     label: element.genre_name,
+  //   })
+  //   });
 
-    console.log(genres_category.value);
-    // sessionStorage.removeItem("event_id");
+  //   console.log(genres_category.value);
+  //   // sessionStorage.removeItem("event_id");
 
-  } catch (error) {}
+  // } catch (error) {}
 };
 
 const roles = async () => {
@@ -356,24 +395,24 @@ const getGenres = async () => {
     genre_data.value = names;
   } catch (error) {}
 };
-const gen_id=ref();
-const selectedCat=(genre_id)=>{
-  gen_id.value=genre_id
-}
+const gen_id = ref();
+const selectedCat = (genre_id) => {
+  gen_id.value = genre_id;
+};
 
-const cat_data=ref([]);
+const cat_data = ref([]);
 
-const cat_name=ref();
-const addCategory=()=>{
+const cat_name = ref();
+const addCategory = () => {
   cat_data.value.push({
-    genre:{
-      genre_id:gen_id.value,
-      cat_name: cat_name.value
-    }
-  })
+    genre: {
+      genre_id: gen_id.value,
+      cat_name: cat_name.value,
+    },
+  });
 
   console.log(cat_data.value);
-}
+};
 onMounted(() => {
   // roles();
   getGenres();

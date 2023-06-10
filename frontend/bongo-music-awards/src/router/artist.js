@@ -28,6 +28,9 @@ const artistRoutes = [
       {
         path: '/artist/myaccount',
         component: () => import("pages/Artist/Views/ArtistAccount.vue"),
+      }, {
+        path: '/artist/awardsnominations',
+        component: () => import("pages/Artist/Views/AwardsNomination.vue"),
       }
     ],
 
