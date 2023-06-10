@@ -16,11 +16,8 @@ class ArtistProfileController extends Controller
      */
     public function index()
     {
-        //pull the Artistprofile depending on authentication
-        //What about admin(hataweza kunavigate token abilities)??
-        //Auth::user()->id
-
-
+        $artist_profile = ArtistProfile::all();
+        return \response(ArtistProfileResource::collection($artist_profile));
     }
 
     /**
@@ -58,9 +55,18 @@ class ArtistProfileController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(ArtistProfile $artistProfile)
+    public function show($id)
     {
-        //
+        $artistProfile =  ArtistProfile::find($id);
+        if (!$artistProfile) {
+            return \response()->json([
+                'message' => Response::$statusTexts[Response::HTTP_NOT_FOUND],
+                'status' => Response::HTTP_NOT_FOUND
+            ])->setStatusCode(Response::HTTP_NOT_FOUND, Response::$statusTexts[Response::HTTP_NOT_FOUND]);
+        }
+
+        return \response(new ArtistProfileResource($artistProfile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**
@@ -110,7 +116,8 @@ class ArtistProfileController extends Controller
             'labels'
         ]));
 
-        return new ArtistProfileResource($artistProfile);
+        return \response(new ArtistProfileResource($artistProfile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**
