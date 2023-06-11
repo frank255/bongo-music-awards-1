@@ -21,9 +21,14 @@ pipeline {
                }
             }
         }
-        stage('Test') {
+        stage('frontend') {
             steps {
-                echo 'node --version'
+                dir('frontend/bongo-music-awards/'){
+                    echo 'node --version'
+                    sh 'npm install'
+                    sh 'quasar -v'
+                    sh 'quasar build'
+                }
             }
         }
         stage('Deploy') {
