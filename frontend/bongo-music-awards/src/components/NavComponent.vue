@@ -1,5 +1,5 @@
 <template>
-  <q-header class="q-pa-xs bg-white row justify-around text-black" bordered>
+  <q-header class="q-pa-xs bg-white row justify-around  text-black" bordered>
     <q-toolbar class="col-2">
       <q-toolbar-title>
         <router-link to="">
@@ -54,16 +54,16 @@ const tabs =
       label: "Home",
       icon: "mdi-home",
     },
-    {
-      path: "/wekeza",
-      label: "Wekeza",
-      icon: "mdi-cash",
-    },
-    {
-      path: "/biashara",
-      label: "Biashara",
-      icon: "mdi-handshake-outline",
-    },
+    // {
+    //   path: "/wekeza",
+    //   label: "Wekeza",
+    //   icon: "mdi-cash",
+    // },
+    // {
+    //   path: "/biashara",
+    //   label: "Biashara",
+    //   icon: "mdi-handshake-outline",
+    // },
     {
       path: "/ajira-kazi",
       label: "Artists",

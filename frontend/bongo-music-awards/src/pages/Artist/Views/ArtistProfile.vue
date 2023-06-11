@@ -1,161 +1,286 @@
 <template>
   <q-page padding>
-    <q-card class="shaddow q-mt-lg q-pa-sm column items-center relative">
-      <div class="card bg-grey-2 flex justify-center items-center">
-        <q-avatar size="90px" class="avatar">
-          <img src="https://cdn.quasar.dev/img/avatar.png" />
-        </q-avatar>
+    <q-card>
+      <div class="shaddow q-mt-lg q-pa-sm column items-center relative">
+        <div class="card bg-grey-2 flex justify-center items-center">
+          <q-avatar size="90px" class="avatar">
+            <img src="https://cdn.quasar.dev/img/avatar.png" />
+          </q-avatar>
+        </div>
+        <div class="q-mt-xl column flex justify-center items-center">
+          <p class="text-h6">Ally Kiba</p>
+        </div>
+        <div class="q-mt-xs column flex justify-center items-center">
+          <p class="text-subtitle1">Genres | Afropop,R&B,Bongo Flava</p>
+          <p class="text-subtitle2 q-px-xl" style="text-align: center">
+            Ali Saleh Kiba (26 November 1986), best known as Ali Kiba or
+            sometimes King Kiba, is a Tanzanian musician and songwriter. He is
+            from Kigoma and the owner of Kings Music label. According to BASATA
+            Alikiba is one of the most successful Bongo Flava singers and
+            considered the greatest of all time having often been referred to by
+            many contemporaries as the "King of Bongo flava".His musical style
+            has been defined as polyhedric, with his style being characterized
+            by several influences from other genres, mainly Afro pop, R&B and
+            Rhumba. His lyrics develop predominantly over themes of romance,
+            fast life, desire, regret, and emotional conflict. He also
+            collaborated with R. Kelly and other African musicians on the One8
+            project.In 2017 he became the director of Rockstar4000.
+          </p>
+        </div>
       </div>
-      <div class="q-mt-xl column flex justify-center items-center">
-        <p class="text-h6">Ally Kiba</p>
-      </div>
-      <div class="q-mt-xs column flex justify-center items-center">
-        <p class="text-subtitle1">Genres | Afropop,R&B,Bongo Flava</p>
-        <p class="text-subtitle2 q-px-xl" style="text-align: center">
-          Ali Saleh Kiba (26 November 1986), best known as Ali Kiba or sometimes
-          King Kiba, is a Tanzanian musician and songwriter. He is from Kigoma
-          and the owner of Kings Music label. According to BASATA Alikiba is one
-          of the most successful Bongo Flava singers and considered the greatest
-          of all time having often been referred to by many contemporaries as
-          the "King of Bongo flava".His musical style has been defined as
-          polyhedric, with his style being characterized by several influences
-          from other genres, mainly Afro pop, R&B and Rhumba. His lyrics develop
-          predominantly over themes of romance, fast life, desire, regret, and
-          emotional conflict. He also collaborated with R. Kelly and other
-          African musicians on the One8 project.In 2017 he became the director
-          of Rockstar4000.
-        </p>
-      </div>
-    </q-card>
-    <q-card class="row shaddow q-mt-sm q-pa-sm justify-between">
-      <div class="q-pa-sm">
-        <p class="text-h6 q-pa-sm">Informations</p>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-phone" />
-            </q-item-section>
-            <q-item-section>Phone</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>+255766830442</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-web" />
-            </q-item-section>
-            <q-item-section>Website</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>www.alikiba.com</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-gmail" />
-            </q-item-section>
-            <q-item-section>Email</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>alikiba@gmail.com</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
-      <div class="q-pa-sm">
-        <p class="text-h6 q-pa-sm">Social Media</p>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-facebook" />
-            </q-item-section>
-            <q-item-section>Facebook</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>Ally Kiba</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-twitter" />
-            </q-item-section>
-            <q-item-section>Twitter</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>@alikiba</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-        <q-list padding>
-          <q-item>
-            <q-item-section avatar>
-              <q-icon color="green" name="mdi-instagram" />
-            </q-item-section>
-            <q-item-section>Instagram</q-item-section>
-            <q-item-section side>
-              <q-item-label caption>@alikiba</q-item-label>
-            </q-item-section>
-          </q-item>
-        </q-list>
-      </div>
-      <div class="q-pa-sm">
-        <p class="text-h6 q-pa-sm">Other Info</p>
-        <q-list padding>
-          <q-item class="column flex">
-            <q-item-section avatar>
-              <div class="row flex">
-                <q-icon
-                  color="green"
-                  size="25px"
-                  class="q-ma-xs"
-                  name="mdi-account-hard-hat"
-                />
-                <p class="text-h6">Occupations</p>
-              </div>
-            </q-item-section>
-            <div class="row flex">
-              <q-chip label="Actor" color="amber" />
-              <q-chip label="Singer" color="amber" />
-              <q-chip label="Director" color="amber" />
-              <q-chip label="Footballer" color="amber" />
-            </div>
-          </q-item>
-          <q-item class="column flex">
-            <q-item-section avatar>
-              <div class="row flex">
-                <q-icon
-                  color="green"
-                  size="35px"
-                  class=""
-                  name="mdi-record-rec"
-                />
-                <p class="text-h6">Labels</p>
-              </div>
-            </q-item-section>
-            <div class="row flex">
-              <q-chip label="Rock" color="amber" />
-              <q-chip label="Kings Music" color="amber" />
-              <q-chip label="Sony Music Entertainment" color="amber" />
-            </div>
-          </q-item>
-        </q-list>
+      <div class="row justify-end">
+        <q-icon
+          size="2em"
+          class="q-pa-sm"
+          name="mdi-pencil"
+          @click="
+            // approveLoan(props.row.loan_id);
+            BIO_DIALOG = true
+          "
+        >
+          <q-tooltip>Edit</q-tooltip>
+        </q-icon>
       </div>
     </q-card>
+    <q-card class="q-mt-lg">
+      <div class="row justify-end">
+        <q-icon
+          size="2em"
+          class="q-pa-sm"
+          name="mdi-pencil"
+          @click="
+            // approveLoan(props.row.loan_id);
+            INFO_DIALOG = true
+          "
+        >
+
+          <q-tooltip>Edit</q-tooltip></q-icon
+        >
+      </div>
+      <div class="row shaddow q-mt-sm q-pa-sm justify-between">
+        <div class="q-pa-sm">
+          <p class="text-h6 q-pa-sm">Informations</p>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-phone" />
+              </q-item-section>
+              <q-item-section>Phone</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>+255766830442</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-web" />
+              </q-item-section>
+              <q-item-section>Website</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>www.alikiba.com</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-gmail" />
+              </q-item-section>
+              <q-item-section>Email</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>alikiba@gmail.com</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+        <div class="q-pa-sm">
+          <p class="text-h6 q-pa-sm">Social Media</p>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-youtube" />
+              </q-item-section>
+              <q-item-section>Youtube</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>Ally Kiba</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-twitter" />
+              </q-item-section>
+              <q-item-section>Twitter</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>@alikiba</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+          <q-list padding>
+            <q-item>
+              <q-item-section avatar>
+                <q-icon color="green" name="mdi-instagram" />
+              </q-item-section>
+              <q-item-section>Instagram</q-item-section>
+              <q-item-section side>
+                <q-item-label caption>@alikiba</q-item-label>
+              </q-item-section>
+            </q-item>
+          </q-list>
+        </div>
+        <div class="q-pa-sm">
+          <p class="text-h6 q-pa-sm">Other Info</p>
+          <q-list padding>
+            <q-item class="column flex">
+              <q-item-section avatar>
+                <div class="row flex">
+                  <q-icon
+                    color="green"
+                    size="25px"
+                    class="q-ma-xs"
+                    name="mdi-account-hard-hat"
+                  />
+                  <p class="text-h6">Occupations</p>
+                </div>
+              </q-item-section>
+              <div class="row flex">
+                <q-chip label="Actor" color="amber" />
+                <q-chip label="Singer" color="amber" />
+                <q-chip label="Director" color="amber" />
+                <q-chip label="Footballer" color="amber" />
+              </div>
+            </q-item>
+            <q-item class="column flex">
+              <q-item-section avatar>
+                <div class="row flex">
+                  <q-icon
+                    color="green"
+                    size="35px"
+                    class=""
+                    name="mdi-record-rec"
+                  />
+                  <p class="text-h6">Labels</p>
+                </div>
+              </q-item-section>
+              <div class="row flex">
+                <q-chip label="Rock" color="amber" />
+                <q-chip label="Kings Music" color="amber" />
+                <q-chip label="Sony Music Entertainment" color="amber" />
+              </div>
+            </q-item>
+          </q-list>
+        </div>
+      </div>
+    </q-card>
+    <!--dialogue biography-->
+    <q-dialog v-model="BIO_DIALOG" position="right">
+      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
+        <q-card-section>
+          <div class="text-h6">Fill the form bellow</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none q-gutter-y-md">
+          <!-- <q-input v-model="artwork_name" dense outlined label="Profile image" /> -->
+          <q-file
+          v-model="profile_image"
+          class="q-mx-lg"
+          counter
+          dense
+          label="Profile Photo"
+          outlined
+          type="file"
+        >
+          <template #prepend>
+            <q-icon name="cloud_upload" @click.stop.prevent />
+          </template>
+          <template #append>
+            <q-icon
+              class="cursor-pointer"
+              name="close"
+              @click.stop.prevent="model = null"
+            />
+          </template>
+        </q-file>
+          <q-input v-model="artwork_link" dense outlined label="Name" />
+          <q-input v-model="artwork_link" dense outlined label="Genres" />
+          <q-input v-model="artwork_link" dense outlined label="Biography" />
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn
+            flat
+            outline
+            color="negative"
+            label="Cancel"
+            @click="declineLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+          <q-btn
+            color="primary"
+            label="Save"
+            @click="approveLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
+    <!--dialogue other info-->
+    <q-dialog v-model="INFO_DIALOG" position="right">
+      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
+        <q-card-section>
+          <div class="text-h6">Fill the form bellow</div>
+        </q-card-section>
+
+        <q-card-section class="q-pt-none q-gutter-y-md">
+          <q-input v-model="artwork_name" dense outlined label="Phone" />
+          <q-input v-model="artwork_link" dense outlined label="Website" />
+          <q-input v-model="artwork_link" dense outlined label="Email" />
+          <q-input v-model="artwork_link" dense outlined label="Youtube" />
+          <q-input v-model="artwork_name" dense outlined label="Instagram" />
+          <q-input v-model="artwork_link" dense outlined label="Twitter" />
+          <q-input v-model="artwork_link" dense outlined label="Occupations" />
+          <q-input v-model="artwork_link" dense outlined label="Labels" />
+        </q-card-section>
+
+        <q-card-actions>
+          <q-btn
+            flat
+            outline
+            color="negative"
+            label="Cancel"
+            @click="declineLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+          <q-btn
+            color="primary"
+            label="Save"
+            @click="approveLoans()"
+            class="q-mx-sm text-capitalize"
+            v-close-popup
+          />
+        </q-card-actions>
+      </q-card>
+    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
 import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
+const BIO_DIALOG = ref(false);
+const INFO_DIALOG = ref(false);
 const getProfile = async () => {
   try {
     const response = await api.get("/artist_profile");
     console.log(response);
   } catch (error) {}
 };
-onMounted (()=>{
+onMounted(() => {
   getProfile();
 });
 </script>
