@@ -11,15 +11,14 @@ pipeline {
         stage('Backend') {
             steps {
                dir('backend/') {
-                         sh 'composer --version'
-                         sh 'composer update'
-                         sh 'composer install'
-                         /* sh 'npm install'
-                         sh 'php artisan migrate'
-                         sh 'php artisan create:superuser'
-                         sh 'php artisan key:generate'
-                         sh 'php artisan jwt:secret --force' */
-                   }
+                 sh 'composer --version'
+                 sh 'composer update'
+                 sh 'composer install'
+                 sh 'npm install'
+                 sh 'php artisan migrate'
+                 //sh 'php artisan create:superuser'
+                 sh 'php artisan key:generate'
+               }
             }
         }
         stage('Test') {
