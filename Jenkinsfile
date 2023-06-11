@@ -8,9 +8,10 @@ pipeline {
                 checkout scmGit(branches: [[name: '*/main']], extensions: [], userRemoteConfigs: [[credentialsId: 'music_award', url: 'https://github.com/lilkevinrobert/bongo-music-awards.git']])
             }
         }
-        stage('Build') {
+        stage('Backend') {
             steps {
-                echo 'Building..'
+                sh 'composer update'
+                sh 'composer install'
             }
         }
         stage('Test') {
