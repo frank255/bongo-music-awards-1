@@ -10,8 +10,16 @@ pipeline {
         }
         stage('Backend') {
             steps {
-                sh 'composer update'
-                sh 'composer install'
+               dir('backend/') {
+                         sh 'composer --version'
+                         sh 'composer update'
+                         sh 'composer install'
+                         /* sh 'npm install'
+                         sh 'php artisan migrate'
+                         sh 'php artisan create:superuser'
+                         sh 'php artisan key:generate'
+                         sh 'php artisan jwt:secret --force' */
+                   }
             }
         }
         stage('Test') {
