@@ -14,11 +14,7 @@
     </q-toolbar>
 
     <div
-      :class="
-        $q.platform.is.desktop
-          ? 'col-9 row'
-          : 'col-9 row  justify-end '
-      "
+      :class="$q.platform.is.desktop ? 'col-9 row' : 'col-9 row  justify-end '"
     >
       <q-tabs
         v-for="(tab, i) in tabs"
@@ -90,7 +86,7 @@ const $q = useQuasar();
 
 const tabs = [
   {
-    path: "/pochi",
+    path: "/",
     label: "Voting",
     icon: "mdi-vote",
   },
@@ -105,19 +101,19 @@ const tabs = [
   //   icon: "mdi-handshake-outline",
   // },
   {
-    path: "/ajira-kazi",
+    path: "/",
     label: "Artists",
     icon: "mdi-music-clef-treble",
   },
 
   {
-    path: "/mshauri",
+    path: "/",
     label: "Awards",
     icon: "mdi-trophy",
   },
 
   {
-    path: "/mnada",
+    path: "/",
     label: "Tickets",
     icon: "mdi-ticket",
   },
