@@ -32,7 +32,7 @@
                 <q-item-section>
                   <q-item-label>{{ nominee.name }}</q-item-label>
                   <q-item-label caption lines="1">{{
-                    nominee.email
+                    nominee.description
                   }}</q-item-label>
                 </q-item-section>
                 <q-item-section side>
@@ -103,27 +103,27 @@ const nominees = [
     nominees: [
       { id: 1,
         name: "Nominee A",
-        email: "nominee.a@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar1.jpg"
       },
       { id: 2,
         name: "Nominee B",
-        email: "nominee.b@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar2.jpg"
       },
       { id: 3,
         name: "Nominee C",
-        email: "nominee.c@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar3.jpg"
       },
       { id: 4,
         name: "Nominee D",
-        email: "nominee.d@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar4.jpg"
       },
       { id: 5,
         name: "Nominee E",
-        email: "nominee.e@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar5.jpg"
       }
     ]
@@ -133,27 +133,27 @@ const nominees = [
     nominees: [
       { id: 6,
         name: "Nominee F",
-        email: "nominee.f@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar6.jpg"
       },
       { id: 7,
         name: "Nominee G",
-        email: "nominee.g@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar7.jpg"
       },
       { id: 8,
         name: "Nominee H",
-        email: "nominee.h@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar8.jpg"
       },
       { id: 9,
         name: "Nominee I",
-        email: "nominee.i@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar9.jpg"
       },
       { id: 10,
         name: "Nominee J",
-        email: "nominee.j@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar10.jpg"
       }
     ]
@@ -163,27 +163,27 @@ const nominees = [
     nominees: [
       { id: 6,
         name: "Nominee F",
-        email: "nominee.f@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar6.jpg"
       },
       { id: 7,
         name: "Nominee G",
-        email: "nominee.g@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar7.jpg"
       },
       { id: 8,
         name: "Nominee H",
-        email: "nominee.h@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar8.jpg"
       },
       { id: 9,
         name: "Nominee I",
-        email: "nominee.i@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar9.jpg"
       },
       { id: 10,
         name: "Nominee J",
-        email: "nominee.j@gmail.com",
+        description: "bla bla bla",
         avatar: "avatar10.jpg"
       }
     ]
