@@ -2,14 +2,13 @@
   <q-header class="q-pa-xs bg-white row justify-around text-black" bordered>
     <q-toolbar class="col-2">
       <q-toolbar-title>
-        <!-- <router-link to="">
+        <router-link to="">
           <q-img
             alt="conture logo"
             src="~assets/logo.png"
-            style="width: 50px; max-width: 100%; cursor: pointer"
+            style="width: 100px; max-width: 100%; cursor: pointer"
           />
-        </router-link> -->
-        Bongo Music Awards
+        </router-link>
       </q-toolbar-title>
     </q-toolbar>
 
@@ -39,7 +38,7 @@
       </q-tabs>
 
       <div v-if="$q.platform.is.desktop" class="col flex justify-end">
-        <q-btn icon="mdi-login" flat size="12px" to="/login">
+        <q-btn icon="mdi-login" flat size="12px" color="primary" to="/login">
           <q-tooltip>Login</q-tooltip>
         </q-btn>
       </div>
