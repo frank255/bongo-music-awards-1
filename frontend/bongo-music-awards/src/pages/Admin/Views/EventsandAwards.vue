@@ -48,6 +48,7 @@
             dense
             color="primary"
             size="10px"
+            to="/admin/event"
           >
             <!-- <q-menu>
               <div class="row no-wrap q-pa-md">

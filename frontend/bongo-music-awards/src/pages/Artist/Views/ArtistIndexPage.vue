@@ -3,8 +3,8 @@
     <div class="full-width">
       <q-carousel height="300px" swipeable animated v-model="slide" navigation infinite :autoplay="autoplay" arrows transition-prev="slide-right"
           transition-next="slide-left" @mouseenter="autoplay = false" @mouseleave="autoplay = true">
-          <q-carousel-slide :name="1" img-src="http://localhost:9000/src/assets/vote1copy.png" />
-          <q-carousel-slide :name="2" img-src="http://localhost:9000/src/assets/vote1.png" />
+          <q-carousel-slide :name="1" img-src="~assets/vote1copy.png" />
+          <q-carousel-slide :name="2" img-src="~assets/vote1.png" />
         </q-carousel>
     </div>
     <div class="row q-gutter-sm q-mt-xl  justify-between">
