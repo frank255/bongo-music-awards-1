@@ -80,7 +80,7 @@
           round
           size="2em"
           icon="mdi-vote"
-          color="grey-9"
+          color="primary"
           class="text-capitalize text-sm"
           @click="showDialog = true"
         >
