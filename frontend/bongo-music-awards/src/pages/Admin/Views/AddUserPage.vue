@@ -3,9 +3,9 @@
     <p class="font-body-small text-capitalize q-pl-md">
       <q-breadcrumbs gutter="none">
         <q-breadcrumbs-el
-          label="Back to Events"
+          label="Back to Users"
           icon="mdi-arrow-left-thick"
-          to="/admin/eventsandawards"
+          to="/admin/users"
         />
       </q-breadcrumbs>
     </p>
@@ -16,46 +16,28 @@
       animated
       color="primary"
     >
-      <q-step :done="STEP > 1" :name="1" prefix="1" title="Event">
+      <q-step :done="STEP > 1" :name="1" prefix="1" title="Basic Info">
         <q-input
           v-model="addEvent.event_title"
           class="q-ma-lg"
           dense
-          label="Event name"
+          label="Artist name"
           outlined
         />
         <q-input
           v-model="addEvent.event_number"
           class="q-ma-lg"
           dense
-          label="Event number"
+          label="Artist phone number"
           outlined
         />
         <q-input
-          v-model="addEvent.event_date"
-          :rules="['date']"
+          v-model="addEvent.event_email"
           class="q-ma-lg"
           dense
-          hint="Date of Event"
-          mask="date"
+          label="Artist email"
           outlined
-        >
-          <template #append>
-            <q-icon class="cursor-pointer" name="event">
-              <q-popup-proxy
-                cover
-                transition-hide="scale"
-                transition-show="scale"
-              >
-                <q-date v-model="addEvent.event_date">
-                  <div class="row items-center justify-end">
-                    <q-btn v-close-popup color="primary" flat label="Close" />
-                  </div>
-                </q-date>
-              </q-popup-proxy>
-            </q-icon>
-          </template>
-        </q-input>
+        />
         <q-stepper-navigation>
           <q-btn color="primary" label="Continue" @click="eventSubmit()" />
         </q-stepper-navigation>

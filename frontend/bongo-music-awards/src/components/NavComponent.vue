@@ -16,7 +16,7 @@
     <div
       :class="
         $q.platform.is.desktop
-          ? 'col-9 row  justify-center items-center '
+          ? 'col-9 row'
           : 'col-9 row  justify-end '
       "
     >
@@ -24,7 +24,7 @@
         v-for="(tab, i) in tabs"
         :key="i"
         active-color="primary"
-        class="text-grey-9 cursor-pointer q-pa-sm"
+        class="text-grey-9 col cursor-pointer q-pa-sm"
         dense
         indicator-color="transparent"
         no-caps
