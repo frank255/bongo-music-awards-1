@@ -6,7 +6,7 @@
         rounded
         dense
         class="q-mt-xl"
-        style="width: 50%"
+        :style="$q.platform.is.desktop ? 'width: 50%' : 'width: 70%'"
         debounce="300"
         v-model="filter"
         placeholder="Search Artists By Name"
@@ -16,15 +16,15 @@
         </template>
       </q-input>
     </div>
-    <div class="flex justify-center q-gutter-x-xl">
+    <div :class="$q.platform.is.desktop ? 'flex justify-center q-gutter-x-xl':'flex justify-center'">
       <q-card
         v-for="(artist, i) in filteredArtists"
         :key="i"
         class="q-mt-xl bg-grey-2"
-        style="min-width: 200px;height:200px"
+        :style="$q.platform.is.desktop ? 'min-width: 200px;height:200px': 'width: 300px;height:200px'"
       >
         <q-card-section class="flex justify-center">
-          <q-avatar size="6em">
+          <q-avatar size="90px">
             <q-img :src="artist.image" />
           </q-avatar>
         </q-card-section>

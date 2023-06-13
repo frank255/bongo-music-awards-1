@@ -8,7 +8,7 @@
         expand-separator
         icon="mdi-trophy-award"
         :label="category.category"
-        class="shadow-2 q-mx-xl rounded-borders"
+        :class="$q.platform.is.desktop ? 'shadow-2 q-mx-xl rounded-borders':'shadow-2 q-mx-sm rounded-borders'"
         header-class="text-h6"
       >
         <q-card>
