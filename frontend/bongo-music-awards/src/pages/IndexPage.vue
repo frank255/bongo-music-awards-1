@@ -42,6 +42,7 @@
                     :name="category.category"
                     checked-icon="task_alt"
                     unchecked-icon="panorama_fish_eye"
+                    @click="showSubmit = true"
                   />
                 </q-item-section>
               </q-item>
@@ -122,12 +123,13 @@
     </q-dialog>
     <!--send vote btn-->
     <div>
-      <q-page-sticky :offset="[18, 18]" position="bottom-right" v-if="votes != ''">
+      <q-page-sticky :offset="[18, 18]" position="bottom-right">
         <q-btn
           round
           size="2em"
           icon="mdi-vote"
           color="primary"
+          v-if="showSubmit"
           class="text-capitalize text-sm"
           @click="showDialog = true"
         >
@@ -144,6 +146,7 @@ const voter_name = ref("");
 const voter_email = ref("");
 const voter_phone = ref("");
 let showDialog = ref(false);
+let showSubmit = ref(false);
 const nominees = [
   {
     category: "Best Artist of The Year",
