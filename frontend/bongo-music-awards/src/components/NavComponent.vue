@@ -1,19 +1,19 @@
 <template>
   <q-header class="q-pa-xs bg-white row justify-around text-black" bordered>
-    <q-toolbar class="col-2">
+    <q-toolbar :class="$q.platform.is.desktop ? 'col-2':'col-4'">
       <q-toolbar-title>
-        <router-link to="">
+        <router-link to="/">
           <q-img
-            alt="conture logo"
+            alt="BMA logo"
             src="~assets/logo.png"
-            style="width: 100px; max-width: 100%; cursor: pointer"
+            :style="$q.platform.is.desktop ? 'width: 100px' : 'width: 100%'"
           />
         </router-link>
       </q-toolbar-title>
     </q-toolbar>
 
     <div
-      :class="$q.platform.is.desktop ? 'col-9 row' : 'col-9 row  justify-end '"
+      :class="$q.platform.is.desktop ? 'col-9 row' : 'col-6 row  justify-end '"
     >
       <q-tabs
         v-for="(tab, i) in tabs"
