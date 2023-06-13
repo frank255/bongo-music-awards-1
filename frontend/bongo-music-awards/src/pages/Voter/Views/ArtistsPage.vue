@@ -16,12 +16,23 @@
         </template>
       </q-input>
     </div>
-    <div :class="$q.platform.is.desktop ? 'flex justify-center q-gutter-x-xl':'flex justify-center'">
+    <div
+      :class="
+        $q.platform.is.desktop
+          ? 'flex justify-center q-gutter-x-xl'
+          : 'flex justify-center'
+      "
+    >
       <q-card
         v-for="(artist, i) in filteredArtists"
         :key="i"
         class="q-mt-xl bg-grey-2"
-        :style="$q.platform.is.desktop ? 'min-width: 200px;height:200px': 'width: 300px;height:200px'"
+        :style="
+          $q.platform.is.desktop
+            ? 'min-width: 200px;height:200px; cursor: pointer'
+            : 'width: 300px;height:200px; cursor: pointer'
+        "
+        @click="artistDetails(artist.id)"
       >
         <q-card-section class="flex justify-center">
           <q-avatar size="90px">
@@ -42,35 +53,46 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+
 const filteredArtists = [
   {
+    id: 1,
     name: "John",
     category: "Painter",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg"
+    image: "https://cdn.quasar.dev/img/avatar1.jpg",
   },
   {
+    id: 2,
     name: "Sarah",
     category: "Sculptor",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg"
+    image: "https://cdn.quasar.dev/img/avatar1.jpg",
   },
   {
+    id: 3,
     name: "Mike",
     category: "Photographer",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg"
+    image: "https://cdn.quasar.dev/img/avatar1.jpg",
   },
   {
+    id: 4,
     name: "Emily",
     category: "Mixed Media Artist",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg"
+    image: "https://cdn.quasar.dev/img/avatar1.jpg",
   },
-   {
+  {
+    id: 5,
     name: "Keyle",
     category: "Mixed Media Artist",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg"
-  }
+    image: "https://cdn.quasar.dev/img/avatar1.jpg",
+  },
 ];
-
+const router = useRouter();
+const artistDetails = (index) => {
+  router.push(`/artists/${index}`);
+  console.log(index);
+};
 </script>
 
 <style lang="scss" scoped></style>

@@ -5,12 +5,13 @@ const otherRoutes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/IndexPage.vue') },
-      { path: '/artists', component: () => import('pages/ArtistsPage.vue') },
-      { path: '/awards', component: () => import('pages/AwardsPage.vue') },
-      { path: '/tickets', component: () => import('pages/TicketsPage.vue') },
+      { path: '/artists', component: () => import('pages/Voter/Views/ArtistsPage.vue') },
+      { path: '/awards', component: () => import('pages/Voter/Views/AwardsPage.vue') },
+      { path: '/tickets', component: () => import('pages/Voter/Views/TicketsPage.vue') },
+      { path: '/artists/:id', component: () => import('pages/Voter/Views/ArtistDetails.vue') },
     ]
   },
-   {
+  {
     path: '/login',
     component: () => import('layouts/AppLayout.vue'),
     children: [
