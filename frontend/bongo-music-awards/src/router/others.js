@@ -5,6 +5,9 @@ const otherRoutes = [
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/IndexPage.vue') },
+      { path: '/artists', component: () => import('pages/ArtistsPage.vue') },
+      { path: '/awards', component: () => import('pages/AwardsPage.vue') },
+      { path: '/tickets', component: () => import('pages/TicketsPage.vue') },
     ]
   },
    {
