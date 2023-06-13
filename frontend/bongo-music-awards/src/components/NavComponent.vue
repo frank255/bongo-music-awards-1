@@ -100,19 +100,19 @@ const tabs = [
   //   icon: "mdi-handshake-outline",
   // },
   {
-    path: "/",
+    path: "/artists",
     label: "Artists",
     icon: "mdi-music-clef-treble",
   },
 
   {
-    path: "/",
+    path: "/awards",
     label: "Awards",
     icon: "mdi-trophy",
   },
 
   {
-    path: "/",
+    path: "/tickets",
     label: "Tickets",
     icon: "mdi-ticket",
   },
