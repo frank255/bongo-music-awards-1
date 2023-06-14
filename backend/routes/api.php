@@ -6,6 +6,7 @@ use App\Http\Controllers\EventsController;
 use App\Http\Controllers\GenreController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\ArtistProfileController;
+use App\Http\Controllers\AuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -26,5 +27,9 @@ Route::apiResource('/events',EventsController::class);
 Route::apiResource('/genres',GenreController::class);
 Route::apiResource('/categories',CategoryController::class);
 Route::apiResource('/artist_profile',ArtistProfileController::class);
+
+Route::post('/register',[AuthController::class,'register']);
+Route::post('/login',[AuthController::class,'login']);
+Route::post('/logout',[AuthController::class,'logout']);
 
 //Route::get('/distinct_genres',[GenreController::class,'getGenres']);
