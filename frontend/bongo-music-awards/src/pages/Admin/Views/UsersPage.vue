@@ -2,10 +2,10 @@
   <q-page padding>
     <div class="row items-center q-mt-xl">
       <p class="font-body-small q-pl-md col">
-        <span class="text-weight-bolder text-capitalize text-h6">events and awards</span>
+        <span class="text-weight-bolder text-capitalize text-h6">Total Registered Users</span>
       </p>
       <p class="flex justify-end width col">
-        <q-btn class="text-capitalize" to="/admin/eventsandawards/addevent"> add event </q-btn>
+        <q-btn class="text-capitalize" to="/admin/users/adduser"> add user</q-btn>
       </p>
     </div>
     <q-table

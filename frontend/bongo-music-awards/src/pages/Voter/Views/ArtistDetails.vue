@@ -28,72 +28,9 @@
           </p>
         </div>
       </div>
-      <div class="row justify-end">
-        <q-icon
-          size="2em"
-          class="q-pa-sm"
-          name="mdi-pencil"
-          @click="
-            // approveLoan(props.row.loan_id);
-            BIO_DIALOG = true
-          "
-        >
-          <q-tooltip>Edit</q-tooltip>
-        </q-icon>
-      </div>
     </q-card>
     <q-card class="q-mt-lg">
-      <div class="row justify-end">
-        <q-icon
-          size="2em"
-          class="q-pa-sm"
-          name="mdi-pencil"
-          @click="
-            // approveLoan(props.row.loan_id);
-            INFO_DIALOG = true
-          "
-        >
-
-          <q-tooltip>Edit</q-tooltip></q-icon
-        >
-      </div>
       <div class="row shaddow q-mt-sm q-pa-sm justify-between">
-        <div class="q-pa-sm">
-          <p class="text-h6 q-pa-sm">Informations</p>
-          <q-list padding>
-            <q-item>
-              <q-item-section avatar>
-                <q-icon color="green" name="mdi-phone" />
-              </q-item-section>
-              <q-item-section>Phone</q-item-section>
-              <q-item-section side>
-                <q-item-label caption>+255766830442</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <q-list padding>
-            <q-item>
-              <q-item-section avatar>
-                <q-icon color="green" name="mdi-web" />
-              </q-item-section>
-              <q-item-section>Website</q-item-section>
-              <q-item-section side>
-                <q-item-label caption>www.alikiba.com</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-          <q-list padding>
-            <q-item>
-              <q-item-section avatar>
-                <q-icon color="green" name="mdi-gmail" />
-              </q-item-section>
-              <q-item-section>Email</q-item-section>
-              <q-item-section side>
-                <q-item-label caption>alikiba@gmail.com</q-item-label>
-              </q-item-section>
-            </q-item>
-          </q-list>
-        </div>
         <div class="q-pa-sm">
           <p class="text-h6 q-pa-sm">Social Media</p>
           <q-list padding>
@@ -174,106 +111,14 @@
         </div>
       </div>
     </q-card>
-    <!--dialogue biography-->
-    <q-dialog v-model="BIO_DIALOG" position="right">
-      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
-        <q-card-section>
-          <div class="text-h6">Fill the form bellow</div>
-        </q-card-section>
 
-        <q-card-section class="q-pt-none q-gutter-y-md">
-          <!-- <q-input v-model="artwork_name" dense outlined label="Profile image" /> -->
-          <q-file
-          v-model="profile_image"
-          class="q-mx-lg"
-          counter
-          dense
-          label="Profile Photo"
-          outlined
-          type="file"
-        >
-          <template #prepend>
-            <q-icon name="cloud_upload" @click.stop.prevent />
-          </template>
-          <template #append>
-            <q-icon
-              class="cursor-pointer"
-              name="close"
-              @click.stop.prevent="model = null"
-            />
-          </template>
-        </q-file>
-          <q-input v-model="artwork_link" dense outlined label="Name" />
-          <q-input v-model="artwork_link" dense outlined label="Genres" />
-          <q-input v-model="artwork_link" dense outlined label="Biography" />
-        </q-card-section>
-
-        <q-card-actions>
-          <q-btn
-            flat
-            outline
-            color="negative"
-            label="Cancel"
-            @click="declineLoans()"
-            class="q-mx-sm text-capitalize"
-            v-close-popup
-          />
-          <q-btn
-            color="primary"
-            label="Save"
-            @click="approveLoans()"
-            class="q-mx-sm text-capitalize"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
-    <!--dialogue other info-->
-    <q-dialog v-model="INFO_DIALOG" position="right">
-      <q-card style="width: 500px; max-width: 80vw; height: 100vh">
-        <q-card-section>
-          <div class="text-h6">Fill the form bellow</div>
-        </q-card-section>
-
-        <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="artwork_name" dense outlined label="Phone" />
-          <q-input v-model="artwork_link" dense outlined label="Website" />
-          <q-input v-model="artwork_link" dense outlined label="Email" />
-          <q-input v-model="artwork_link" dense outlined label="Youtube" />
-          <q-input v-model="artwork_name" dense outlined label="Instagram" />
-          <q-input v-model="artwork_link" dense outlined label="Twitter" />
-          <q-input v-model="artwork_link" dense outlined label="Occupations" />
-          <q-input v-model="artwork_link" dense outlined label="Labels" />
-        </q-card-section>
-
-        <q-card-actions>
-          <q-btn
-            flat
-            outline
-            color="negative"
-            label="Cancel"
-            @click="declineLoans()"
-            class="q-mx-sm text-capitalize"
-            v-close-popup
-          />
-          <q-btn
-            color="primary"
-            label="Save"
-            @click="approveLoans()"
-            class="q-mx-sm text-capitalize"
-            v-close-popup
-          />
-        </q-card-actions>
-      </q-card>
-    </q-dialog>
   </q-page>
 </template>
 
 <script setup>
 import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
-const BIO_DIALOG = ref(false);
-const INFO_DIALOG = ref(false);
+
 const getProfile = async () => {
   try {
     const response = await api.get("/artist_profile");
