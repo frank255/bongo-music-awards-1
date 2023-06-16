@@ -1,6 +1,6 @@
 <template>
   <q-header class="q-pa-xs bg-white row justify-around text-black" bordered>
-    <q-toolbar :class="$q.platform.is.desktop ? 'col-2':'col-4'">
+    <q-toolbar :class="$q.platform.is.desktop ? 'col-2' : 'col-4'">
       <q-toolbar-title>
         <router-link to="/">
           <q-img
@@ -27,7 +27,7 @@
       >
         <q-route-tab
           inline
-          v-if="$q.platform.is.desktop"
+          v-if="tab.label !== 'login' && $q.platform.is.desktop"
           :label="tab.label"
           :icon="tab.icon"
           :to="tab.path"
@@ -117,11 +117,11 @@ const tabs = [
     icon: "mdi-ticket",
   },
 
-  // {
-  //   path: "/mshauri",
-  //   label: "Mshauri",
-  //      icon: "mdi-account-question-outline",
-  // },
+  {
+    path: "/login",
+    label: "login",
+    icon: "mdi-account-question-outline",
+  },
 ];
 
 const rightDrawer = () => {
