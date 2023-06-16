@@ -6,9 +6,10 @@ const otherRoutes = [
     children: [
       { path: '/', component: () => import('pages/IndexPage.vue') },
       { path: '/artists', component: () => import('pages/Voter/Views/ArtistsPage.vue') },
+      { path: '/artists/:id', component: () => import('pages/Voter/Views/ArtistDetails.vue') },
       { path: '/awards', component: () => import('pages/Voter/Views/AwardsPage.vue') },
       { path: '/tickets', component: () => import('pages/Voter/Views/TicketsPage.vue') },
-      { path: '/artists/:id', component: () => import('pages/Voter/Views/ArtistDetails.vue') },
+
     ]
   },
   {
@@ -16,6 +17,14 @@ const otherRoutes = [
     component: () => import('layouts/AppLayout.vue'),
     children: [
       { path: '/login', component: () => import('pages/LoginPage.vue') },
+      {
+        path: '/register', component: () => import('pages/RegistrationPage.vue'),
+        name: 'register'
+      },
+      {
+        path: '/forgot_password', component: () => import('pages/ForgotPassword.vue'),
+        name: 'forgot-password'
+      },
     ]
   },
 

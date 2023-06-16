@@ -1,5 +1,8 @@
 <template>
   <q-page class="bg-grey-2 bg-images" padding>
+    <div class="full-width q-pa-md">
+      <q-btn label="home" class="text-capitalize" to="/" icon="arrow_back" flat color="primary" />
+    </div>
     <div class="row justify-center items-center" style="height: 85vh">
       <q-card class="q-pa-lg col-xs-12 col-sm-12 col-md-5 column items-center">
         <div
@@ -37,11 +40,17 @@
             </template>
           </q-input>
         </div>
-        <q-btn color="primary" @click="loginUser()" label="Login"> </q-btn>
-        <div class="text-subtitle1 text-center q-mt-sm">
+        <div class="">
           Forgot password?
-          <span class="text-blue cursor-pointer" @click="register"
+          <span class="text-blue cursor-pointer" @click="forgotPassword"
             >Reset Here</span
+          >
+        </div>
+        <q-btn color="primary" @click="loginUser()" label="Login"> </q-btn>
+        <div class="text-subtitle1 q-mt-sm">
+         Don't have an account?
+          <span class="text-blue cursor-pointer" @click="register"
+            >Register Here</span
           >
         </div>
       </q-card>
@@ -71,7 +80,12 @@ const loginUser = async () => {
   useAuth.setUserData(data.data);
   window.location.reload();
 };
-
+const register = ()=> {
+  router.push({ name: "register" });
+}
+const forgotPassword = ()=> {
+  router.push({ name: "forgot-password" });
+}
 /*
  *
  * Password::min(8)->mixedCase()->numbers()->symbols()
@@ -79,21 +93,5 @@ const loginUser = async () => {
 onMounted(() => {});
 </script>
 <style>
-.bg-images {
-  position: relative;
-}
-.bg-images::before {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background-image: url("../assets/background2.jpeg");
-  background-size: cover;
-  background-repeat: no-repeat;
-  background-position: center;
-  opacity: 0.2; /* Change the opacity value as desired */
-}
+
 </style>
