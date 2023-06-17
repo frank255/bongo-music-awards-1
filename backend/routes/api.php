@@ -30,6 +30,8 @@ Route::apiResource('/artist_profile',ArtistProfileController::class);
 
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
-Route::post('/logout',[AuthController::class,'logout']);
 
-//Route::get('/distinct_genres',[GenreController::class,'getGenres']);
+
+Route::middleware('auth:sanctum')->group( function () {
+    Route::post('/logout',[AuthController::class,'logout']);
+});
