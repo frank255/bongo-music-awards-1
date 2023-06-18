@@ -64,6 +64,7 @@ class AuthController extends Controller
             'user' => $user,
             'status' => Response::HTTP_OK,
             'token' => $user->createToken('login')->plainTextToken,
+            'role' => $user->is_admin ? 'artist':'admin',
         ])->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
 
 
