@@ -21,6 +21,7 @@ pipeline {
                  sh 'php artisan route:cache'
                  sh 'php artisan route:clear'
                  sh 'php artisan config:clear'
+                 sh 'php artisan migrate:refresh'
                  //sh 'php artisan create:superuser'
                  sh 'php artisan key:generate'
                }
