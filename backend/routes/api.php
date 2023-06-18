@@ -28,7 +28,7 @@ Route::apiResource('/genres',GenreController::class);
 Route::apiResource('/categories',CategoryController::class);
 Route::apiResource('/artist_profile',ArtistProfileController::class);
 
-Route::post('/reg',[AuthController::class,'register']);
+Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 
 
