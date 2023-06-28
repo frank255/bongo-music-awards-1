@@ -21,19 +21,19 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
+            v-model="form.name"
             :options="options"
           />
-          <q-input
+<!--          <q-input
             label="Enter Phone Number"
             class="q-ma-lg"
             outlined
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
+            v-model="form.phone_number"
             :options="options"
-          />
+          />-->
           <q-input
             label="Enter Email"
             class="q-ma-lg"
@@ -41,7 +41,7 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
+            v-model="form.email"
             :options="options"
           />
           <q-input
@@ -51,7 +51,7 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
+            v-model="form.password"
             :options="options"
           />
           <q-input
@@ -61,14 +61,15 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
+            v-model="form.password_confirmation"
             :options="options"/>
           <div class="flex justify-end q-ma-lg">
             <q-btn
               class="text-capitalize"
               color="primary"
               label="Register"
-              @click="sendToBank()"
+              type="submit"
+              @click.prevent="register()"
             />
           </div>
         </div>
@@ -77,7 +78,34 @@
   </q-page>
 </template>
 
-<script setup></script>
+<script>
+import {api} from "boot/axios";
+
+export default {
+  data(){
+    return {
+      form: {
+        name: '',
+//        phone_number: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+      }
+    }
+  },
+
+  methods: {
+    register(){
+      //console.log(this.form)
+      //Implementing loader, or progress indicator here
+      return api.post('/register',this.form)
+    }
+  }
+}
+
+
+
+</script>
 
 <style lang="scss" scoped>
 .bg-images {
