@@ -29,8 +29,19 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="name"
+            v-model="form.name"
+            :options="options"
           />
+<!--          <q-input
+            label="Enter Phone Number"
+            class="q-ma-lg"
+            outlined
+            dense
+            transition-show="flip-up"
+            transition-hide="scale"
+            v-model="form.phone_number"
+            :options="options"
+          />-->
           <q-input
             label="Enter Email"
             class="q-ma-lg"
@@ -38,7 +49,8 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="email"
+            v-model="form.email"
+            :options="options"
           />
           <q-input
             label="Password"
@@ -48,7 +60,8 @@
             type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="password"
+            v-model="form.password"
+            :options="options"
           />
           <q-input
             label="Repeat Password"
@@ -58,14 +71,15 @@
             type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="password_confirmation"
-          />
+            v-model="form.password_confirmation"
+            :options="options"/>
           <div class="flex justify-end q-ma-lg">
             <q-btn
               class="text-capitalize"
               color="primary"
               label="Register"
-              @click="register()"
+              type="submit"
+              @click.prevent="register()"
             />
           </div>
         </div>
@@ -74,28 +88,33 @@
   </q-page>
 </template>
 
-<script setup>
-import { ref } from "vue";
-import { api } from "src/boot/axios";
-import { useRouter } from "vue-router";
-const router = useRouter();
-const name = ref("");
-const email = ref("");
-const password = ref("");
-const password_confirmation = ref("");
-const register = async () => {
-  try {
-    const { data } = await api.post("/register", {
-      name: name.value,
-      email: email.value,
-      password: password.value,
-      password_confirmation: password_confirmation.value,
-    });
-    console.log(data);
-    router.push("/login");
-    // console.log(value);
-  } catch (e) {}
-};
+<script>
+import {api} from "boot/axios";
+
+export default {
+  data(){
+    return {
+      form: {
+        name: '',
+//        phone_number: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+      }
+    }
+  },
+
+  methods: {
+    register(){
+      //console.log(this.form)
+      //Implementing loader, or progress indicator here
+      return api.post('/register',this.form)
+    }
+  }
+}
+
+
+
 </script>
 
 <style lang="scss" scoped>
