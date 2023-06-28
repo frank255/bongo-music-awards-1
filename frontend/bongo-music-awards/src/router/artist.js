@@ -1,7 +1,7 @@
 const artistRoutes = [
   {
     path: '/artist',
-    meta:'',
+    meta: { requiresAuth: true, isArtist: "artist" },
     component:() => import ("layouts/ArtistLayout.vue"),
     children: [
       {
@@ -10,6 +10,8 @@ const artistRoutes = [
       } ,{
         path: '/artist/dashboard',
         component: () => import("pages/Artist/Views/ArtistIndexPage.vue"),
+        name: "Artist",
+
       }, {
         path: '/artist/eventsandawards',
         component: () => import("pages/Artist/Views/ArtistEventsandAwards.vue"),

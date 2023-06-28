@@ -30,10 +30,18 @@
 
 <script setup>
 import ArtistMenu from "src/components/ArtistMenu.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "src/stores/auth";
 const router = useRouter();
 
 const leftDrawerOpen = ref(false);
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
+onMounted(() => {
+  // auth();
+  if (useAuthStore().$state.isAuthorized) {
+  } else {
+    window.location.href = "/login";
+  }
+});
 </script>

@@ -30,10 +30,18 @@
 
 <script setup>
 import AdminMenu from "src/components/AdminMenu.vue";
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useAuthStore } from "stores/auth";
 const router = useRouter();
 
 const leftDrawerOpen = ref(false);
 const toggleLeftDrawer = () => (leftDrawerOpen.value = !leftDrawerOpen.value);
+onMounted(() => {
+  // auth();
+  if (useAuthStore().$state.isAuthorized) {
+  } else {
+    window.location.href = "/login";
+  }
+});
 </script>

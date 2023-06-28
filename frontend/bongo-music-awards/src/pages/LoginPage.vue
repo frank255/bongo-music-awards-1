@@ -60,11 +60,11 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-// import { useAuthStore } from "stores/auth";
+import { useAuthStore } from "stores/auth";
 import { useRouter } from "vue-router";
 import { api } from "src/boot/axios";
 
-// const useAuth = useAuthStore();
+const useAuth = useAuthStore();
 
 const isPwd = ref(true);
 const router = useRouter();

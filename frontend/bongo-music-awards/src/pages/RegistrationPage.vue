@@ -10,9 +10,17 @@
         color="primary"
       />
     </div>
-    <div :class="$q.platform.is.desktop?'flex justify-center text-h4':'flex justify-center text-h5' ">Artists Registration Form</div>
+    <div
+      :class="
+        $q.platform.is.desktop
+          ? 'flex justify-center text-h4'
+          : 'flex justify-center text-h5'
+      "
+    >
+      Artists Registration Form
+    </div>
     <div class="flex justify-center">
-      <q-form @submit.prevent="moneyToBank()" style="width: 80%">
+      <q-form @submit.prevent="register()" style="width: 80%">
         <div>
           <q-input
             label="Full Name"
@@ -21,18 +29,7 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
-            :options="options"
-          />
-          <q-input
-            label="Enter Phone Number"
-            class="q-ma-lg"
-            outlined
-            dense
-            transition-show="flip-up"
-            transition-hide="scale"
-            v-model="bank_name"
-            :options="options"
+            v-model="name"
           />
           <q-input
             label="Enter Email"
@@ -41,34 +38,34 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
-            :options="options"
+            v-model="email"
           />
           <q-input
             label="Password"
             class="q-ma-lg"
             outlined
             dense
+            type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
-            :options="options"
+            v-model="password"
           />
           <q-input
             label="Repeat Password"
             class="q-ma-lg"
             outlined
             dense
+            type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="bank_name"
-            :options="options"/>
+            v-model="password_confirmation"
+          />
           <div class="flex justify-end q-ma-lg">
             <q-btn
               class="text-capitalize"
               color="primary"
               label="Register"
-              @click="sendToBank()"
+              @click="register()"
             />
           </div>
         </div>
@@ -77,7 +74,29 @@
   </q-page>
 </template>
 
-<script setup></script>
+<script setup>
+import { ref } from "vue";
+import { api } from "src/boot/axios";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const name = ref("");
+const email = ref("");
+const password = ref("");
+const password_confirmation = ref("");
+const register = async () => {
+  try {
+    const { data } = await api.post("/register", {
+      name: name.value,
+      email: email.value,
+      password: password.value,
+      password_confirmation: password_confirmation.value,
+    });
+    console.log(data);
+    router.push("/login");
+    // console.log(value);
+  } catch (e) {}
+};
+</script>
 
 <style lang="scss" scoped>
 .bg-images {

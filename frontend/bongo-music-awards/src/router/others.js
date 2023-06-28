@@ -2,6 +2,7 @@
 const otherRoutes = [
   {
     path: '/',
+    meta: { requiresAuth: false },
     component: () => import('layouts/MainLayout.vue'),
     children: [
       { path: '/', component: () => import('pages/IndexPage.vue') },
@@ -14,16 +15,20 @@ const otherRoutes = [
   },
   {
     path: '/login',
+    meta: { requiresAuth: false },
     component: () => import('layouts/AppLayout.vue'),
     children: [
-      { path: '/login', component: () => import('pages/LoginPage.vue') },
+      {
+        path: '/login', component: () => import('pages/LoginPage.vue'),
+        name: 'Login'
+      },
       {
         path: '/register', component: () => import('pages/RegistrationPage.vue'),
-        name: 'register'
+        name: 'Register'
       },
       {
         path: '/forgot_password', component: () => import('pages/ForgotPassword.vue'),
-        name: 'forgot-password'
+        name: 'Forgot-password'
       },
     ]
   },
