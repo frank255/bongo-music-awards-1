@@ -13,21 +13,22 @@ return new class extends Migration
     {
         Schema::create('artist_profiles', function (Blueprint $table) {
             $table->id();
-            $table->string('name',255)->unique();
-            $table->json('genres');
-            $table -> text('biography');
-            $table -> string('phone')->unique();
-            $table -> string('website',255)->unique();
-            $table -> string('email',255)->unique();
-            $table -> string('facebook',255)->unique();
-            $table -> string('twitter',255)->unique();
-            $table -> string('instagram',255)->unique();
-            $table -> string('youtube',255)->unique();
-            $table -> json('occupations');
-            $table -> json('labels');
+            $table->string('name', 255)->unique();
+            $table->json('genres')->nullable();
+            $table->text('biography')->nullable();
+            $table->string('phone')->unique()->nullable();
+            $table->string('website', 255)->unique()->nullable();
+            $table->string('email', 255)->unique();
+            $table->string('facebook', 255)->unique()->nullable();
+            $table->string('twitter', 255)->unique()->nullable();
+            $table->string('instagram', 255)->unique()->nullable();
+            $table->string('youtube', 255)->unique()->nullable();
+            $table->json('occupations')->nullable();
+            $table->json('labels')->nullable();
             $table->timestamps();
         });
     }
+
 
     /**
      * Reverse the migrations.

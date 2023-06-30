@@ -8,14 +8,17 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
-
+use App\Http\Controllers\ArtistProfileController;
 class AuthController extends Controller
 {
+    public function index(Request $request){
+
+    }
 
     public function register(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'name' => 'required|string|max:255| min:3',
+            'name' => 'required|string|max:255|min:3',
             'email' => 'required|email|string|unique:users,email',
             'password' => 'required|confirmed|min:6'
         ]);
@@ -27,14 +30,24 @@ class AuthController extends Controller
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
 
-        $user = User::create($validator->safe()->all());
-        return \response()->json([
+        $user = User::create([
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+            'password' => bcrypt($request->input('password')),
+        ]);
+
+        // Create the user profile
+        $artistProfileController = new ArtistProfileController();
+        $artistProfile = $artistProfileController->store($request, $user);
+
+        return response()->json([
             'user' => $user,
+            'profile' => $artistProfile,
             'role' => 'artist',
             'token' => $user->createToken('token')->plainTextToken
         ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
-
     }
+
 
 
     public function login(Request $request)
