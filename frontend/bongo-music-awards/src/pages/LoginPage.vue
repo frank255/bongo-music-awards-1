@@ -1,7 +1,14 @@
 <template>
   <q-page class="bg-grey-2 bg-images" padding>
     <div class="full-width q-pa-md">
-      <q-btn label="home" class="text-capitalize" to="/" icon="arrow_back" flat color="primary" />
+      <q-btn
+        label="home"
+        class="text-capitalize"
+        to="/"
+        icon="arrow_back"
+        flat
+        color="primary"
+      />
     </div>
     <div class="row justify-center items-center" style="height: 85vh">
       <q-card class="q-pa-lg col-xs-12 col-sm-12 col-md-5 column items-center">
@@ -48,7 +55,7 @@
         </div>
         <q-btn color="primary" @click="loginUser()" label="Login"> </q-btn>
         <div class="text-subtitle1 q-mt-sm">
-         Don't have an account?
+          Don't have an account?
           <span class="text-blue cursor-pointer" @click="register"
             >Register Here</span
           >
@@ -60,11 +67,11 @@
 
 <script setup>
 import { onMounted, ref } from "vue";
-// import { useAuthStore } from "stores/auth";
+import { useAuthStore } from "stores/auth";
 import { useRouter } from "vue-router";
 import { api } from "src/boot/axios";
 
-// const useAuth = useAuthStore();
+const useAuth = useAuthStore();
 
 const isPwd = ref(true);
 const router = useRouter();
@@ -75,23 +82,25 @@ const loginUser = async () => {
     email: email.value,
     password: password.value,
   });
-  sessionStorage.removeItem("token");
-  sessionStorage.removeItem("role");
-  useAuth.setUserData(data.data);
+  if (sessionStorage.getItem("token") === null) {
+    useAuth.setUserData(data);
+  } else {
+    sessionStorage.removeItem("token");
+    sessionStorage.removeItem("role");
+  }
   window.location.reload();
 };
-const register = ()=> {
-  router.push({ name: "register" });
-}
-const forgotPassword = ()=> {
-  router.push({ name: "forgot-password" });
-}
+const register = () => {
+  router.push({ name: "Register" });
+};
+const forgotPassword = () => {
+  router.push({ name: "Forgot-password" });
+};
 /*
  *
  * Password::min(8)->mixedCase()->numbers()->symbols()
  * */
-onMounted(() => {});
+onMounted(() => {
+});
 </script>
-<style>
-
-</style>
+<style></style>

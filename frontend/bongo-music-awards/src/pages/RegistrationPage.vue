@@ -10,9 +10,17 @@
         color="primary"
       />
     </div>
-    <div :class="$q.platform.is.desktop?'flex justify-center text-h4':'flex justify-center text-h5' ">Artists Registration Form</div>
+    <div
+      :class="
+        $q.platform.is.desktop
+          ? 'flex justify-center text-h4'
+          : 'flex justify-center text-h5'
+      "
+    >
+      Artists Registration Form
+    </div>
     <div class="flex justify-center">
-      <q-form @submit.prevent="moneyToBank()" style="width: 80%">
+      <q-form @submit.prevent="register()" style="width: 80%">
         <div>
           <q-input
             label="Full Name"
@@ -21,7 +29,7 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="form.name"
+            v-model="name"
             :options="options"
           />
 <!--          <q-input
@@ -41,7 +49,7 @@
             dense
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="form.email"
+            v-model="email"
             :options="options"
           />
           <q-input
@@ -49,9 +57,10 @@
             class="q-ma-lg"
             outlined
             dense
+            type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="form.password"
+            v-model="password"
             :options="options"
           />
           <q-input
@@ -59,9 +68,10 @@
             class="q-ma-lg"
             outlined
             dense
+            type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="form.password_confirmation"
+            v-model="password_confirmation"
             :options="options"/>
           <div class="flex justify-end q-ma-lg">
             <q-btn
@@ -78,32 +88,28 @@
   </q-page>
 </template>
 
-<script>
+<script setup>
 import {api} from "boot/axios";
+import { ref } from "vue";
+import { useRouter } from "vue-router";
 
-export default {
-  data(){
-    return {
-      form: {
-        name: '',
-//        phone_number: '',
-        email: '',
-        password: '',
-        password_confirmation: ''
-      }
-    }
-  },
+const email = ref("")
+const name = ref("")
+const password = ref("")
+const password_confirmation = ref("")
+const router = useRouter();
+const errors = ref([])
 
-  methods: {
-    register(){
-      //console.log(this.form)
-      //Implementing loader, or progress indicator here
-      return api.post('/register',this.form)
-    }
-  }
+const register = async () => {
+  const response = await api.post('/register', {
+    email: email.value,
+    name: name.value,
+    password: password.value,
+    password_confirmation: password_confirmation.value
+  })
+  router.push({ name: "Login" });
+  console.log(response.data)
 }
-
-
 
 </script>
 

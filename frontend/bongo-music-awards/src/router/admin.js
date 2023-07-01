@@ -1,12 +1,13 @@
 const adminRoutes = [
   {
     path: '/admin',
-    meta: '',
     component: () => import("layouts/AdminLayout.vue"),
+    meta: { requiresAuth: true, isAdmin: "admin" },
     children: [
       {
         path: '/admin/dashboard',
         component: () => import("pages/Admin/Views/AdminIndexPage.vue"),
+        name: "Admin",
       },
       {
         path: '/admin',

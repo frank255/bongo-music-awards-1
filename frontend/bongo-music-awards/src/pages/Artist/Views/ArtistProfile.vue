@@ -8,7 +8,7 @@
           </q-avatar>
         </div>
         <div class="q-mt-xl column flex justify-center items-center">
-          <p class="text-h6">Ally Kiba</p>
+          <p class="text-h6">{{ profileInfo.name }}</p>
         </div>
         <div class="q-mt-xs column flex justify-center items-center">
           <p class="text-subtitle1">Genres | Afropop,R&B,Bongo Flava</p>
@@ -53,7 +53,6 @@
             INFO_DIALOG = true
           "
         >
-
           <q-tooltip>Edit</q-tooltip></q-icon
         >
       </div>
@@ -184,28 +183,33 @@
         <q-card-section class="q-pt-none q-gutter-y-md">
           <!-- <q-input v-model="artwork_name" dense outlined label="Profile image" /> -->
           <q-file
-          v-model="profile_image"
-          class="q-mx-lg"
-          counter
-          dense
-          label="Profile Photo"
-          outlined
-          type="file"
-        >
-          <template #prepend>
-            <q-icon name="cloud_upload" @click.stop.prevent />
-          </template>
-          <template #append>
-            <q-icon
-              class="cursor-pointer"
-              name="close"
-              @click.stop.prevent="model = null"
-            />
-          </template>
-        </q-file>
-          <q-input v-model="artwork_link" dense outlined label="Name" />
-          <q-input v-model="artwork_link" dense outlined label="Genres" />
-          <q-input v-model="artwork_link" dense outlined label="Biography" />
+            v-model="profile_image"
+            class="q-mx-lg"
+            counter
+            dense
+            label="Profile Photo"
+            outlined
+            type="file"
+          >
+            <template #prepend>
+              <q-icon name="cloud_upload" @click.stop.prevent />
+            </template>
+            <template #append>
+              <q-icon
+                class="cursor-pointer"
+                name="close"
+                @click.stop.prevent="model = null"
+              />
+            </template>
+          </q-file>
+          <q-input v-model="ProfileData.name" dense outlined label="Name" />
+          <q-input v-model="ProfileData.genre" dense outlined label="Genres" />
+          <q-input
+            v-model="ProfileData.biography"
+            dense
+            outlined
+            label="Biography"
+          />
         </q-card-section>
 
         <q-card-actions>
@@ -214,14 +218,13 @@
             outline
             color="negative"
             label="Cancel"
-            @click="declineLoans()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
           <q-btn
             color="primary"
             label="Save"
-            @click="approveLoans()"
+            @click="updateProfile()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -236,14 +239,39 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="artwork_name" dense outlined label="Phone" />
-          <q-input v-model="artwork_link" dense outlined label="Website" />
-          <q-input v-model="artwork_link" dense outlined label="Email" />
-          <q-input v-model="artwork_link" dense outlined label="Youtube" />
-          <q-input v-model="artwork_name" dense outlined label="Instagram" />
-          <q-input v-model="artwork_link" dense outlined label="Twitter" />
-          <q-input v-model="artwork_link" dense outlined label="Occupations" />
-          <q-input v-model="artwork_link" dense outlined label="Labels" />
+          <q-input v-model="ProfileData.phone" dense outlined label="Phone" />
+          <q-input
+            v-model="ProfileData.website"
+            dense
+            outlined
+            label="Website"
+          />
+          <q-input v-model="ProfileData.email" dense outlined label="Email" />
+          <q-input
+            v-model="ProfileData.youtube"
+            dense
+            outlined
+            label="Youtube"
+          />
+          <q-input
+            v-model="ProfileData.instagram"
+            dense
+            outlined
+            label="Instagram"
+          />
+          <q-input
+            v-model="ProfileData.twitter"
+            dense
+            outlined
+            label="Twitter"
+          />
+          <q-input
+            v-model="ProfileData.occupations"
+            dense
+            outlined
+            label="Occupations"
+          />
+          <q-input v-model="ProfileData.labels" dense outlined label="Labels" />
         </q-card-section>
 
         <q-card-actions>
@@ -252,14 +280,13 @@
             outline
             color="negative"
             label="Cancel"
-            @click="declineLoans()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
           <q-btn
             color="primary"
             label="Save"
-            @click="approveLoans()"
+            @click="updateProfile()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -274,10 +301,48 @@ import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
 const BIO_DIALOG = ref(false);
 const INFO_DIALOG = ref(false);
+const ProfileData = ref({
+  name: "",
+  website: "",
+  phone: "",
+  email: "",
+  youtube: "",
+  instagram: "",
+  twitter: "",
+  occupations: "",
+  labels: "",
+  biography: "",
+  genre: "",
+});
+const profileInfo = ref("");
+const form_data = () => {
+  const formData = new FormData();
+  formData.append("name", ProfileData.value.name);
+  formData.append("website", ProfileData.value.website);
+  formData.append("phone", ProfileData.value.phone);
+  formData.append("email", ProfileData.value.email);
+  formData.append("youtube", ProfileData.value.youtube);
+  formData.append("instagram", ProfileData.value.instagram);
+  formData.append("twitter", ProfileData.value.twitter);
+  formData.append("occupations", ProfileData.value.occupations);
+  formData.append("labels", ProfileData.value.labels);
+  formData.append("biography", ProfileData.value.biography);
+  formData.append("genre", ProfileData.value.genre);
+
+  return formData;
+};
+const userString = sessionStorage.getItem("user");
+const user = JSON.parse(userString);
+const updateProfile = async () => {
+  try {
+    const { data } = await api.post("/register", form_data());
+    console.log(data);
+  } catch (error) {}
+};
 const getProfile = async () => {
   try {
-    const response = await api.get("/artist_profile");
-    console.log(response);
+    const response = await api.get(`/artist_profile/${user.user_id}`);
+    profileInfo.value = response.data;
   } catch (error) {}
 };
 onMounted(() => {

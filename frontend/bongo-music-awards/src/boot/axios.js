@@ -7,7 +7,16 @@ import axios from 'axios'
 // good idea to move this instance creation inside of the
 // "export default () => {}" function below (which runs individually
 // for each client)
-const api = axios.create({ baseURL: 'http://127.0.0.1:8000/api' })
+axios.defaults.withCredentials = true;
+
+axios
+  .get(`${process.env.SANCTUM_URL}/sanctum/csrf-cookie`)
+  .then((response) => {});
+
+const api = axios.create({
+   baseURL: process.env.API_URL,
+   headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+  })
 
 export default boot(({ app }) => {
   // for use inside Vue files (Options API) through this.$axios and this.$api

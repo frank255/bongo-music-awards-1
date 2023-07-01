@@ -204,18 +204,18 @@ const rows = [
   },
   // Add more rows as needed
 ];
-const downloadPDF =()=> {
-    // Create a new instance of jsPDF
-    const doc = new jsPDF();
-    // Add the table to the PDF document
-    doc.autoTable({
-      head: [columns],
-      body: rows
-    });
+// const downloadPDF =()=> {
+//     // Create a new instance of jsPDF
+//     const doc = new jsPDF();
+//     // Add the table to the PDF document
+//     doc.autoTable({
+//       head: [columns],
+//       body: rows
+//     });
 
-    // Download the PDF file
-    doc.save('table.pdf');
-  }
+//     // Download the PDF file
+//     doc.save('table.pdf');
+//   }
 </script>
 
 <style lang="scss" scoped></style>
