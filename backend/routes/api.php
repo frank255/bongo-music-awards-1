@@ -33,6 +33,9 @@ Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);
 
 
+Route::put('/artist_bio/{id}',[ArtistProfileController::class,'updateBio']);
+Route::put('/artist_info/{id}',[ArtistProfileController::class,'updateArtistInfo']);
+
 //Route::middleware('auth:sanctum')->group( function (Request $request) {
 //    Route::post('/logout',[AuthController::class,'logout']);
 //});

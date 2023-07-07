@@ -7,8 +7,10 @@ use App\Models\ArtistProfile;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
+use function Termwind\renderUsing;
 
 class ArtistProfileController extends Controller
 {
@@ -54,7 +56,6 @@ class ArtistProfileController extends Controller
             'biography' => $request->input('biography'),
             'phone' => $request->input('phone'),
             'website' => $request->input('website'),
-            'email' => $request->input('email'),
             'facebook' => $request->input('facebook'),
             'twitter' => $request->input('twitter'),
             'instagram' => $request->input('instagram'),
@@ -144,4 +145,52 @@ class ArtistProfileController extends Controller
     {
         //
     }
+
+    public function updateBio(Request $request, $id){
+
+        $artistProfile = ArtistProfile::find($id);
+        $artistProfile->name = $request->input('name');
+        $artistProfile->genres = $request->input('genres');
+        $artistProfile->biography = $request->input('biography');
+
+        //return response
+        if($artistProfile->save()){
+            return \response()->json([
+                'status'=>Response::HTTP_CREATED,
+                'message'=> "Profile updated"
+            ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
+        }
+
+        return \response()->json([
+            'status'=>Response::HTTP_FORBIDDEN,
+            'message'=> "Profile failed"
+        ]);
+    }
+
+    public function updateArtistInfo(Request $request, $id){
+        $artistProfile = ArtistProfile::find($id);
+
+        $artistProfile->website =$request->input('website');
+        $artistProfile->phone = $request->input('phone');
+        $artistProfile->email = $request->input('email');
+        $artistProfile->youtube = $request->input('youtube');
+        $artistProfile->facebook = $request->input('facebook');
+        $artistProfile->instagram = $request->input('instagram');
+        $artistProfile->twitter = $request->input('twitter');
+        $artistProfile->occupations = $request->input('occupations');
+        $artistProfile->labels = $request->input('labels');
+
+        if($artistProfile->save()){
+            return \response()->json([
+                'status'=>Response::HTTP_CREATED,
+                'message'=> "Profile updated"
+            ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
+        }
+
+        return \response()->json([
+            'status'=>Response::HTTP_FORBIDDEN,
+            'message'=> "Profile failed"
+        ]);
+    }
+
 }
