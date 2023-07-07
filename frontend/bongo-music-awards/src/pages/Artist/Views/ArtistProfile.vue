@@ -202,10 +202,10 @@
               />
             </template>
           </q-file>
-          <q-input v-model="ProfileData.name" dense outlined label="Name" />
-          <q-input v-model="ProfileData.genre" dense outlined label="Genres" />
+          <q-input v-model="ProfileBio.name" dense outlined label="Name" />
+          <q-input v-model="ProfileBio.genre" dense outlined label="Genres" />
           <q-input
-            v-model="ProfileData.biography"
+            v-model="ProfileBio.biography"
             dense
             outlined
             label="Biography"
@@ -224,7 +224,7 @@
           <q-btn
             color="primary"
             label="Save"
-            @click="updateProfile()"
+            @click="updateBio()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -239,39 +239,39 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="ProfileData.phone" dense outlined label="Phone" />
+          <q-input v-model="Profileinfo.phone" dense outlined label="Phone" />
           <q-input
-            v-model="ProfileData.website"
+            v-model="Profileinfo.website"
             dense
             outlined
             label="Website"
           />
-          <q-input v-model="ProfileData.email" dense outlined label="Email" />
+          <q-input v-model="Profileinfo.email" dense outlined label="Email" />
           <q-input
-            v-model="ProfileData.youtube"
+            v-model="Profileinfo.youtube"
             dense
             outlined
             label="Youtube"
           />
           <q-input
-            v-model="ProfileData.instagram"
+            v-model="Profileinfo.instagram"
             dense
             outlined
             label="Instagram"
           />
           <q-input
-            v-model="ProfileData.twitter"
+            v-model="Profileinfo.twitter"
             dense
             outlined
             label="Twitter"
           />
           <q-input
-            v-model="ProfileData.occupations"
+            v-model="Profileinfo.occupations"
             dense
             outlined
             label="Occupations"
           />
-          <q-input v-model="ProfileData.labels" dense outlined label="Labels" />
+          <q-input v-model="Profileinfo.labels" dense outlined label="Labels" />
         </q-card-section>
 
         <q-card-actions>
@@ -286,7 +286,7 @@
           <q-btn
             color="primary"
             label="Save"
-            @click="updateProfile()"
+            @click="updateInfo()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -299,10 +299,16 @@
 <script setup>
 import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
+
 const BIO_DIALOG = ref(false);
 const INFO_DIALOG = ref(false);
-const ProfileData = ref({
+const profileInfo = ref("");
+const ProfileBio = ref({
   name: "",
+  biography: "",
+  genre: ""
+});
+const Profileinfo = ref({
   website: "",
   phone: "",
   email: "",
@@ -310,33 +316,52 @@ const ProfileData = ref({
   instagram: "",
   twitter: "",
   occupations: "",
-  labels: "",
-  biography: "",
-  genre: "",
+  labels: ""
 });
-const profileInfo = ref("");
-const form_data = () => {
-  const formData = new FormData();
-  formData.append("name", ProfileData.value.name);
-  formData.append("website", ProfileData.value.website);
-  formData.append("phone", ProfileData.value.phone);
-  formData.append("email", ProfileData.value.email);
-  formData.append("youtube", ProfileData.value.youtube);
-  formData.append("instagram", ProfileData.value.instagram);
-  formData.append("twitter", ProfileData.value.twitter);
-  formData.append("occupations", ProfileData.value.occupations);
-  formData.append("labels", ProfileData.value.labels);
-  formData.append("biography", ProfileData.value.biography);
-  formData.append("genre", ProfileData.value.genre);
 
+const form_data_bio = () => {
+  const formData = new FormData();
+  formData.append("form_type", "bio"); // Add form_type field for bio form
+  formData.append("name", ProfileBio.value.name);
+  formData.append("biography", ProfileBio.value.biography);
+  formData.append("genre", ProfileBio.value.genre);
   return formData;
 };
+
+const form_data_info = () => {
+  const formData = new FormData();
+  formData.append("form_type", "info"); // Add form_type field for info form
+  formData.append("website", Profileinfo.value.website);
+  formData.append("phone", Profileinfo.value.phone);
+  formData.append("email", Profileinfo.value.email);
+  formData.append("youtube", Profileinfo.value.youtube);
+  formData.append("instagram", Profileinfo.value.instagram);
+  formData.append("twitter", Profileinfo.value.twitter);
+  formData.append("occupations", Profileinfo.value.occupations);
+  formData.append("labels", Profileinfo.value.labels);
+  return formData;
+};
+
 const userString = sessionStorage.getItem("user");
 const user = JSON.parse(userString);
-const updateProfile = async () => {
+
+const updateBio = async () => {
   try {
-    const { data } = await api.post("/register", form_data());
-    console.log(data);
+    const response = await api.post(
+      `/artist_profile/${user.user_id}`,
+      form_data_bio()
+    );
+    console.log(response.data);
+  } catch (error) {}
+};
+
+const updateInfo = async () => {
+  try {
+    const response = await api.post(
+      `/artist_profile/${user.user_id}`,
+      form_data_info()
+    );
+    console.log(response.data);
   } catch (error) {}
 };
 const getProfile = async () => {

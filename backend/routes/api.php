@@ -28,6 +28,7 @@ Route::apiResource('/events',EventsController::class);
 Route::apiResource('/genres',GenreController::class);
 Route::apiResource('/categories',CategoryController::class);
 Route::apiResource('/artist_profile',ArtistProfileController::class);
+// Route::post('/artist_profile',ArtistProfileController::class,'updateProfile');
 Route::post('/register',[AuthController::class,'register']);
 Route::post('/login',[AuthController::class,'login']);
 Route::post('/logout',[AuthController::class,'logout']);

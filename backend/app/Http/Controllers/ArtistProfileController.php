@@ -90,26 +90,30 @@ class ArtistProfileController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request,$id)
+    public function updateProfile(Request $request, $id)
     {
         $artistProfile = ArtistProfile::find($id);
         if (!$artistProfile){
             return response()->json(['message' => 'Artist profile not found'], 404);
         }
 
+        // Determine which form data is being submitted
+        $formType = $request->input('form_type'); // Add this field in the frontend forms
+
         $validator = Validator::make($request->all(), [
-            'name' => ['required', 'string', 'max:255', 'min:3',],
-            'genres' => ['required','array'],
-            'biography' => ['required','string'],
-            'phone' => ['required','numeric','digits:12',],
-            'website' => ['required', 'string', 'max:255',],
-            'email' => ['required','email'],
-            'facebook' => ['required','string','max:255'],
-            'twitter' => ['required', 'string','max:255'],
-            'instagram' => ['required', 'string','max:255'],
-            'youtube' => ['required', 'string','max:255'],
-            'occupations' =>['required','array'],
-            'labels' => ['required','array']
+            // Include validation rules specific to each form
+            'name' => ['string', 'max:255', 'min:3'],
+            'genres' => ['array'],
+            'biography' => ['string'],
+            'phone' => ['numeric', 'digits:12'],
+            'website' => ['string', 'max:255'],
+            'email' => ['email'],
+            'facebook' => ['string', 'max:255'],
+            'twitter' => ['string', 'max:255'],
+            'instagram' => ['string', 'max:255'],
+            'youtube' => ['string', 'max:255'],
+            'occupations' => ['array'],
+            'labels' => ['array']
         ]);
 
         if ($validator->fails()){
@@ -119,24 +123,31 @@ class ArtistProfileController extends Controller
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
 
-        $artistProfile->update($validator->safe()->only([
-            'name',
-            'genres',
-            'biography',
-            'phone',
-            'website',
-            'email',
-            'facebook',
-            'twitter',
-            'instagram',
-            'youtube',
-            'occupations',
-            'labels'
-        ]));
+        // Update the profile based on the form type
+        if ($formType === 'bio') {
+            $artistProfile->update($validator->safe()->only([
+                'name',
+                'genres',
+                'biography'
+            ]));
+        } elseif ($formType === 'info') {
+            $artistProfile->update($validator->safe()->only([
+                'phone',
+                'website',
+                'email',
+                'facebook',
+                'twitter',
+                'instagram',
+                'youtube',
+                'occupations',
+                'labels'
+            ]));
+        }
 
         return \response(new ArtistProfileResource($artistProfile))
             ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
+
 
     /**
      * Remove the specified resource from storage.
