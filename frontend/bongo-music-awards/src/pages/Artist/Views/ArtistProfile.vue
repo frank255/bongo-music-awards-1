@@ -11,20 +11,9 @@
           <p class="text-h6">{{ profileInfo.name }}</p>
         </div>
         <div class="q-mt-xs column flex justify-center items-center">
-          <p class="text-subtitle1">Genres | Afropop,R&B,Bongo Flava</p>
+          <p class="text-subtitle1">Genres | {{ profileInfo.genres }}</p>
           <p class="text-subtitle2 q-px-xl" style="text-align: center">
-            Ali Saleh Kiba (26 November 1986), best known as Ali Kiba or
-            sometimes King Kiba, is a Tanzanian musician and songwriter. He is
-            from Kigoma and the owner of Kings Music label. According to BASATA
-            Alikiba is one of the most successful Bongo Flava singers and
-            considered the greatest of all time having often been referred to by
-            many contemporaries as the "King of Bongo flava".His musical style
-            has been defined as polyhedric, with his style being characterized
-            by several influences from other genres, mainly Afro pop, R&B and
-            Rhumba. His lyrics develop predominantly over themes of romance,
-            fast life, desire, regret, and emotional conflict. He also
-            collaborated with R. Kelly and other African musicians on the One8
-            project.In 2017 he became the director of Rockstar4000.
+          {{ profileInfo.biography}}
           </p>
         </div>
       </div>
@@ -202,14 +191,40 @@
               />
             </template>
           </q-file>
-          <q-input v-model="ProfileBio.name" dense outlined label="Name" />
-          <q-input v-model="ProfileBio.genre" dense outlined label="Genres" />
-          <q-input
-            v-model="ProfileBio.biography"
-            dense
-            outlined
-            label="Biography"
-          />
+          <q-input v-model="name" dense outlined label="Name" />
+          <div class="row flex justify-center q-gutter-x-sm">
+            <q-input
+              v-model="newGenre"
+              :style="$q.platform.is.desktop ? 'width: 76%' : 'width: 57%'"
+              dense
+              label="Add new genres"
+              outlined
+            />
+            <q-btn
+              label="Add Genre"
+              color="primary"
+              class="text-capitalize"
+              @click="AddGen"
+            ></q-btn>
+          </div>
+          <q-banner
+            inline-actions
+            v-if="genres != ''"
+            class="q-ml-xs q-mt-md bordered"
+          >
+            <div class="text-sm text-green text-bold">*your genres</div>
+            <q-chip
+              v-for="(genre, index) in genres"
+              :key="index"
+              :label="genre"
+              class="chip-margin"
+              color="primary"
+              outlined
+              removable
+              @remove="handleRemoveGen(genre)"
+            />
+          </q-banner>
+          <q-input v-model="biography" dense outlined label="Biography" />
         </q-card-section>
 
         <q-card-actions>
@@ -239,39 +254,78 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="Profileinfo.phone" dense outlined label="Phone" />
-          <q-input
-            v-model="Profileinfo.website"
-            dense
-            outlined
-            label="Website"
-          />
-          <q-input v-model="Profileinfo.email" dense outlined label="Email" />
-          <q-input
-            v-model="Profileinfo.youtube"
-            dense
-            outlined
-            label="Youtube"
-          />
-          <q-input
-            v-model="Profileinfo.instagram"
-            dense
-            outlined
-            label="Instagram"
-          />
-          <q-input
-            v-model="Profileinfo.twitter"
-            dense
-            outlined
-            label="Twitter"
-          />
-          <q-input
-            v-model="Profileinfo.occupations"
-            dense
-            outlined
-            label="Occupations"
-          />
-          <q-input v-model="Profileinfo.labels" dense outlined label="Labels" />
+          <q-input v-model="phone" dense outlined label="Phone" />
+          <q-input v-model="website" dense outlined label="Website" />
+          <q-input v-model="email" dense outlined label="Email" />
+          <q-input v-model="youtube" dense outlined label="Youtube" />
+          <q-input v-model="instagram" dense outlined label="Instagram" />
+          <q-input v-model="twitter" dense outlined label="Twitter" />
+          <div class="row flex justify-center q-gutter-x-sm">
+            <q-input
+              v-model="newOccupation"
+              :style="$q.platform.is.desktop ? 'width: 76%' : 'width: 63%'"
+              dense
+              label="Occupations"
+              outlined
+            />
+            <q-btn
+              label="Add"
+              :style="$q.platform.is.desktop ? '' : 'width: 30%'"
+              color="primary"
+              class="text-capitalize"
+              @click="AddOcc"
+            ></q-btn>
+          </div>
+          <q-banner
+            inline-actions
+            v-if="occupations != ''"
+            class="q-ml-xs q-mt-md bordered"
+          >
+            <div class="text-sm text-green text-bold">*your occupations</div>
+            <q-chip
+              v-for="(occupation, index) in occupations"
+              :key="index"
+              :label="occupation"
+              class="chip-margin"
+              color="primary"
+              outlined
+              removable
+              @remove="handleRemoveOcc(occupation)"
+            />
+          </q-banner>
+           <div class="row flex justify-center q-gutter-x-sm">
+            <q-input
+              v-model="newLabel"
+              :style="$q.platform.is.desktop ? 'width: 76%' : 'width: 63%'"
+              dense
+              label="Labels"
+              outlined
+            />
+            <q-btn
+              label="Add"
+              :style="$q.platform.is.desktop ? '' : 'width: 30%'"
+              color="primary"
+              class="text-capitalize"
+              @click="AddLabel"
+            ></q-btn>
+          </div>
+          <q-banner
+            inline-actions
+            v-if="labels != ''"
+            class="q-ml-xs q-mt-md bordered"
+          >
+            <div class="text-sm text-green text-bold">*your labels</div>
+            <q-chip
+              v-for="(label, index) in labels"
+              :key="index"
+              :label="label"
+              class="chip-margin"
+              color="primary"
+              outlined
+              removable
+              @remove="handleRemoveLabel(label)"
+            />
+          </q-banner>
         </q-card-section>
 
         <q-card-actions>
@@ -299,75 +353,114 @@
 <script setup>
 import { api } from "src/boot/axios";
 import { onMounted, reactive, ref } from "vue";
-
+import { useQuasar } from "quasar";
+const $q = useQuasar();
 const BIO_DIALOG = ref(false);
 const INFO_DIALOG = ref(false);
 const profileInfo = ref("");
-const ProfileBio = ref({
-  name: "",
-  biography: "",
-  genre: ""
-});
-const Profileinfo = ref({
-  website: "",
-  phone: "",
-  email: "",
-  youtube: "",
-  instagram: "",
-  twitter: "",
-  occupations: "",
-  labels: ""
-});
 
-const form_data_bio = () => {
-  const formData = new FormData();
-  formData.append("form_type", "bio"); // Add form_type field for bio form
-  formData.append("name", ProfileBio.value.name);
-  formData.append("biography", ProfileBio.value.biography);
-  formData.append("genre", ProfileBio.value.genre);
-  return formData;
-};
+const newGenre = ref("");
+const newLabel = ref("");
+const newOccupation = ref("");
 
-const form_data_info = () => {
-  const formData = new FormData();
-  formData.append("form_type", "info"); // Add form_type field for info form
-  formData.append("website", Profileinfo.value.website);
-  formData.append("phone", Profileinfo.value.phone);
-  formData.append("email", Profileinfo.value.email);
-  formData.append("youtube", Profileinfo.value.youtube);
-  formData.append("instagram", Profileinfo.value.instagram);
-  formData.append("twitter", Profileinfo.value.twitter);
-  formData.append("occupations", Profileinfo.value.occupations);
-  formData.append("labels", Profileinfo.value.labels);
-  return formData;
-};
-
+const name = ref("");
+const biography = ref("");
+const genres = ref([]);
+const profile_image = ref("");
+const website = ref("");
+const phone = ref("");
+const email = ref("");
+const youtube = ref("");
+const instagram = ref("");
+const twitter = ref("");
+const occupations = ref([]);
+const labels = ref([]);
 const userString = sessionStorage.getItem("user");
 const user = JSON.parse(userString);
 
+const handleRemoveGen = (genre) => {
+  // remove genre from genres array
+  const index = genres.value.indexOf(genre);
+  if (index !== -1) {
+    genres.value.splice(index, 1);
+  }
+};
+
+const AddGen = () => {
+  // create new genre object and add it to  selected_genres array
+  const selected_genre = newGenre.value;
+  genres.value.push(selected_genre);
+  // clear input field after removing/adding chip
+  newGenre.value = "";
+};
+
+const handleRemoveOcc = (occupation) => {
+  // remove occupation from occupations array
+  const index = occupations.value.indexOf(occupation);
+  if (index !== -1) {
+    occupations.value.splice(index, 1);
+  }
+};
+
+const AddOcc = () => {
+  // create new occupation object and add it to  selected_occupations array
+  const selected_occupation = newOccupation.value;
+  occupations.value.push(selected_occupation);
+  // clear input field after removing/adding chip
+  newOccupation.value = "";
+};
+
+const handleRemoveLabel = (label) => {
+  // remove genre from genres array
+  const index = labels.value.indexOf(label);
+  if (index !== -1) {
+    labels.value.splice(index, 1);
+  }
+};
+
+const AddLabel = () => {
+  // create new genre object and add it to  selected_genres array
+  const selected_label = newLabel.value;
+  labels.value.push(selected_label);
+  // clear input field after removing/adding chip
+  newLabel.value = "";
+};
+
 const updateBio = async () => {
   try {
-    const response = await api.post(
-      `/artist_profile/${user.user_id}`,
-      form_data_bio()
-    );
-    console.log(response.data);
+    const genreString = JSON.stringify(genres.value);
+    const response = await api.put(`/artist_bio/${user.user_id}`, {
+      name: name.value,
+      biography: biography.value,
+      genres: genreString,
+    });
+    window.location.reload();
   } catch (error) {}
 };
 
 const updateInfo = async () => {
   try {
-    const response = await api.post(
-      `/artist_profile/${user.user_id}`,
-      form_data_info()
-    );
+    const occupationsString = JSON.stringify(occupations.value);
+    const labelsString = JSON.stringify(labels.value);
+    const response = await api.put(`/artist_info/${user.user_id}`, {
+      website: website.value,
+      phone: phone.value,
+      email: email.value,
+      youtube: youtube.value,
+      instagram: instagram.value,
+      twitter: twitter.value,
+      occupations: occupationsString,
+      labels: labelsString,
+    });
     console.log(response.data);
+    window.location.reload();
   } catch (error) {}
 };
 const getProfile = async () => {
   try {
     const response = await api.get(`/artist_profile/${user.user_id}`);
     profileInfo.value = response.data;
+    console.log(profileInfo.value);
   } catch (error) {}
 };
 onMounted(() => {
