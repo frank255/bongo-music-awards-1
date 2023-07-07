@@ -54,7 +54,6 @@ class ArtistProfileController extends Controller
             'biography' => $request->input('biography'),
             'phone' => $request->input('phone'),
             'website' => $request->input('website'),
-            'email' => $request->input('email'),
             'facebook' => $request->input('facebook'),
             'twitter' => $request->input('twitter'),
             'instagram' => $request->input('instagram'),
