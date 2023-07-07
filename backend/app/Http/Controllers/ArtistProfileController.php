@@ -88,68 +88,6 @@ class ArtistProfileController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
-     */
-    public function updateProfile(Request $request, $id)
-    {
-        $artistProfile = ArtistProfile::find($id);
-        if (!$artistProfile){
-            return response()->json(['message' => 'Artist profile not found'], 404);
-        }
-
-        // Determine which form data is being submitted
-        $formType = $request->input('form_type'); // Add this field in the frontend forms
-
-        $validator = Validator::make($request->all(), [
-            // Include validation rules specific to each form
-            'name' => ['string', 'max:255', 'min:3'],
-            'genres' => ['array'],
-            'biography' => ['string'],
-            'phone' => ['numeric', 'digits:12'],
-            'website' => ['string', 'max:255'],
-            'email' => ['email'],
-            'facebook' => ['string', 'max:255'],
-            'twitter' => ['string', 'max:255'],
-            'instagram' => ['string', 'max:255'],
-            'youtube' => ['string', 'max:255'],
-            'occupations' => ['array'],
-            'labels' => ['array']
-        ]);
-
-        if ($validator->fails()){
-            return response()->json([
-                'message' => $validator->messages(),
-                'status' => Response::HTTP_FORBIDDEN,
-            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
-        }
-
-        // Update the profile based on the form type
-        if ($formType === 'bio') {
-            $artistProfile->update($validator->safe()->only([
-                'name',
-                'genres',
-                'biography'
-            ]));
-        } elseif ($formType === 'info') {
-            $artistProfile->update($validator->safe()->only([
-                'phone',
-                'website',
-                'email',
-                'facebook',
-                'twitter',
-                'instagram',
-                'youtube',
-                'occupations',
-                'labels'
-            ]));
-        }
-
-        return \response(new ArtistProfileResource($artistProfile))
-            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
-    }
-
-
-    /**
      * Remove the specified resource from storage.
      */
     public function destroy(ArtistProfile $artistProfile)
@@ -157,26 +95,30 @@ class ArtistProfileController extends Controller
         //
     }
 
-    public function updateBio(Request $request, $id){
-
+    public function updateBio(Request $request, $id)
+    {
         $artistProfile = ArtistProfile::find($id);
         $artistProfile->name = $request->input('name');
-        $artistProfile->genres = $request->input('genres');
+
+        // Deserialization: Parse the genres JSON string into an array
+        $genresArray = json_decode($request->input('genres'), true);
+        $artistProfile->genres = json_encode($genresArray);
+
         $artistProfile->biography = $request->input('biography');
 
-        //return response
-        if($artistProfile->save()){
-            return \response()->json([
-                'status'=>Response::HTTP_CREATED,
-                'message'=> "Profile updated"
+        if ($artistProfile->save()) {
+            return response()->json([
+                'status' => Response::HTTP_CREATED,
+                'message' => "Profile updated"
             ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
         }
 
-        return \response()->json([
-            'status'=>Response::HTTP_FORBIDDEN,
-            'message'=> "Profile failed"
+        return response()->json([
+            'status' => Response::HTTP_FORBIDDEN,
+            'message' => "Profile update failed"
         ]);
     }
+
 
     public function updateArtistInfo(Request $request, $id){
         $artistProfile = ArtistProfile::find($id);
