@@ -20,7 +20,7 @@
     </div>
     <q-table
       bordered
-      :rows="rows"
+      :rows="albums"
       :columns="columns"
       row-key="name"
       :filter="filter"
@@ -94,8 +94,9 @@
     </div>
     <q-table
       bordered
-      :rows="singlerows"
+      album="singlerows"
       :columns="singlecolumns"
+      :rows="singlerows"
       row-key="name"
       :filter="filter"
       class="q-mt-md"
@@ -157,10 +158,15 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="artwork_name" dense outlined label="Album/Ep Name" />
-          <q-input v-model="artwork_link" dense outlined label="Number of trucks" />
-          <q-input v-model="artwork_link" dense outlined label="Release Date" />
-          <q-input v-model="artwork_link" dense outlined label="Link" />
+          <q-input v-model="album_name" dense outlined label="Album/Ep Name" />
+          <q-input
+            v-model="number_of_tracks"
+            dense
+            outlined
+            label="Number of trucks"
+          />
+          <q-input v-model="album_date" dense outlined label="Release Date" />
+          <q-input v-model="album_link" dense outlined label="Link" />
         </q-card-section>
 
         <q-card-actions>
@@ -169,14 +175,13 @@
             outline
             color="negative"
             label="Cancel"
-            @click="declineLoans()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
           <q-btn
             color="primary"
             label="Save"
-            @click="approveLoans()"
+            @click="AddAlbums()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -190,9 +195,9 @@
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="artwork_name" dense outlined label="Truck Name" />
-          <q-input v-model="artwork_link" dense outlined label="Release Date" />
-          <q-input v-model="artwork_link" dense outlined label="Link" />
+          <q-input v-model="single_name" dense outlined label="Truck Name" />
+          <q-input v-model="single_date" dense outlined label="Release Date" />
+          <q-input v-model="single_link" dense outlined label="Link" />
         </q-card-section>
 
         <q-card-actions>
@@ -201,14 +206,13 @@
             outline
             color="negative"
             label="Cancel"
-            @click="declineLoans()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
           <q-btn
             color="primary"
             label="Save"
-            @click="approveLoans()"
+            @click="AddSingles()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -219,9 +223,20 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { api } from "src/boot/axios";
 const SINGLE_DIALOG = ref(false);
 const ALBUM_DIALOG = ref(false);
+const single_name = ref("");
+const single_date = ref("");
+const single_link = ref("");
+const album_name = ref("");
+const album_link = ref("");
+const album_date = ref("");
+const number_of_tracks = ref("");
+const userString = sessionStorage.getItem("user");
+const user = JSON.parse(userString);
+
 const columns = ref([
   {
     name: "album_name",
@@ -231,24 +246,24 @@ const columns = ref([
     sortable: true,
   },
   {
-    name: "number_of_trucks",
+    name: "number_of_tracks",
     label: "Number of Tracks",
     align: "left",
-    field: (row) => row.number_of_trucks,
+    field: (row) => row.number_of_tracks,
     sortable: true,
   },
   {
     name: "date",
     label: "Release Date",
     align: "left",
-    field: (row) => row.date,
+    field: (row) => row.album_date,
     sortable: true,
   },
   {
     name: "link",
     label: "Link",
     align: "left",
-    field: (row) => row.link,
+    field: (row) => row.album_link,
     sortable: true,
   },
   {
@@ -257,33 +272,13 @@ const columns = ref([
     align: "left",
   },
 ]);
-const rows = [
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    album_name: "Bongo Music Awards 2022",
-    number_of_trucks: "BM22",
-    date: "20/2/2019",
-  },
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    album_name: "Bongo Music Awards 2022",
-    number_of_trucks: "BM22",
-    date: "20/2/2019",
-  },
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    album_name: "Bongo Music Awards 2022",
-    number_of_trucks: "BM22",
-    date: "20/2/2019",
-  },
-  // Add more rows as needed
-];
+const albums = ref([]);
 const singlecolumns = ref([
   {
     name: "track_name",
     label: "Track Name",
     align: "left",
-    field: (row) => row.track_name,
+    field: (row) => row.single_name,
     sortable: true,
   },
 
@@ -291,14 +286,14 @@ const singlecolumns = ref([
     name: "date",
     label: "Release Date",
     align: "left",
-    field: (row) => row.date,
+    field: (row) => row.single_date,
     sortable: true,
   },
   {
     name: "link",
     label: "Link",
     align: "left",
-    field: (row) => row.link,
+    field: (row) => row.single_link,
     sortable: true,
   },
   {
@@ -307,24 +302,48 @@ const singlecolumns = ref([
     align: "left",
   },
 ]);
-const singlerows = [
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    track_name: "Bongo Music Awards 2022",
-    date: "20/2/2019",
-  },
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    track_name: "Bongo Music Awards 2022",
-    date: "20/2/2019",
-  },
-  {
-    link: "https://www.boomplay.com/songs/72411661",
-    track_name: "Bongo Music Awards 2022",
-    date: "20/2/2019",
-  },
-  // Add more rows as needed
-];
+const singlerows = ref([]);
+
+const AddSingles = async () => {
+  try {
+    const response = await api.post("/single", {
+      single_name: single_name.value,
+      single_date: single_date.value,
+      single_link: single_link.value,
+    });
+    console.log(response.data);
+  } catch (error) {}
+};
+const AddAlbums = async () => {
+  try {
+    const response = await api.post("/albums", {
+      album_name: album_name.value,
+      album_date: album_date.value,
+      album_link: album_link.value,
+      number_of_tracks: number_of_tracks.value,
+    });
+    console.log(response.data);
+  } catch (error) {}
+};
+
+const getSingles = async () => {
+  try {
+    const response = await api.get(`/single/${user.user_id}`);
+    singlerows.value = response.data;
+    console.log(response.data);
+  } catch (error) {}
+};
+const getAlbums = async () => {
+  try {
+    const response = await api.get(`/albums/${user.user_id}`);
+    console.log(response.data);
+    albums.value = response.data;
+  } catch (error) {}
+};
+onMounted(() => {
+  getSingles();
+  getAlbums();
+});
 </script>
 
 <style lang="scss" scoped></style>

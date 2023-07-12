@@ -37,12 +37,12 @@ class AuthController extends Controller
         ]);
 
         // Create the user profile
-        $artistProfileController = new ArtistProfileController();
-        $artistProfile = $artistProfileController->store($request, $user);
+        // $artistProfileController = new ArtistProfileController();
+        // $artistProfile = $artistProfileController->store($request, $user);
 
         return response()->json([
             'user' => $user,
-            'profile' => $artistProfile,
+            // 'profile' => $artistProfile,
             'role' => 'artist',
             'token' => $user->createToken('token')->plainTextToken
         ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
@@ -77,7 +77,7 @@ class AuthController extends Controller
             'user' => $user,
             'status' => Response::HTTP_OK,
             'token' => $user->createToken('login')->plainTextToken,
-            'role' => ($user->is_admin) ? 'admin':'artist',
+            'role' => $user->role,
         ])->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
 
 

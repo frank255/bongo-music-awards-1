@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('artist_profiles', function (Blueprint $table) {
             $table->id();
+            $table->unsignedBigInteger('user_id')->unique();
             $table->string('name', 255)->unique();
             $table->json('genres')->nullable();
             $table->text('biography')->nullable();
@@ -26,6 +27,8 @@ return new class extends Migration
             $table->json('occupations')->nullable();
             $table->json('labels')->nullable();
             $table->timestamps();
+
+            $table->foreign('user_id')->references('user_id')->on('users');
         });
     }
 

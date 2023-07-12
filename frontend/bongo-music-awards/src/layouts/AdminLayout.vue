@@ -65,9 +65,9 @@ const logout = async () => {
 };
 onMounted(() => {
   // auth();
-  // if (useAuthStore().$state.isAuthorized) {
-  // } else {
-  //   window.location.href = "/login";
-  // }
+  if (useAuthStore().$state.role=='admin') {
+  } else {
+    window.location.href = "/login";
+  }
 });
 </script>

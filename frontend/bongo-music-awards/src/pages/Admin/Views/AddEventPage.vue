@@ -329,54 +329,54 @@ const continueBtn = ref(null);
 //   STEP.value = 2;
 // };
 const eventSubmit = async () => {
-  STEP.value = 2;
-  // try {
-  //   const { status, data } = await api.post("/events", form_data());
-  //   sessionStorage.removeItem("event_id");
-  //   sessionStorage.setItem("event_id", data.data.event_id);
-  //   if (status === 200) {
-  //     STEP.value = 2;
-  //   }
-  // } catch (error) {
-  //   // Notify.create({
-  //   //   type: "negative",
-  //   //   message: error.response.data.message,
-  //   // });
-  // }
+  // STEP.value = 2;
+  try {
+    const { status, data } = await api.post("/events", form_data());
+    sessionStorage.removeItem("event_id");
+    sessionStorage.setItem("event_id", data.data.event_id);
+    if (status === 200) {
+      STEP.value = 2;
+    }
+  } catch (error) {
+    // Notify.create({
+    //   type: "negative",
+    //   message: error.response.data.message,
+    // });
+  }
 };
 const genresSubmit = async () => {
-  STEP.value = 3;
+  // STEP.value = 3;
 
-  // try {
-  //   const eventId = sessionStorage.getItem("event_id");
-  //   // Loop through the selected_genres array and append the event ID to each value
-  //   // selected_genres.value.forEach((genre, index) => {
-  //   //   selected_genres.value[index] = `${event_id}_${genre}`;
-  //   // });
+  try {
+    const eventId = sessionStorage.getItem("event_id");
+    // Loop through the selected_genres array and append the event ID to each value
+    // selected_genres.value.forEach((genre, index) => {
+    //   selected_genres.value[index] = `${event_id}_${genre}`;
+    // });
 
-  //   const payload = {
-  //     event_id: eventId,
-  //     genre_names: selected_genres.value,
-  //   };
+    const payload = {
+      event_id: eventId,
+      genre_names: selected_genres.value,
+    };
 
-  //   // // Append the selected_genres array to the form data object
-  //   // selected_genres.value.forEach((genre) => {
-  //   //   formData.append("selected_genres[]", genre);
-  //   // });
+    // // Append the selected_genres array to the form data object
+    // selected_genres.value.forEach((genre) => {
+    //   formData.append("selected_genres[]", genre);
+    // });
 
-  //   const { data } = await api.post("/genres", payload);
-  //   STEP.value = 3;
-  //   data.forEach(element => {
-  //     genres_category.value.push({
-  //     value:element.genre_id,
-  //     label: element.genre_name,
-  //   })
-  //   });
+    const { data } = await api.post("/genres", payload);
+    STEP.value = 3;
+    data.forEach(element => {
+      genres_category.value.push({
+      value:element.genre_id,
+      label: element.genre_name,
+    })
+    });
 
-  //   console.log(genres_category.value);
-  //   // sessionStorage.removeItem("event_id");
+    console.log(genres_category.value);
+    // sessionStorage.removeItem("event_id");
 
-  // } catch (error) {}
+  } catch (error) {}
 };
 
 const roles = async () => {

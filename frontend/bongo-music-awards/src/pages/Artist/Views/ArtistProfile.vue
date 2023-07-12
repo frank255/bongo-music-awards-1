@@ -1,19 +1,32 @@
 <template>
   <q-page padding>
+    <div class="column text-capitalize text-h5 flex justify-center items-center">
+      this profile will be vissible to your fans....
+    </div>
     <q-card>
       <div class="shaddow q-mt-lg q-pa-sm column items-center relative">
         <div class="card bg-grey-2 flex justify-center items-center">
           <q-avatar size="90px" class="avatar">
-            <img src="https://cdn.quasar.dev/img/avatar.png" />
+            <img :src="profile_url + profileInfo.profile_image" />
           </q-avatar>
         </div>
         <div class="q-mt-xl column flex justify-center items-center">
           <p class="text-h6">{{ profileInfo.name }}</p>
         </div>
         <div class="q-mt-xs column flex justify-center items-center">
-          <p class="text-subtitle1">Genres | {{ profileInfo.genres }}</p>
+          <p class="text-subtitle1">
+            Genres |
+            <template v-if="profileInfo.genres">
+              <!-- <span
+                v-for="genre in JSON.parse(profileInfo.genres)"
+                :key="genre"
+                >{{ genre }}</span
+              > -->
+              {{ JSON.parse(profileInfo.genres).join(", ") }}
+            </template>
+          </p>
           <p class="text-subtitle2 q-px-xl" style="text-align: center">
-          {{ profileInfo.biography}}
+            {{ profileInfo.biography }}
           </p>
         </div>
       </div>
@@ -47,7 +60,7 @@
       </div>
       <div class="row shaddow q-mt-sm q-pa-sm justify-between">
         <div class="q-pa-sm">
-          <p class="text-h6 q-pa-sm">Informations</p>
+          <p class="text-h6 q-pa-sm">Contacts</p>
           <q-list padding>
             <q-item>
               <q-item-section avatar>
@@ -55,7 +68,7 @@
               </q-item-section>
               <q-item-section>Phone</q-item-section>
               <q-item-section side>
-                <q-item-label caption>+255766830442</q-item-label>
+                <q-item-label caption>{{ profileInfo.phone }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -66,7 +79,7 @@
               </q-item-section>
               <q-item-section>Website</q-item-section>
               <q-item-section side>
-                <q-item-label caption>www.alikiba.com</q-item-label>
+                <q-item-label caption>{{ profileInfo.website }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -77,7 +90,7 @@
               </q-item-section>
               <q-item-section>Email</q-item-section>
               <q-item-section side>
-                <q-item-label caption>alikiba@gmail.com</q-item-label>
+                <q-item-label caption>{{ profileInfo.email }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -91,7 +104,7 @@
               </q-item-section>
               <q-item-section>Youtube</q-item-section>
               <q-item-section side>
-                <q-item-label caption>Ally Kiba</q-item-label>
+                <q-item-label caption>{{ profileInfo.youtube }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -102,7 +115,7 @@
               </q-item-section>
               <q-item-section>Twitter</q-item-section>
               <q-item-section side>
-                <q-item-label caption>@alikiba</q-item-label>
+                <q-item-label caption>{{ profileInfo.twitter }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -113,7 +126,7 @@
               </q-item-section>
               <q-item-section>Instagram</q-item-section>
               <q-item-section side>
-                <q-item-label caption>@alikiba</q-item-label>
+                <q-item-label caption>{{ profileInfo.instagram }}</q-item-label>
               </q-item-section>
             </q-item>
           </q-list>
@@ -133,11 +146,13 @@
                   <p class="text-h6">Occupations</p>
                 </div>
               </q-item-section>
-              <div class="row flex">
-                <q-chip label="Actor" color="amber" />
-                <q-chip label="Singer" color="amber" />
-                <q-chip label="Director" color="amber" />
-                <q-chip label="Footballer" color="amber" />
+              <div v-if="profileInfo.occupations" class="row flex">
+                <q-chip
+                  v-for="occupation in JSON.parse(profileInfo.occupations)"
+                  :key="occupation"
+                  :label="occupation"
+                  color="amber"
+                />
               </div>
             </q-item>
             <q-item class="column flex">
@@ -152,10 +167,13 @@
                   <p class="text-h6">Labels</p>
                 </div>
               </q-item-section>
-              <div class="row flex">
-                <q-chip label="Rock" color="amber" />
-                <q-chip label="Kings Music" color="amber" />
-                <q-chip label="Sony Music Entertainment" color="amber" />
+              <div v-if="profileInfo.labels" class="row flex">
+                <q-chip
+                  v-for="label in JSON.parse(profileInfo.labels)"
+                  :key="label"
+                  :label="label"
+                  color="amber"
+                />
               </div>
             </q-item>
           </q-list>
@@ -171,27 +189,30 @@
 
         <q-card-section class="q-pt-none q-gutter-y-md">
           <!-- <q-input v-model="artwork_name" dense outlined label="Profile image" /> -->
+          <div class="row justify-center items-center">
+            <q-avatar size="150px" class="bg-grey">
+              <img v-if="imagePreview" :src="imagePreview" />
+              <q-icon v-else name="mdi-account" rounded color="grey-3" />
+            </q-avatar>
+          </div>
+
+          <!-- <q-btn @click="files()">click</q-btn> -->
           <q-file
-            v-model="profile_image"
-            class="q-mx-lg"
-            counter
-            dense
-            label="Profile Photo"
+            class="q-mt-md"
             outlined
-            type="file"
+            ref="file"
+            dense
+            :value="model"
+            v-model="bioInfo.profile_image"
+            label="Upload your profile image"
+            @update:model-value="handleFileUpload"
           >
-            <template #prepend>
-              <q-icon name="cloud_upload" @click.stop.prevent />
-            </template>
-            <template #append>
-              <q-icon
-                class="cursor-pointer"
-                name="close"
-                @click.stop.prevent="model = null"
-              />
+            <template v-slot:append>
+              <q-icon name="attachment" />
             </template>
           </q-file>
-          <q-input v-model="name" dense outlined label="Name" />
+          <q-input v-model="bioInfo.name" dense outlined label="Name" />
+          <q-input v-model="bioInfo.email" dense outlined label="Email" />
           <div class="row flex justify-center q-gutter-x-sm">
             <q-input
               v-model="newGenre"
@@ -214,7 +235,7 @@
           >
             <div class="text-sm text-green text-bold">*your genres</div>
             <q-chip
-              v-for="(genre, index) in genres"
+              v-for="(genre, index) in bioInfo.genres"
               :key="index"
               :label="genre"
               class="chip-margin"
@@ -224,7 +245,15 @@
               @remove="handleRemoveGen(genre)"
             />
           </q-banner>
-          <q-input v-model="biography" dense outlined label="Biography" />
+          <q-input
+            v-model="bioInfo.biography"
+            dense
+            outlined
+            label="Biography"
+            type="textarea"
+            borderless
+            autogrow
+          />
         </q-card-section>
 
         <q-card-actions>
@@ -293,7 +322,7 @@
               @remove="handleRemoveOcc(occupation)"
             />
           </q-banner>
-           <div class="row flex justify-center q-gutter-x-sm">
+          <div class="row flex justify-center q-gutter-x-sm">
             <q-input
               v-model="newLabel"
               :style="$q.platform.is.desktop ? 'width: 76%' : 'width: 63%'"
@@ -358,15 +387,18 @@ const $q = useQuasar();
 const BIO_DIALOG = ref(false);
 const INFO_DIALOG = ref(false);
 const profileInfo = ref("");
-
+const getProfileResponse = ref("");
 const newGenre = ref("");
 const newLabel = ref("");
 const newOccupation = ref("");
-
-const name = ref("");
-const biography = ref("");
-const genres = ref([]);
-const profile_image = ref("");
+const profile_url = process.env.API_URL;
+const bioInfo = ref({
+  name: "",
+  email: "",
+  biography: "",
+  genres: [],
+  profile_image: "",
+});
 const website = ref("");
 const phone = ref("");
 const email = ref("");
@@ -377,6 +409,18 @@ const occupations = ref([]);
 const labels = ref([]);
 const userString = sessionStorage.getItem("user");
 const user = JSON.parse(userString);
+const file = ref(null);
+const imagePreview = ref(null);
+
+const handleFileUpload = (file) => {
+  if (!file) return;
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    imagePreview.value = e.target.result;
+  };
+  reader.readAsDataURL(file);
+};
 
 const handleRemoveGen = (genre) => {
   // remove genre from genres array
@@ -389,7 +433,7 @@ const handleRemoveGen = (genre) => {
 const AddGen = () => {
   // create new genre object and add it to  selected_genres array
   const selected_genre = newGenre.value;
-  genres.value.push(selected_genre);
+  bioInfo.value.genres.push(selected_genre);
   // clear input field after removing/adding chip
   newGenre.value = "";
 };
@@ -426,23 +470,39 @@ const AddLabel = () => {
   newLabel.value = "";
 };
 
-const updateBio = async () => {
+const form_data = () => {
+  const formData = new FormData();
+  formData.append("name", bioInfo.value.name);
+  formData.append("email", bioInfo.value.email);
+  formData.append("biography", bioInfo.value.biography);
+  formData.append("genres", JSON.stringify(bioInfo.value.genres));
+  formData.append("profile_image", bioInfo.value.profile_image); // Include the file in the FormData
+  return formData;
+};
+
+const createBio = async () => {
   try {
-    const genreString = JSON.stringify(genres.value);
-    const response = await api.put(`/artist_bio/${user.user_id}`, {
-      name: name.value,
-      biography: biography.value,
-      genres: genreString,
-    });
-    window.location.reload();
+    const response = await api.post("/artists", form_data());
+indow.location.reload();
   } catch (error) {}
 };
 
-const updateInfo = async () => {
+const updateBio = async () => {
+  try {
+    if (getProfileResponse.value == "not found") {
+      createBio();
+    } else {
+      const response = await api.post(`/artist_bio/${user.user_id}`, form_data());
+      window.location.reload();
+    }
+  } catch (error) {}
+};
+
+const createInfo = async () => {
   try {
     const occupationsString = JSON.stringify(occupations.value);
     const labelsString = JSON.stringify(labels.value);
-    const response = await api.put(`/artist_info/${user.user_id}`, {
+    const response = await api.post("/artists", {
       website: website.value,
       phone: phone.value,
       email: email.value,
@@ -452,17 +512,47 @@ const updateInfo = async () => {
       occupations: occupationsString,
       labels: labelsString,
     });
-    console.log(response.data);
     window.location.reload();
   } catch (error) {}
 };
-const getProfile = async () => {
+
+const updateInfo = async () => {
   try {
-    const response = await api.get(`/artist_profile/${user.user_id}`);
-    profileInfo.value = response.data;
-    console.log(profileInfo.value);
+    const occupationsString = JSON.stringify(occupations.value);
+    const labelsString = JSON.stringify(labels.value);
+    if(getProfileResponse.value == "not found"){
+      createInfo();
+    }else{
+    const response = await api.post(`/artist_info/${user.user_id}`, {
+      website: website.value,
+      phone: phone.value,
+      email: email.value,
+      youtube: youtube.value,
+      instagram: instagram.value,
+      twitter: twitter.value,
+      occupations: occupationsString,
+      labels: labelsString,
+    });
+indow.location.reload();
+    }
   } catch (error) {}
 };
+
+const getProfile = async () => {
+  try {
+    const response = await api.get(`/artists/${user.user_id}`);
+    profileInfo.value = response.data;
+    } catch (error) {
+    if (error.response && error.response.status === 404) {
+      // Profile not found
+      getProfileResponse.value = "not found";
+      // Handle the case when the profile is not found
+    } else {
+      // Other error occurred
+    }
+  }
+};
+
 onMounted(() => {
   getProfile();
 });

@@ -24,7 +24,7 @@
       "
     >
       <q-card
-        v-for="(artist, i) in filteredArtists"
+        v-for="(artist, i) in artistList"
         :key="i"
         class="q-mt-xl bg-grey-2"
         :style="
@@ -32,11 +32,11 @@
             ? 'min-width: 200px;height:200px; cursor: pointer'
             : 'width: 300px;height:200px; cursor: pointer'
         "
-        @click="artistDetails(artist.id)"
+        @click="artistDetails(artist.user_id)"
       >
         <q-card-section class="flex justify-center">
           <q-avatar size="90px">
-            <q-img :src="artist.image" />
+            <img :src="profile_url + artist.profile_image" />
           </q-avatar>
         </q-card-section>
         <q-card-section class="q-px-sm">
@@ -44,7 +44,14 @@
             {{ artist.name }}
           </div>
           <div class="text-subtitle1 text-center text-grey-8">
-            {{ artist.category }}
+            <template v-if="artist.genres">
+              <!-- <span
+                v-for="genre in JSON.parse(artist.genres)"
+                :key="genre"
+                >{{ genre }}</span
+              > -->
+              {{ JSON.parse(artist.genres).join(", ") }}
+            </template>
           </div>
         </q-card-section>
       </q-card>
@@ -53,46 +60,25 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+import { api } from "src/boot/axios";
 import { useRouter } from "vue-router";
-
-const filteredArtists = [
-  {
-    id: 1,
-    name: "John",
-    category: "Painter",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg",
-  },
-  {
-    id: 2,
-    name: "Sarah",
-    category: "Sculptor",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg",
-  },
-  {
-    id: 3,
-    name: "Mike",
-    category: "Photographer",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg",
-  },
-  {
-    id: 4,
-    name: "Emily",
-    category: "Mixed Media Artist",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg",
-  },
-  {
-    id: 5,
-    name: "Keyle",
-    category: "Mixed Media Artist",
-    image: "https://cdn.quasar.dev/img/avatar1.jpg",
-  },
-];
-const router = useRouter();
-const artistDetails = (index) => {
-  router.push(`/artists/${index}`);
-  console.log(index);
+const artistList = ref([]);
+const profile_url = process.env.API_URL;
+const getartists = async () => {
+  try {
+    const response = await api.get("/artist_list");
+    artistList.value = response.data;
+  } catch (error) {}
 };
+const router = useRouter();
+const artistDetails = (user_id) => {
+  console.log(user_id);
+  router.push(`/artists/${user_id}`);
+};
+onMounted(() => {
+  getartists();
+});
 </script>
 
 <style lang="scss" scoped></style>
