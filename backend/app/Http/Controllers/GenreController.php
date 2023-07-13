@@ -18,7 +18,7 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genres = Genre::all();
+        $genres = Genre::distinct()->get(['genre_name']);
         return GenreResource::collection($genres);
     }
 
@@ -36,9 +36,11 @@ class GenreController extends Controller
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'genre_name' => ['required', 'string', 'max:255', 'unique:genres,genre_name'],
-            'event_id' => ['required', 'integer']
+            'event_id' => ['required', 'integer'],
+            'genre_names' => ['required', 'array'],
+            'genre_names.*' => ['required', 'string', 'max:255']
         ]);
+
 
         if ($validator->fails()) {
             return response()->json([

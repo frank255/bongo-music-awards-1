@@ -2,7 +2,17 @@
   <q-page padding>
     <div class="row scroll-on-mobile justify-around q-mt-xl">
       <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
-        <q-select
+        <q-toggle
+          v-model="EventActivation"
+          checked-icon="check"
+          false-value="closed"
+          true-value="active"
+          color="green"
+          size="60px"
+          :label="`Event is ${EventActivation}`"
+          unchecked-icon="clear"
+        />
+        <!-- <q-select
           bg-color="white"
           label="Events"
           :options="['Bongo Music Awards']"
@@ -10,7 +20,7 @@
           v-model="events"
           @update:model-value="updateFilters(events, 'l')"
         >
-        </q-select>
+        </q-select> -->
       </q-card>
       <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
         <q-select
@@ -208,6 +218,7 @@ const rows = [
   },
   // Add more rows as needed
 ];
+const EventActivation = ref('closed');
 const events = ref("");
 const genres = ref("");
 const category = ref("");
