@@ -2,10 +2,14 @@
   <q-page padding>
     <div class="row items-center q-mt-xl">
       <p class="font-body-small q-pl-md col">
-        <span class="text-weight-bolder text-capitalize text-h6">events and awards</span>
+        <span class="text-weight-bolder text-capitalize text-h6"
+          >events and awards</span
+        >
       </p>
       <p class="flex justify-end width col">
-        <q-btn class="text-capitalize" to="/admin/eventsandawards/addevent"> add event </q-btn>
+        <q-btn class="text-capitalize" to="/admin/eventsandawards/addevent">
+          add event
+        </q-btn>
       </p>
     </div>
     <q-table
@@ -16,10 +20,10 @@
       :filter="filter"
       class="q-mt-md"
     >
-    <template #body-cell-status="props">
+      <template #body-cell-status="props">
         <q-td>
           <q-badge
-            v-if="props.row.status === 'closed'"
+            v-if="props.row.event_status === 'closed'"
             dense
             color="red"
             size="10px"
@@ -29,7 +33,7 @@
           </q-badge>
 
           <q-badge
-            v-if="props.row.status === 'active'"
+            v-if="props.row.event_status === 'active'"
             dense
             color="green"
             size="10px"
@@ -93,13 +97,17 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { onMounted, ref } from "vue";
+import { api } from "boot/axios";
+import { useQuasar } from "quasar";
+import { useRouter } from "vue-router";
+const rows = ref([]);
 const columns = ref([
   {
     name: "event_name",
     label: "Event Name",
     align: "left",
-    field: (row) => row.event_name,
+    field: (row) => row.event_title,
     sortable: true,
   },
   {
@@ -113,12 +121,13 @@ const columns = ref([
     name: "date",
     label: "Date",
     align: "left",
-    field: (row) => row.date,
+    field: (row) => row.event_date,
     sortable: true,
   },
   {
     name: "status",
     label: "Status",
+    field: (row) => row.event_status,
     align: "left",
   },
   {
@@ -127,27 +136,19 @@ const columns = ref([
     align: "left",
   },
 ]);
-const rows = [
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "active",
-  },
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "closed",
-  },
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "active",
-  },
-  // Add more rows as needed
-];
+const getEvents = async () => {
+  try {
+    const response = await api.get("/events");
+    console.log(response.data.data);
+    rows.value = response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+onMounted(() => {
+  getEvents();
+});
 </script>
 
 <style lang="scss" scoped></style>

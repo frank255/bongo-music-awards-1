@@ -215,6 +215,17 @@
               </q-item>
             </q-td>
           </template>
+          <template v-slot:body-cell-actions="props">
+            <q-td :props="props" :key="props.key">
+              <q-btn
+                color="primary"
+                class="text-capitalize"
+                label="Add Category"
+                dense
+                @click="addCategory(props.row)"
+              />
+            </q-td>
+          </template>
         </q-table>
 
         <template #navigation>
@@ -282,6 +293,12 @@ const columns = [
     label: "Categories",
     field: "categories",
   },
+  {
+    name: "actions",
+    align: "left",
+    label: "Actions",
+    // field: "categories",
+  },
 ];
 const removeCategory = (row, index) => {
   row.categories.splice(index, 1);
@@ -329,54 +346,54 @@ const continueBtn = ref(null);
 //   STEP.value = 2;
 // };
 const eventSubmit = async () => {
-  // STEP.value = 2;
-  try {
-    const { status, data } = await api.post("/events", form_data());
-    sessionStorage.removeItem("event_id");
-    sessionStorage.setItem("event_id", data.data.event_id);
-    if (status === 200) {
-      STEP.value = 2;
-    }
-  } catch (error) {
-    // Notify.create({
-    //   type: "negative",
-    //   message: error.response.data.message,
-    // });
-  }
+  STEP.value = 2;
+  // try {
+  //   const { status, data } = await api.post("/events", form_data());
+  //   sessionStorage.removeItem("event_id");
+  //   sessionStorage.setItem("event_id", data.data.event_id);
+  //   if (status === 200) {
+  //     STEP.value = 2;
+  //   }
+  // } catch (error) {
+  //   // Notify.create({
+  //   //   type: "negative",
+  //   //   message: error.response.data.message,
+  //   // });
+  // }
 };
 const genresSubmit = async () => {
-  // STEP.value = 3;
+  STEP.value = 3;
 
-  try {
-    const eventId = sessionStorage.getItem("event_id");
-    // Loop through the selected_genres array and append the event ID to each value
-    // selected_genres.value.forEach((genre, index) => {
-    //   selected_genres.value[index] = `${event_id}_${genre}`;
-    // });
+  // try {
+  //   const eventId = sessionStorage.getItem("event_id");
+  //   // Loop through the selected_genres array and append the event ID to each value
+  //   // selected_genres.value.forEach((genre, index) => {
+  //   //   selected_genres.value[index] = `${event_id}_${genre}`;
+  //   // });
 
-    const payload = {
-      event_id: eventId,
-      genre_names: selected_genres.value,
-    };
+  //   const payload = {
+  //     event_id: eventId,
+  //     genre_names: selected_genres.value,
+  //   };
 
-    // // Append the selected_genres array to the form data object
-    // selected_genres.value.forEach((genre) => {
-    //   formData.append("selected_genres[]", genre);
-    // });
+  //   // // Append the selected_genres array to the form data object
+  //   // selected_genres.value.forEach((genre) => {
+  //   //   formData.append("selected_genres[]", genre);
+  //   // });
 
-    const { data } = await api.post("/genres", payload);
-    STEP.value = 3;
-    data.forEach(element => {
-      genres_category.value.push({
-      value:element.genre_id,
-      label: element.genre_name,
-    })
-    });
+  //   const { data } = await api.post("/genres", payload);
+  //   STEP.value = 3;
+  //   data.forEach(element => {
+  //     genres_category.value.push({
+  //     value:element.genre_id,
+  //     label: element.genre_name,
+  //   })
+  //   });
 
-    console.log(genres_category.value);
-    // sessionStorage.removeItem("event_id");
+  //   console.log(genres_category.value);
+  //   // sessionStorage.removeItem("event_id");
 
-  } catch (error) {}
+  // } catch (error) {}
 };
 
 const roles = async () => {
@@ -403,6 +420,7 @@ const selectedCat = (genre_id) => {
 const cat_data = ref([]);
 
 const cat_name = ref();
+
 const addCategory = () => {
   cat_data.value.push({
     genre: {
@@ -413,6 +431,14 @@ const addCategory = () => {
 
   console.log(cat_data.value);
 };
+
+const getAvailableCategories = async () => {
+  try {
+    const { data } = await api.post("/categories", cat_data.value);
+    console.log(data);
+  } catch (error) {}
+};
+
 onMounted(() => {
   // roles();
   getGenres();
