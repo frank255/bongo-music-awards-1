@@ -215,6 +215,17 @@
               </q-item>
             </q-td>
           </template>
+          <template v-slot:body-cell-actions="props">
+            <q-td :props="props" :key="props.key">
+              <q-btn
+                color="primary"
+                class="text-capitalize"
+                label="Add Category"
+                dense
+                @click="addCategory(props.row)"
+              />
+            </q-td>
+          </template>
         </q-table>
 
         <template #navigation>
@@ -281,6 +292,12 @@ const columns = [
     align: "left",
     label: "Categories",
     field: "categories",
+  },
+  {
+    name: "actions",
+    align: "left",
+    label: "Actions",
+    // field: "categories",
   },
 ];
 const removeCategory = (row, index) => {
@@ -403,6 +420,7 @@ const selectedCat = (genre_id) => {
 const cat_data = ref([]);
 
 const cat_name = ref();
+
 const addCategory = () => {
   cat_data.value.push({
     genre: {
@@ -413,6 +431,14 @@ const addCategory = () => {
 
   console.log(cat_data.value);
 };
+
+const getAvailableCategories = async () => {
+  try {
+    const { data } = await api.post("/categories", cat_data.value);
+    console.log(data);
+  } catch (error) {}
+};
+
 onMounted(() => {
   // roles();
   getGenres();

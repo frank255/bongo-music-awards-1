@@ -18,12 +18,13 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genres = Genre::all();
+        $genres = Genre::distinct()->get(['genre_name']);
         return GenreResource::collection($genres);
     }
 
 
-    public function getGenres(){
+    public function getGenres()
+    {
         //$genres = DB::table('genres')->distinct('genre_name')->select('genre_name')->get();
         $genres = Genre::distinct()->get(['genre_name']);
         return GenreResource::collection($genres);
@@ -34,34 +35,36 @@ class GenreController extends Controller
      */
     public function store(Request $request)
     {
-         /*$validator = Validator::make($request->all(),[
-            'genre_name'=>['required','string','max:255','unique:genres,genre_name'],
-            'event_id'=>['required','integer']
-         ]);
+        $validator = Validator::make($request->all(), [
+            'event_id' => ['required', 'integer'],
+            'genre_names' => ['required', 'array'],
+            'genre_names.*' => ['required', 'string', 'max:255']
+        ]);
 
-         if ($validator->fails()){
-             return response()->json([
-                 'message' => $validator->messages(),
-                 'status' => Response::HTTP_FORBIDDEN,
-             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
-         }*/
 
-/*        $genre= $request->genre_names;
-        $event_id= $request->event_id;
-        foreach ($genre as $gen){
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => $validator->messages(),
+                'status' => Response::HTTP_FORBIDDEN,
+            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+        }
+
+        $genre = $request->genre_names;
+        $event_id = $request->event_id;
+        foreach ($genre as $gen) {
             $genre = Genre::create([
                 'genre_name' => $gen,
                 'event_id' => $event_id
             ]);
-        }*/
+        }
 
-        $event = Event::find($request->event_id);
-        $genre = $event->genres()->createMany($request->all());
-        return GenreResource::collection($genre);
+        // $event = Event::find($request->event_id);
+        // $genre = $event->genres()->createMany($request->all());
+        // return GenreResource::collection($genre);
 
 
 
-        //return Genre::all();
+        return Genre::all();
     }
 
     /**

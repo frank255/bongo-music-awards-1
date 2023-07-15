@@ -16,7 +16,7 @@ $migration = new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->boolean('is_admin')->default(0);
+            $table->string('role')->default('artist');
             $table->rememberToken();
             $table->timestamps();
         });

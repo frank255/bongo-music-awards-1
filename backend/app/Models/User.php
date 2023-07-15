@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Model;
 
 class User extends Authenticatable
 {
@@ -23,7 +24,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'is_admin',
+        'role',
     ];
 
     /**
@@ -34,7 +35,7 @@ class User extends Authenticatable
     protected $hidden = [
         'password',
         'remember_token',
-        'is_admin',
+        'role',
     ];
 
     /**
@@ -46,4 +47,18 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    public function artistProfile()
+    {
+        return $this->hasOne(ArtistProfile::class, 'user_id');
+    }
+
+    public function albums()
+    {
+        return $this->hasMany(Album::class, 'user_id');
+    }
+    public function singles()
+    {
+        return $this->hasMany(Single::class);
+    }
 }

@@ -63,9 +63,9 @@ const logout = async () => {
 };
 onMounted(() => {
   // auth();
-  // if (useAuthStore().$state.isAuthorized) {
-  // } else {
-  //   window.location.href = "/login";
-  // }
+  if (useAuthStore().$state.role=='artist') {
+  } else {
+    window.location.href = "/login";
+  }
 });
 </script>

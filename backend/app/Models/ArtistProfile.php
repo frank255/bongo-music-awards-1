@@ -28,5 +28,20 @@ class ArtistProfile extends Model
         'youtube',
         'occupations',
         'labels',
+        'profile_image',
     ];
+
+    // public function albums()
+    // {
+    //     return $this->hasMany(Album::class)->whereHas('artistProfile.user', function ($query) {
+    //         $query->where('role', 'artist');
+    //     });
+    // }
+
+    // public function singles()
+    // {
+    //     return $this->hasMany(Single::class)->whereHas('artistProfile.user', function ($query) {
+    //         $query->where('role', 'artist');
+    //     });
+    // }
 }

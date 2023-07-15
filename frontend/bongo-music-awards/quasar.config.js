@@ -71,7 +71,7 @@ module.exports = configure(function (ctx ) {
       // analyze: true,
       env: {
         API_URL: ctx.dev
-          ? "http://127.0.0.1:8000/api/"
+          ? "http://127.0.0.1:8000"
           : "https://api.example.com",
         SANCTUM_URL: ctx.dev
           ? "http://127.0.0.1:8000"

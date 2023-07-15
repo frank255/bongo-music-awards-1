@@ -14,7 +14,7 @@ class Category extends Model
       'genre_id'
     ];
 
-    public function genres(): HasOne
+    public function genres()
     {
         return $this->belongsTo(Genre::class, 'genre_id');
     }
