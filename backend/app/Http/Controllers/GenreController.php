@@ -18,7 +18,9 @@ class GenreController extends Controller
      */
     public function index()
     {
-        $genres = Genre::distinct()->get(['genre_name']);
+
+        $genres = Genre::with('category')->get();
+        //$genres = Genre::distinct()->get(['genre_name']);
         return GenreResource::collection($genres);
     }
 
