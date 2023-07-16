@@ -28,14 +28,14 @@ class EventsController extends Controller
      */
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(),[
+        $validator = Validator::make($request->all(), [
             'event_title' => 'required|string|max:255',
             'event_number' => 'required|string|max:255',
             'event_date' => 'required|date_format:Y/m/d|after:today',
-            'event_status' => 'required|in:closed,opened',
+            'event_status' => 'required|string|max:6',
         ]);
 
-        if ($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'message' => $validator->messages(),
                 'status' => Response::HTTP_FORBIDDEN,
@@ -68,7 +68,7 @@ class EventsController extends Controller
 
 
 
-/*    public function show($id)
+    /*    public function show($id)
     {
         //return new EventResource(Event::findOrFail($id));
         if (DB::table('events')->where('eventId', $id)->doesntExist()) {
@@ -93,6 +93,28 @@ class EventsController extends Controller
         }
         $event->update($request->validated());
         return new EventResource($event);
+    }
+
+    public function ActivateEvent(Request $request, $event_id)
+    {
+        $event = Event::find($event_id);
+
+        if (!$event) {
+            return response()->json([
+                'message' => 'Event does not exist',
+                'status' => Response::HTTP_NOT_FOUND
+            ]);
+        }
+
+        // Update the event status
+        $newStatus = $event->event_status === 'closed' ? 'active' : 'closed';
+        $event->event_status = $newStatus;
+        $event->save();
+
+        return response()->json([
+            'message' => 'Event status updated successfully',
+            'status' => Response::HTTP_OK
+        ]);
     }
 
     /**
