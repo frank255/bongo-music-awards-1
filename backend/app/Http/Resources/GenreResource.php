@@ -19,7 +19,7 @@ class GenreResource extends JsonResource
             'genre_name' => $this->genre_name,
             'created_at' => $this->created_at,
             'event_id' => $this->event_id,
-            //'genre_category' => $this -> genre_category,
+            'categories'=> CategoryResorce::collection($this->whenLoaded('category'))
         ];
     }
 }

@@ -19,8 +19,8 @@ class EventsController extends Controller
     public function index()
     {
 
-        $users = Event::with('genres')->get();
-        return EventResource::collection($users);
+        $events = Event::with('genres')->get();
+        return EventResource::collection($events);
     }
 
     /**
