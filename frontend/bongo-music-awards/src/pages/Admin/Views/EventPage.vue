@@ -156,7 +156,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
+import { api } from "src/boot/axios";
+import { useRoute } from "vue-router";
 const columns = ref([
   {
     name: "artist_name",
@@ -218,7 +220,7 @@ const rows = [
   },
   // Add more rows as needed
 ];
-const EventActivation = ref('closed');
+const EventActivation = ref("");
 const events = ref("");
 const genres = ref("");
 const category = ref("");
@@ -226,10 +228,37 @@ const filters = ref({});
 const APPROVAL_DIALOG = ref(false);
 // const filter = ref([]);
 const filter_changes = ref(false);
-
 const events_data = ref("");
 const genre_data = ref("");
 const category_data = ref("");
+const route = useRoute();
+
+//event activation
+watch(EventActivation, (newValue, oldValue) => {
+  if (newValue === "active") {
+    sendAPIRequest();
+  } else {
+    sendRequest();
+  }
+});
+
+const sendAPIRequest = async () => {
+  try {
+    const response = await api.post(`/activateEvent/${route.params.event_id}`);
+    console.log(response);
+  } catch (error) {}
+};
+
+const getEventStatus = async () => {
+  try {
+    const response = await api.get(`/events/${route.params.event_id}`);
+    // console.log(response.data.data.event_status);
+    EventActivation.value = response.data.data.event_status;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
 const updateFilters = (filter_value, type) => {
   filter_changes.value = true;
   if (type === "l") {
@@ -253,6 +282,10 @@ const applyFilter = () => {
 const removeChips = () => {
   filters.value.length === 0 ? (filter_changes.value = false) : "";
 };
+
+onMounted(() => {
+  getEventStatus();
+});
 </script>
 
 <style lang="scss" scoped></style>

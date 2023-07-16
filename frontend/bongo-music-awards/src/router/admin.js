@@ -20,7 +20,7 @@ const adminRoutes = [
         path: '/admin/eventsandawards',
         component: () => import("pages/Admin/Views/EventsandAwards.vue"),
       }, {
-        path: '/admin/event',
+        path: '/admin/event/:event_id',
         component: () => import("pages/Admin/Views/EventPage.vue"),
       },
       {
