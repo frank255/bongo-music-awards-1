@@ -49,6 +49,8 @@ Route::post('/logout', [AuthController::class, 'logout']);
 Route::get('/artist_list', [ArtistProfileController::class, 'index']);
 Route::get('/artist_list/{user_id}', [ArtistProfileController::class, 'show']);
 
+Route::get('/genre_categories/{event_id}',[GenreController::class,'getGenreCategory']);
+
 //Route::middleware('auth:sanctum')->group( function (Request $request) {
 //    Route::post('/logout',[AuthController::class,'logout']);
 //});

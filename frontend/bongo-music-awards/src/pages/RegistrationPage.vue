@@ -30,7 +30,6 @@
             transition-show="flip-up"
             transition-hide="scale"
             v-model="name"
-            :options="options"
           />
 <!--          <q-input
             label="Enter Phone Number"
@@ -50,7 +49,6 @@
             transition-show="flip-up"
             transition-hide="scale"
             v-model="email"
-            :options="options"
           />
           <q-input
             label="Password"
@@ -61,7 +59,6 @@
             transition-show="flip-up"
             transition-hide="scale"
             v-model="password"
-            :options="options"
           />
           <q-input
             label="Repeat Password"
@@ -71,8 +68,8 @@
             type="password"
             transition-show="flip-up"
             transition-hide="scale"
-            v-model="password_confirmation"
-            :options="options"/>
+            v-model="password_confirmation"/>
+
           <div class="flex justify-end q-ma-lg">
             <q-btn
               class="text-capitalize"

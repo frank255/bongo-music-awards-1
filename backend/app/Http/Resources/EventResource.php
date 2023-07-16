@@ -20,7 +20,7 @@ class EventResource extends JsonResource
             'event_id' => $this->event_id,
             'event_title' => $this->event_title,
             'event_number' => $this->event_number,
-            'genre'=> GenreResource::collection($this->whenLoaded('genres')),
+            'genres'=> GenreResource::collection($this->whenLoaded('genres')),
             'event_status' => $this->event_status,
             'event_date' => $this->event_date,
             'created_at' => $this->created_at,

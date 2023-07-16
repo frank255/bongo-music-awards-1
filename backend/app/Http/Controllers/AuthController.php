@@ -26,8 +26,8 @@ class AuthController extends Controller
         if ($validator->fails()) {
             return response()->json([
                 'message' => $validator->messages(),
-                'status' => Response::HTTP_FORBIDDEN,
-            ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
+                'status' => Response::HTTP_UNPROCESSABLE_ENTITY,
+            ])->setStatusCode(Response::HTTP_UNPROCESSABLE_ENTITY, Response::$statusTexts[Response::HTTP_UNPROCESSABLE_ENTITY]);
         }
 
         $user = User::create([

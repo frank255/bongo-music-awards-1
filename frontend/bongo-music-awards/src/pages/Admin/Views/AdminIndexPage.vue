@@ -146,10 +146,7 @@
 
 <script setup>
 import { ref } from "vue";
-import pdfMake from 'pdfmake/build/pdfmake';
-import pdfFonts from 'pdfmake/build/vfs_fonts';
-import jsPDF from 'jspdf';
-// import 'jspdf-autotable';
+
 
 import ArtistCard from "src/pages/Admin/components/ArtistCard.vue";
 import NomineesCard from "src/pages/Admin/components/NomineesCard.vue";

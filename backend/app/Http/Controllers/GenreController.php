@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\UpdateGenreRequest;
+use App\Http\Resources\GenreCategoryResource;
 use App\Http\Resources\GenreResource;
 use App\Models\Event;
 use App\Models\Genre;
@@ -22,6 +23,17 @@ class GenreController extends Controller
         $genres = Genre::with('category')->get();
         //$genres = Genre::distinct()->get(['genre_name']);
         return GenreResource::collection($genres);
+    }
+
+
+    //method retrieving genres with associated categories
+    function getGenreCategory($eventId){
+       //$genre = Genre::with('category')->find($eventId);
+
+
+        //genres associated with that event
+        $genres = Genre::where('event_id', $eventId)->get();
+        return  GenreCategoryResource::collection($genres);
     }
 
 
@@ -74,9 +86,7 @@ class GenreController extends Controller
      */
     public function show($id)
     {
-        //Thinking how to improve this with using relationship (btn genre and event)
-        // to avoid event_id to be return back
-        $genre = Genre::find($id);
+        $genre = Genre::with('category')->find($id);
         if (!$genre) {
             return response()->json(['message' => 'Genre not found'], 404);
         }
