@@ -13,7 +13,7 @@
         <q-select
           bg-color="white"
           label="Genres"
-          :options="['Bongo Fleva', 'Taarabu', 'Singeli']"
+          :options="['Bongo Fleva', 'Singeli']"
           borderless
           v-model="genres"
           @update:model-value="updateFilters(genres, 'b')"
