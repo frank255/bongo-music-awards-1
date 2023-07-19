@@ -1,39 +1,26 @@
 <template>
   <q-page padding>
     <div class="row scroll-on-mobile justify-around q-mt-xl">
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
-        <q-toggle
-          v-model="EventActivation"
-          checked-icon="check"
-          false-value="closed"
-          true-value="active"
-          color="green"
-          size="60px"
-          :label="`Event is ${EventActivation}`"
-          unchecked-icon="clear"
-        />
-        <!-- <q-select
-          bg-color="white"
-          label="Events"
-          :options="['Bongo Music Awards']"
-          borderless
-          v-model="events"
-          @update:model-value="updateFilters(events, 'l')"
-        >
-        </q-select> -->
-      </q-card>
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
+      <q-btn
+        @click="toggleEventStatus"
+        class="text-capitalize"
+        flat
+        :color="EventActivation === 'active' ? 'negative' : 'primary'"
+      >
+        {{ EventActivation === "active" ? "Close Event" : "Activate Event" }}
+      </q-btn>
+      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
         <q-select
           bg-color="white"
           label="Genres"
-          :options="['Bongo Fleva', 'Taarabu', 'Singeli']"
+          :options="['Bongo Fleva', 'Singeli']"
           borderless
           v-model="genres"
           @update:model-value="updateFilters(genres, 'b')"
         >
         </q-select>
       </q-card>
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
+      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
         <q-select
           bg-color="white"
           standout
@@ -233,20 +220,22 @@ const genre_data = ref("");
 const category_data = ref("");
 const route = useRoute();
 
-//event activation
-watch(EventActivation, (newValue, oldValue) => {
-  if (newValue === "active") {
-    sendAPIRequest();
-  } else {
-    sendRequest();
-  }
-});
+const toggleEventStatus = async () => {
+  const newStatus = EventActivation.value === "active" ? "closed" : "active";
+  await sendAPIRequest(newStatus);
+};
 
-const sendAPIRequest = async () => {
+const sendAPIRequest = async (newStatus) => {
   try {
-    const response = await api.post(`/activateEvent/${route.params.event_id}`);
+    const response = await api.post(`/activateEvent/${route.params.event_id}`, {
+      status: newStatus,
+    });
     console.log(response);
-  } catch (error) {}
+    // Update EventActivation ref with the new status after successful API call
+    EventActivation.value = newStatus;
+  } catch (error) {
+    console.error("Error sending API request:", error);
+  }
 };
 
 const getEventStatus = async () => {

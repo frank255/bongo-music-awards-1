@@ -108,7 +108,7 @@ class EventsController extends Controller
 
         // Update the event status
         $newStatus = $event->event_status === 'closed' ? 'active' : 'closed';
-        $event->event_status = $newStatus;
+        $event->fill(['event_status' => $newStatus]);
         $event->save();
 
         return response()->json([
