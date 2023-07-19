@@ -234,7 +234,7 @@ const sendAPIRequest = async (newStatus) => {
     // Update EventActivation ref with the new status after successful API call
     EventActivation.value = newStatus;
   } catch (error) {
-    console.error("Error sending API request:", error);
+    console.error("Error sending API:", error);
   }
 };
 
@@ -246,6 +246,7 @@ const getEventStatus = async () => {
   } catch (error) {
     console.log(error);
   }
+
 };
 
 const updateFilters = (filter_value, type) => {
