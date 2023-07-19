@@ -246,6 +246,7 @@ const getEventStatus = async () => {
   } catch (error) {
     console.log(error);
   }
+  
 };
 
 const updateFilters = (filter_value, type) => {
