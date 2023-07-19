@@ -228,7 +228,7 @@
           </template>
         </q-table>
 
-        <template #navigation>
+
           <q-stepper-navigation>
             <q-btn
               label="Finish"
@@ -244,7 +244,7 @@
               @click="$refs.stepper.previous()"
             />
           </q-stepper-navigation>
-        </template>
+
       </q-step>
     </q-stepper>
   </q-page>
@@ -394,6 +394,8 @@ const genresSubmit = async () => {
   //   // sessionStorage.removeItem("event_id");
 
   // } catch (error) {}
+
+  const data = await api.get(`/genre_categories/1`)
 };
 
 const roles = async () => {

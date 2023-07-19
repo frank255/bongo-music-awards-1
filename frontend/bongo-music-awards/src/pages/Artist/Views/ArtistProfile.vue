@@ -250,9 +250,7 @@
             dense
             outlined
             label="Biography"
-            type="textarea"
-            borderless
-            autogrow
+           
           />
         </q-card-section>
 
