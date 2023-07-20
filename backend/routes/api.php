@@ -40,6 +40,7 @@ Route::apiResource('/events', EventsController::class);
 Route::apiResource('/genres', GenreController::class);
 Route::apiResource('/categories', CategoryController::class);
 // Route::apiResource('/artists',ArtistProfileController::class)->middleware('auth:sanctum');
+Route::post('updatePassword', [AuthController::class, 'updatePassword'])->middleware('auth:sanctum');
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/logout', [AuthController::class, 'logout']);

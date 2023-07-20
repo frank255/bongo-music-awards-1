@@ -24,11 +24,11 @@ export const useArtistStore = defineStore("artist", {
           text: "My Works",
           path: "/artist/works",
         },
-        {
-          icon: "mdi-account-circle-outline",
-          text: "My Account",
-          path: "/artist/myaccount",
-        }
+        // {
+        //   icon: "mdi-account-circle-outline",
+        //   text: "My Account",
+        //   path: "/artist/myaccount",
+        // }
       ]
     }
   )
