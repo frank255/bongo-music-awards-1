@@ -2,6 +2,7 @@
 
 namespace App\Http\Resources;
 
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\Genre;
 use Illuminate\Http\Request;
@@ -25,6 +26,7 @@ class EventResource extends JsonResource
             'event_date' => $this->event_date,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
+            'categories' => CategoryResorce::collection(Category::find($this->genres->pluck('genre_id'))), // Retrieve genre details
         ];
     }
 }
