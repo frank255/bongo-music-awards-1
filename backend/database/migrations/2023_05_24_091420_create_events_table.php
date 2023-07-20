@@ -18,7 +18,7 @@ return new class extends Migration
             $table->timestamp('event_date');
             //$table ->unsignedBigInteger('genre_id');
             //$table->foreign('genre_id')->references('genre_id')->on('genres');
-            $table->enum('event_status',['closed','opened'])->default('closed');
+            $table->string('event_status')->default('closed');
             $table->timestamps();
         });
     }

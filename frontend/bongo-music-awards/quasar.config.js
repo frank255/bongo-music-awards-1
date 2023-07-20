@@ -72,13 +72,13 @@ module.exports = configure(function (ctx ) {
       env: {
         API_URL: ctx.dev
           ? "http://127.0.0.1:8000"
-          : "https://api.example.com",
+          : "https://bongomusicaward.co.tz",
         SANCTUM_URL: ctx.dev
           ? "http://127.0.0.1:8000"
-          : "https://api.example.com",
+          : "https://bongomusicaward.co.tz",
         STORAGE_URL: ctx.dev
           ? "http://127.0.0.1:8000/storage"
-          : "https://api.example.com",
+          : "https://bongomusicaward.co.tz",
       },
       // rawDefine: {}
       // ignorePublicFolder: true,

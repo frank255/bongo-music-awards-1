@@ -28,6 +28,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/artist_bio/{id}', [ArtistProfileController::class, 'updateBio']);
     Route::post('/artist_info/{id}', [ArtistProfileController::class, 'updateArtistInfo']);
+    Route::post('/activateEvent/{id}', [EventsController::class, 'activateEvent']);
     Route::apiResource('/artists', ArtistProfileController::class);
     Route::apiResource('/albums', AlbumController::class);
     Route::apiResource('/single', SingleController::class);

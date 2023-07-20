@@ -43,8 +43,8 @@
           </q-badge>
         </q-td>
       </template>
-      <template #body-cell-action="">
-        <q-td>
+      <template #body-cell-action="props">
+        <q-td :props="props">
           <q-btn
             class=""
             icon="mdi-eye"
@@ -52,7 +52,7 @@
             dense
             color="primary"
             size="10px"
-            to="/admin/event"
+            @click="eventDetails(props.row.event_id)"
           >
             <!-- <q-menu>
               <div class="row no-wrap q-pa-md">
@@ -101,6 +101,8 @@ import { onMounted, ref } from "vue";
 import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+const router = useRouter();
+
 const rows = ref([]);
 const columns = ref([
   {
@@ -145,6 +147,9 @@ const getEvents = async () => {
     console.log(error);
   }
 };
+
+const eventDetails = (event_id) =>
+  router.push(`/admin/event/${event_id}`);
 
 onMounted(() => {
   getEvents();

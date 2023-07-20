@@ -19,7 +19,7 @@ class StoreEventRequest extends FormRequest
     {
         return [
             'event_title' => 'required|max:255',
-            'event_name' => 'required',
+            'event_name' => 'required|max:255',
             'event_number' => 'required',
             'event_date' => 'required',
             'event_status' => 'required',

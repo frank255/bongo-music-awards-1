@@ -1,39 +1,26 @@
 <template>
   <q-page padding>
     <div class="row scroll-on-mobile justify-around q-mt-xl">
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
-        <q-toggle
-          v-model="EventActivation"
-          checked-icon="check"
-          false-value="closed"
-          true-value="active"
-          color="green"
-          size="60px"
-          :label="`Event is ${EventActivation}`"
-          unchecked-icon="clear"
-        />
-        <!-- <q-select
-          bg-color="white"
-          label="Events"
-          :options="['Bongo Music Awards']"
-          borderless
-          v-model="events"
-          @update:model-value="updateFilters(events, 'l')"
-        >
-        </q-select> -->
-      </q-card>
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
+      <q-btn
+        @click="toggleEventStatus"
+        class="text-capitalize"
+        flat
+        :color="EventActivation === 'active' ? 'negative' : 'primary'"
+      >
+        {{ EventActivation === "active" ? "Close Event" : "Activate Event" }}
+      </q-btn>
+      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
         <q-select
           bg-color="white"
           label="Genres"
-          :options="['Bongo Fleva', 'Taarabu', 'Singeli']"
+          :options="['Bongo Fleva', 'Singeli']"
           borderless
           v-model="genres"
           @update:model-value="updateFilters(genres, 'b')"
         >
         </q-select>
       </q-card>
-      <q-card class="col-xs-12 col-sm-6 col-md-3 q-pa-xs" flat bordered>
+      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
         <q-select
           bg-color="white"
           standout
@@ -156,7 +143,9 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, watch, onMounted } from "vue";
+import { api } from "src/boot/axios";
+import { useRoute } from "vue-router";
 const columns = ref([
   {
     name: "artist_name",
@@ -218,7 +207,7 @@ const rows = [
   },
   // Add more rows as needed
 ];
-const EventActivation = ref('closed');
+const EventActivation = ref("");
 const events = ref("");
 const genres = ref("");
 const category = ref("");
@@ -226,10 +215,40 @@ const filters = ref({});
 const APPROVAL_DIALOG = ref(false);
 // const filter = ref([]);
 const filter_changes = ref(false);
-
 const events_data = ref("");
 const genre_data = ref("");
 const category_data = ref("");
+const route = useRoute();
+
+const toggleEventStatus = async () => {
+  const newStatus = EventActivation.value === "active" ? "closed" : "active";
+  await sendAPIRequest(newStatus);
+};
+
+const sendAPIRequest = async (newStatus) => {
+  try {
+    const response = await api.post(`/activateEvent/${route.params.event_id}`, {
+      status: newStatus,
+    });
+    console.log(response);
+    // Update EventActivation ref with the new status after successful API call
+    EventActivation.value = newStatus;
+  } catch (error) {
+    console.error("Error sending API:", error);
+  }
+};
+
+const getEventStatus = async () => {
+  try {
+    const response = await api.get(`/events/${route.params.event_id}`);
+    // console.log(response.data.data.event_status);
+    EventActivation.value = response.data.data.event_status;
+  } catch (error) {
+    console.log(error);
+  }
+
+};
+
 const updateFilters = (filter_value, type) => {
   filter_changes.value = true;
   if (type === "l") {
@@ -253,6 +272,10 @@ const applyFilter = () => {
 const removeChips = () => {
   filters.value.length === 0 ? (filter_changes.value = false) : "";
 };
+
+onMounted(() => {
+  getEventStatus();
+});
 </script>
 
 <style lang="scss" scoped></style>
