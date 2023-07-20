@@ -18,7 +18,7 @@ jobs:
         FTP_USERNAME: ${{secrets.ftp_username}}
         FTP_PASSWORD: ${{secrets.ftp_password}}
         LOCAL_DIR: ./frontend/bongo-music-awards/dist/spa
-        REMOTE_DIR: ./kigomadivingcenter.com/
+        REMOTE_DIR: ./bongomusicawards.com/
         METHOD: sftp
         PORT: 22
         ARGS: --verbose
