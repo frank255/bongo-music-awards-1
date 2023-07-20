@@ -17,7 +17,7 @@ jobs:
         FTP_SERVER: ${{secrets.ftp_server2}}
         FTP_USERNAME: ${{secrets.ftp_username2}}
         FTP_PASSWORD: ${{secrets.ftp_password2}}
-        LOCAL_DIR: ./backend
+        LOCAL_DIR: ./backend/
         REMOTE_DIR: ./bongomusicaward.co.tz/
         METHOD: sftp
         PORT: 22
