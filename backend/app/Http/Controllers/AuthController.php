@@ -9,10 +9,15 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Symfony\Component\HttpFoundation\Response;
 use App\Http\Controllers\ArtistProfileController;
+use App\Traits\HttpResponses;
+use Illuminate\Support\Facades\Hash;
+
 class AuthController extends Controller
 {
-    public function index(Request $request){
+    use HttpResponses;
 
+    public function index(Request $request)
+    {
     }
 
     public function register(Request $request)
@@ -64,14 +69,14 @@ class AuthController extends Controller
             ])->setStatusCode(Response::HTTP_FORBIDDEN, Response::$statusTexts[Response::HTTP_FORBIDDEN]);
         }
 
-        if(!Auth::attempt($request->only(['email','password']))){
+        if (!Auth::attempt($request->only(['email', 'password']))) {
             return response()->json([
                 'message' => "credential do not found",
                 'status' => Response::HTTP_NOT_FOUND,
             ])->setStatusCode(Response::HTTP_NOT_FOUND, Response::$statusTexts[Response::HTTP_NOT_FOUND]);
         }
 
-        $user = User::where('email',$request->email)->first();
+        $user = User::where('email', $request->email)->first();
         //$user = Auth::user();
         return response()->json([
             'user' => $user,
@@ -79,12 +84,31 @@ class AuthController extends Controller
             'token' => $user->createToken('login')->plainTextToken,
             'role' => $user->role,
         ])->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
-
-
     }
 
-    public function logout(Request $request){
-        return \response()->json($request->all());
+    public function updatePassword(Request $request)
+    {
+        $user_id = $request->user_id;
+        $old_password = $request->old_password;
+        $new_password = $request->new_password;
 
+        $user = User::where('user_id', $user_id)->first();
+
+        // Check if the old password matches the user's existing password
+        if (!Hash::check($old_password, $user->password)) {
+            return $this->error('', 'Old password is incorrect', 401);
+        }
+
+        // Update the user's password with the new password
+        $user->password = Hash::make($new_password);
+        $user->save();
+
+        return $this->success('Password updated successfully');
+    }
+
+
+    public function logout(Request $request)
+    {
+        return \response()->json($request->all());
     }
 }
