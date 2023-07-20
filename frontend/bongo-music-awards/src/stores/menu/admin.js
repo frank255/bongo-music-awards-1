@@ -32,11 +32,6 @@ export const useAdminStore = defineStore("admin", {
           text: "Emails",
           path: "/admin/emails",
         },
-        // {
-        //   icon: "mdi-account-circle-outline",
-        //   text: "My Account",
-        //   path: "/admin/myaccount",
-        // }
       ]
     }
   )
