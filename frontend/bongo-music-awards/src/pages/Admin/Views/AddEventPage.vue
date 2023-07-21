@@ -200,7 +200,7 @@
             />
           </template>
         </q-banner> -->
-        <q-table :rows="rows" :columns="columns" :row-key="'id'">
+        <q-table :rows="formattedRows" :columns="columns" :row-key="'id'">
           <template v-slot:body-cell-categories="props">
             <q-td :props="props" :key="props.key">
               <q-item
@@ -228,23 +228,21 @@
           </template>
         </q-table>
 
-
-          <q-stepper-navigation>
-            <q-btn
-              label="Finish"
-              color="primary"
-              @click="STEP === 3 ? submitCategories() : $refs.stepper.next()"
-            />
-            <q-btn
-              v-if="STEP > 1"
-              class="q-ml-sm"
-              color="primary"
-              flat
-              label="Back"
-              @click="$refs.stepper.previous()"
-            />
-          </q-stepper-navigation>
-
+        <q-stepper-navigation>
+          <q-btn
+            label="Finish"
+            color="primary"
+            @click="STEP === 3 ? finish() : $refs.stepper.next()"
+          />
+          <q-btn
+            v-if="STEP > 1"
+            class="q-ml-sm"
+            color="primary"
+            flat
+            label="Back"
+            @click="$refs.stepper.previous()"
+          />
+        </q-stepper-navigation>
       </q-step>
     </q-stepper>
   </q-page>
@@ -252,10 +250,12 @@
 
 <script setup>
 import { api } from "src/boot/axios";
-import { onMounted, reactive, ref } from "vue";
+import { computed, onMounted, reactive, ref, watch } from "vue";
 import { Notify, useQuasar } from "quasar";
 
 import { useRouter } from "vue-router";
+const apiResponse = ref([]);
+const formattedRows = ref([]);
 const router = useRouter();
 const $q = useQuasar();
 const STEP = ref(1);
@@ -270,21 +270,6 @@ const addEvent = ref({
 const newGenre = ref("");
 const genre_data = ref([]);
 const selected_genres = ref([]);
-const genres_category = ref([]);
-const rows = [
-  {
-    id: 1,
-    genre: "Action",
-    categories: ["Shooter", "Fighting", "Adventure", "Shooter", "Fighting"],
-  },
-  {
-    id: 2,
-    genre: "Adventure",
-    categories: ["RPG", "Platformer", "Simulation"],
-  },
-  { id: 3, genre: "Sports", categories: ["Football", "Basketball", "Tennis"] },
-  // add more data as per your requirement
-];
 const columns = [
   { name: "genre", align: "left", label: "Genre", field: "genre" },
   {
@@ -346,57 +331,71 @@ const continueBtn = ref(null);
 //   STEP.value = 2;
 // };
 const eventSubmit = async () => {
-  STEP.value = 2;
-  // try {
-  //   const { status, data } = await api.post("/events", form_data());
-  //   sessionStorage.removeItem("event_id");
-  //   sessionStorage.setItem("event_id", data.data.event_id);
-  //   if (status === 200) {
-  //     STEP.value = 2;
-  //   }
-  // } catch (error) {
-  //   // Notify.create({
-  //   //   type: "negative",
-  //   //   message: error.response.data.message,
-  //   // });
-  // }
+  // STEP.value = 2;
+  try {
+    const { status, data } = await api.post("/events", form_data());
+    sessionStorage.removeItem("event_id");
+    sessionStorage.setItem("event_id", data.data.event_id);
+    if (status === 200) {
+      STEP.value = 2;
+    }
+  } catch (error) {
+    $q.notify({
+      message: error.response.data.message,
+      type: "negative",
+      position: "top-right",
+    });
+  }
 };
 const genresSubmit = async () => {
-  STEP.value = 3;
+  try {
+    const eventId = sessionStorage.getItem("event_id");
+    // Loop through the selected_genres array and append the event ID to each value
+    // selected_genres.value.forEach((genre, index) => {
+    //   selected_genres.value[index] = `${event_id}_${genre}`;
+    // });
 
-  // try {
-  //   const eventId = sessionStorage.getItem("event_id");
-  //   // Loop through the selected_genres array and append the event ID to each value
-  //   // selected_genres.value.forEach((genre, index) => {
-  //   //   selected_genres.value[index] = `${event_id}_${genre}`;
-  //   // });
+    const payload = {
+      event_id: eventId,
+      genre_names: selected_genres.value,
+    };
 
-  //   const payload = {
-  //     event_id: eventId,
-  //     genre_names: selected_genres.value,
-  //   };
+    // // Append the selected_genres array to the form data object
+    // selected_genres.value.forEach((genre) => {
+    //   formData.append("selected_genres[]", genre);
+    // });
 
-  //   // // Append the selected_genres array to the form data object
-  //   // selected_genres.value.forEach((genre) => {
-  //   //   formData.append("selected_genres[]", genre);
-  //   // });
+    const { data } = await api.post("/genres", payload);
+    const response = await api.get(`/genre_categories/${eventId}`);
+    apiResponse.value = response.data;
 
-  //   const { data } = await api.post("/genres", payload);
-  //   STEP.value = 3;
-  //   data.forEach(element => {
-  //     genres_category.value.push({
-  //     value:element.genre_id,
-  //     label: element.genre_name,
-  //   })
-  //   });
+    STEP.value = 3;
+    // data.forEach(element => {
+    //   genres_category.value.push({
+    //   value:element.genre_id,
+    //   label: element.genre_name,
+    // })
+    // });
 
-  //   console.log(genres_category.value);
-  //   // sessionStorage.removeItem("event_id");
+    // console.log(genres_category.value);
+    // sessionStorage.removeItem("event_id");
+  } catch (error) {}
 
-  // } catch (error) {}
-
-  const data = await api.get(`/genre_categories/1`)
+  // console.log(data.data);
 };
+
+// Watch for changes in the API response and update the formattedRows accordingly
+watch(apiResponse, (newApiResponse) => {
+  formattedRows.value = newApiResponse.map((item, index) => ({
+    id: index + 1,
+    genre: item.genre_name,
+    categories: item.categories.map((category) => category.category_name),
+  }));
+});
+
+const finish = ()=>{
+  router.push('/admin/eventsandawards')
+}
 
 const roles = async () => {
   try {
@@ -434,12 +433,12 @@ const addCategory = () => {
   console.log(cat_data.value);
 };
 
-const getAvailableCategories = async () => {
-  try {
-    const { data } = await api.post("/categories", cat_data.value);
-    console.log(data);
-  } catch (error) {}
-};
+// const getAvailableCategories = async () => {
+//   try {
+//     const { data } = await api.post("/categories", cat_data.value);
+//     console.log(data);
+//   } catch (error) {}
+// };
 
 onMounted(() => {
   // roles();
