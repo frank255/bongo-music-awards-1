@@ -1,0 +1,1 @@
+import{Q as t}from"./QPage.e8fa4ae4.js";import{aL as e,o as a,c as r,w as c,h as s}from"./index.6752f776.js";const o={};function i(n,_){return a(),r(t,{padding:""},{default:c(()=>[s(" artist tickets ")]),_:1})}var p=e(o,[["render",i]]);export{p as default};
