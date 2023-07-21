@@ -38,6 +38,7 @@ Route::post('authenticated', [AuthController::class, 'index'])->middleware('auth
 
 Route::apiResource('/events', EventsController::class);
 Route::apiResource('/genres', GenreController::class);
+Route::get('/event_genres', [GenreController::class,'getGenres']);
 Route::apiResource('/categories', CategoryController::class);
 // Route::apiResource('/artists',ArtistProfileController::class)->middleware('auth:sanctum');
 Route::post('updatePassword', [AuthController::class, 'updatePassword'])->middleware('auth:sanctum');

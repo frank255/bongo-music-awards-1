@@ -36,6 +36,10 @@ class GenreController extends Controller
             ->where('event_id', $eventId)
             ->pluck('genre_id');
 
+        //inserting the new genres to categories.
+        //1. retrive
+
+
         foreach ($genre_ids as $id) {
             $genreCategory[] = $this->show($id);
         }

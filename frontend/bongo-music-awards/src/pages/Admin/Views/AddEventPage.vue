@@ -406,7 +406,7 @@ const roles = async () => {
 
 const getGenres = async () => {
   try {
-    const response = await api.get("/genres");
+    const response = await api.get("/event_genres");
     const { data } = response;
     // Extract just the genre names using map() and array destructuring
     const names = data.data.map(({ genre_name }) => genre_name);
