@@ -6,6 +6,7 @@ use App\Http\Requests\UpdateGenreRequest;
 use App\Http\Resources\EventResource;
 use App\Http\Resources\GenreCategoryResource;
 use App\Http\Resources\GenreResource;
+use App\Models\Category;
 use App\Models\Event;
 use App\Models\Genre;
 use Illuminate\Http\Request;
@@ -31,6 +32,8 @@ class GenreController extends Controller
     function getGenreCategory($eventId)
     {
         $genreCategory = [];
+
+        //new genre_id names
         $genre_ids = DB::table('genres')
             ->select('genre_id')
             ->where('event_id', $eventId)
@@ -80,11 +83,26 @@ class GenreController extends Controller
                 'genre_name' => $gen,
                 'event_id' => $event_id
             ]);
+
+            if (DB::table('genres')->where('genre_name', $genre->genre_name)->exists()) {
+                $genreValue = DB::table('genres')
+                    ->select('genre_id')
+                    ->where('genre_name','=',$genre->genre_name)
+                    ->first();
+
+                $category = DB::table('categories')
+                    ->select('category_name')
+                    ->where('genre_id','=',$genreValue->genre_id)
+                    ->first();
+
+                Category::create([
+                    'category_name' => $category->category_name,
+                    'genre_id' => $genre->genre_id
+                ]);
+            }
         }
 
-        // $event = Event::find($request->event_id);
-        // $genre = $event->genres()->createMany($request->all());
-        // return GenreResource::collection($genre);
+        //calling the find function, returns the category
 
 
         return Genre::all();
