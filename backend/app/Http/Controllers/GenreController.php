@@ -90,15 +90,20 @@ class GenreController extends Controller
                     ->where('genre_name','=',$genre->genre_name)
                     ->first();
 
+                //collection of categories
                 $category = DB::table('categories')
                     ->select('category_name')
                     ->where('genre_id','=',$genreValue->genre_id)
-                    ->first();
+                    ->get();
 
-                Category::create([
-                    'category_name' => $category->category_name,
-                    'genre_id' => $genre->genre_id
-                ]);
+                //return response()->json(['categories' => $category], 201);
+
+                foreach ($category as $cat){
+                    Category::create([
+                        'category_name' => $cat->category_name,
+                        'genre_id' => $genre->genre_id
+                    ]);
+                }
             }
         }
 
