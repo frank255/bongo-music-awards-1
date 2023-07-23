@@ -1,102 +1,82 @@
 <template>
-  <q-page padding class="">
-    <div class="text-h6 q-mb-lg">Select any category to vote..</div>
-    <div class="column q-gutter-y-md">
+  <q-page class="">
+    <div class="flex justify-center">
+      <div class="full-width">
+        <q-carousel
+          height="350px"
+          swipeable
+          animated
+          v-model="slide"
+          navigation
+          infinite
+          :autoplay="autoplay"
+          arrows
+          transition-prev="slide-right"
+          transition-next="slide-left"
+          @mouseenter="autoplay = false"
+          @mouseleave="autoplay = true"
+        >
+          <q-carousel-slide :name="1" img-src="~assets/vote1copy.png" />
+          <!-- <q-carousel-slide :name="2" img-src="~assets/vote1copy.png" /> -->
+        </q-carousel>
+      </div>
+    </div>
+    <div class="text-h6 q-ma-lg">Select any category to vote..</div>
+    <div class="column q-gutter-y-md q-px-xs">
       <q-expansion-item
         v-for="category in nominees"
-        :key="category.category"
+        :key="category.genre"
         expand-separator
         icon="mdi-trophy-award"
-        :label="category.category"
-        :class="$q.platform.is.desktop ? 'shadow-2 q-mx-xl rounded-borders':'shadow-2 q-mx-sm rounded-borders'"
+        :label="category.genre"
+        :class="{
+          'shadow-2 q-mx-xl rounded-borders': $q.platform.is.desktop,
+          'shadow-2  rounded-borders': !$q.platform.is.desktop,
+        }"
         header-class="text-h6"
       >
         <q-card>
-          <q-card-section>
-            <q-list>
-              <q-item
-                v-for="nominee in category.options"
+          <q-card-section
+            v-for="cat in category.categories"
+            :key="cat.category"
+            class="q-pa-md"
+          >
+            <div class="q-mb-md text-h6">{{ cat.category }}</div>
+            <div class="flex q-gutter-md flex-center justify-evenly">
+              <div
+                v-for="nominee in cat.options"
                 :key="nominee.id"
-                class="q-mb-sm"
-                clickable
-                v-ripple
+                class="col-auto"
               >
-                <q-item-section avatar>
-                  <q-avatar size="5em">
-                    <img
-                      :src="`https://cdn.quasar.dev/img/${nominee.avatar}`"
-                    />
-                  </q-avatar>
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label>{{ nominee.name }}</q-item-label>
-                  <q-item-label caption lines="1">{{
+                <q-card class="q-pa-md" :style="$q.platform.is.desktop?'width: 180px; height: 250px':'width: 280px; height: 250px'">
+                  <q-img
+                    :src="`https://cdn.quasar.dev/img/${nominee.avatar}`"
+                    class=""
+                    style="width: 100%; height: 120px; object-fit: cover"
+                  />
+                  <q-item-label class="text-h6 text-bold">{{
+                    nominee.name
+                  }}</q-item-label>
+                  <q-item-label caption lines="2">{{
                     nominee.description
                   }}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-radio
-                    v-model="votes[category.category]"
-                    :val="nominee.name"
-                    :name="category.category"
-                    checked-icon="task_alt"
-                    unchecked-icon="panorama_fish_eye"
-                    @click="showSubmit = true"
-                  />
-                </q-item-section>
-              </q-item>
-            </q-list>
+                  <div class="q-mt-md">
+                    <q-radio
+                      v-model="votes[category.genre][cat.category]"
+                      label="Vote"
+                      :val="nominee.name"
+                      :name="`${category.genre}-${cat.category}`"
+                      checked-icon="task_alt"
+                      unchecked-icon="panorama_fish_eye"
+                      @click="showSubmit = true"
+                    />
+                  </div>
+                </q-card>
+              </div>
+            </div>
           </q-card-section>
         </q-card>
       </q-expansion-item>
-      <!-- <q-expansion-item
-        v-for="category in nominees"
-        :key="category.category"
-        expand-separator
-        icon="mdi-trophy-award"
-        :label="category.category"
-        class="shadow-2 q-mx-xl rounded-borders"
-        header-class="text-h6"
-      >
-        <q-card>
-          <q-card-section>
-            <q-list>
-              <q-item
-                v-for="nominee in category.options"
-                :key="nominee.id"
-                class="q-mb-sm"
-                clickable
-                v-ripple
-              >
-                <q-item-section avatar>
-                  <q-avatar>
-                    <img
-                      :src="`https://cdn.quasar.dev/img/${nominee.avatar}`"
-                    />
-                  </q-avatar>
-                </q-item-section>
-
-                <q-item-section>
-                  <q-item-label>{{ nominee.name }}</q-item-label>
-                  <q-item-label caption lines="1">{{
-                    nominee.description
-                  }}</q-item-label>
-                </q-item-section>
-                <q-item-section side>
-                  <q-radio
-                    v-model="votes[category.category]"
-                    :val="nominee.id"
-                    :name="category.category"
-                    checked-icon="task_alt"
-                    unchecked-icon="panorama_fish_eye"
-                  />
-                </q-item-section>
-              </q-item>
-            </q-list>
-          </q-card-section>
-        </q-card>
-      </q-expansion-item> -->
     </div>
     <!--dialogue-->
     <q-dialog v-model="showDialog" persistent>
@@ -105,7 +85,7 @@
           <div class="text-h6">Please enter your details bellow</div>
         </q-card-section>
         <q-card-section>
-          <q-input v-model="voter_name" label="Name" />
+          <q-input v-model="voter_name" label="Name" required />
           <q-input v-model="voter_email" label="Email" />
           <q-input v-model="voter_phone" label="Phone" />
         </q-card-section>
@@ -142,6 +122,11 @@
 </template>
 <script setup>
 import { ref } from "vue";
+// import VueCarousel from "vue3-carousel"; // Add this import
+
+// import { Carousel, Navigation, Slide } from 'vue3-carousel';
+const slide = ref(1);
+const autoplay = ref(true);
 const voter_name = ref("");
 const voter_email = ref("");
 const voter_phone = ref("");
@@ -149,117 +134,141 @@ let showDialog = ref(false);
 let showSubmit = ref(false);
 const nominees = [
   {
-    category: "Best Artist of The Year",
-    options: [
+    genre: "Best Artist of The Year",
+    categories: [
       {
-        id: 1,
-        name: "Nominee A",
-        description: "bla bla bla",
-        avatar: "avatar1.jpg",
+        category: "Singeli",
+        options: [
+          {
+            id: 1,
+            name: "Nominee A",
+            description: "Talented singer known for energetic performances.",
+            avatar: "avatar1.jpg",
+          },
+          {
+            id: 2,
+            name: "Nominee B",
+            description: "Versatile artist with a unique vocal style.",
+            avatar: "avatar2.jpg",
+          },
+          {
+            id: 3,
+            name: "Nominee C",
+            description: "Rising star with a massive fan following.",
+            avatar: "avatar3.jpg",
+          },
+          {
+            id: 4,
+            name: "Nominee D",
+            description: "Rising star with a massive fan following.",
+            avatar: "avatar3.jpg",
+          },
+          {
+            id: 5,
+            name: "Nominee E",
+            description: "Rising star with a massive fan following.",
+            avatar: "avatar3.jpg",
+          },
+          // Add more nominees for Singeli category...
+        ],
       },
       {
-        id: 2,
-        name: "Nominee B",
-        description: "bla bla bla",
-        avatar: "avatar2.jpg",
-      },
-      {
-        id: 3,
-        name: "Nominee C",
-        description: "bla bla bla",
-        avatar: "avatar3.jpg",
-      },
-      {
-        id: 4,
-        name: "Nominee D",
-        description: "bla bla bla",
-        avatar: "avatar4.jpg",
-      },
-      {
-        id: 5,
-        name: "Nominee E",
-        description: "bla bla bla",
-        avatar: "avatar5.jpg",
+        category: "Bongo Fleva",
+        options: [
+          {
+            id: 1,
+            name: "Nominee D",
+            description: "Legendary artist with numerous hit songs.",
+            avatar: "avatar4.jpg",
+          },
+          {
+            id: 2,
+            name: "Nominee E",
+            description: "Singer-songwriter known for soulful ballads.",
+            avatar: "avatar5.jpg",
+          },
+          {
+            id: 3,
+            name: "Nominee F",
+            description: "Talented rapper with thought-provoking lyrics.",
+            avatar: "avatar6.jpg",
+          },
+          {
+            id: 4,
+            name: "Nominee D",
+            description: "Rising star with a massive fan following.",
+            avatar: "avatar3.jpg",
+          },
+          {
+            id: 5,
+            name: "Nominee E",
+            description: "Rising star with a massive fan following.",
+            avatar: "avatar3.jpg",
+          },
+          // Add more nominees for Bongo Fleva category...
+        ],
       },
     ],
   },
   {
-    category: "Best Song of The Year",
-    options: [
+    genre: "Best Song of The Year",
+    categories: [
       {
-        id: 6,
-        name: "Nominee F",
-        description: "bla bla bla",
-        avatar: "avatar6.jpg",
+        category: "Singeli",
+        options: [
+          {
+            id: 4,
+            name: "Nominee G",
+            description: "Catchy song with a danceable beat.",
+            avatar: "avatar7.jpg",
+          },
+          {
+            id: 5,
+            name: "Nominee H",
+            description: "Emotional ballad that touched millions of hearts.",
+            avatar: "avatar8.jpg",
+          },
+          {
+            id: 6,
+            name: "Nominee I",
+            description: "Infectious track that became an instant hit.",
+            avatar: "avatar9.jpg",
+          },
+          // Add more nominees for Singeli category...
+        ],
       },
       {
-        id: 7,
-        name: "Nominee G",
-        description: "bla bla bla",
-        avatar: "avatar7.jpg",
-      },
-      {
-        id: 8,
-        name: "Nominee H",
-        description: "bla bla bla",
-        avatar: "avatar8.jpg",
-      },
-      {
-        id: 9,
-        name: "Nominee I",
-        description: "bla bla bla",
-        avatar: "avatar9.jpg",
-      },
-      {
-        id: 10,
-        name: "Nominee J",
-        description: "bla bla bla",
-        avatar: "avatar10.jpg",
-      },
-    ],
-  },
-  {
-    category: "Best Video of The Year",
-    options: [
-      {
-        id: 6,
-        name: "Nominee F",
-        description: "bla bla bla",
-        avatar: "avatar6.jpg",
-      },
-      {
-        id: 7,
-        name: "Nominee G",
-        description: "bla bla bla",
-        avatar: "avatar7.jpg",
-      },
-      {
-        id: 8,
-        name: "Nominee H",
-        description: "bla bla bla",
-        avatar: "avatar8.jpg",
-      },
-      {
-        id: 9,
-        name: "Nominee I",
-        description: "bla bla bla",
-        avatar: "avatar9.jpg",
-      },
-      {
-        id: 10,
-        name: "Nominee J",
-        description: "bla bla bla",
-        avatar: "avatar10.jpg",
+        category: "Bongo Fleva",
+        options: [
+          {
+            id: 4,
+            name: "Nominee J",
+            description: "Upbeat song that dominated the charts.",
+            avatar: "avatar10.jpg",
+          },
+          {
+            id: 5,
+            name: "Nominee K",
+            description: "Collaborative track featuring top artists.",
+            avatar: "avatar11.jpg",
+          },
+          {
+            id: 6,
+            name: "Nominee L",
+            description: "Powerful anthem that resonated with the audience.",
+            avatar: "avatar12.jpg",
+          },
+          // Add more nominees for Bongo Fleva category...
+        ],
       },
     ],
   },
-  // Add additional categories and options here...
 ];
-const votes = ref([]);
-for (const category of nominees) {
-  votes.value[category.category] = null;
-}
 
+const votes = ref({});
+for (const category of nominees) {
+  votes.value[category.genre] = {};
+}
 const sendVote = () => {
   console.log("voter name", voter_name.value);
   console.log("voter email", voter_email.value);

@@ -17,7 +17,6 @@ class SingleController extends Controller
     public function index()
     {
         return Single::all();
-
     }
 
     /**
@@ -47,15 +46,13 @@ class SingleController extends Controller
             'single_date' => $request->input('single_date'),
         ]);
 
-        if ($single) {
-            return response(new SingleResource($single))
-                ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
-        }
-
-        return response()->json([
-            'status' => Response::HTTP_FORBIDDEN,
-            'message' => "Single store failed"
-        ]);
+        // if ($single) {
+        //     return response(new SingleResource($single))
+        //         ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
+        // }
+        $singles = Single::where('user_id', $user->user_id)->get();
+        return response(SingleResource::collection($singles))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
 
@@ -80,9 +77,30 @@ class SingleController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Single $single)
+    public function update(Request $request,  $single_id)
     {
-        //
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'single_name' => 'required|string',
+            'single_date' => 'required|string',
+            'single_link' => 'required|string', // Assuming the "status" field is stored in the "event_status" column in the database
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        $single = Single::find($single_id);
+
+        if (!$single) {
+            return response()->json(['error' => 'single not found'], 404);
+        }
+
+        $single->update($request->all());
+        $singles = Single::where('user_id', $user->user_id)->get();
+        return response(SingleResource::collection($singles))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**

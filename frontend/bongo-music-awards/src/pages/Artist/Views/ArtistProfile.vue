@@ -1,9 +1,11 @@
 <template>
   <q-page padding>
-    <div class="column text-capitalize text-h5 flex justify-center items-center">
-      this profile will be vissible to your fans....
+    <div
+      class="text-center text-h5"
+    >
+      This profile will be vissible to your fans....
     </div>
-    <q-card>
+    <q-card v-if="profileInfo">
       <div class="shaddow q-mt-lg q-pa-sm column items-center relative">
         <div class="card bg-grey-2 flex justify-center items-center">
           <q-avatar size="90px" class="avatar">
@@ -44,16 +46,28 @@
         </q-icon>
       </div>
     </q-card>
-    <q-card class="q-mt-lg">
+    <div v-else class="q-card q-mt-lg">
+      <div class="row justify-center">
+        <q-icon
+          size="2em"
+          class="q-pa-sm"
+          name="mdi-pencil"
+          @click="BIO_DIALOG = true"
+        >
+          <q-tooltip>Edit</q-tooltip>
+        </q-icon>
+      </div>
+      <div class="row shaddow q-mt-sm q-pa-sm justify-center">
+        <p>Please click pencil icon to edit your profile</p>
+      </div>
+    </div>
+    <q-card class="q-mt-lg" v-if="profileInfo">
       <div class="row justify-end">
         <q-icon
           size="2em"
           class="q-pa-sm"
           name="mdi-pencil"
-          @click="
-            // approveLoan(props.row.loan_id);
-            INFO_DIALOG = true
-          "
+          @click="INFO_DIALOG = true"
         >
           <q-tooltip>Edit</q-tooltip></q-icon
         >
@@ -250,7 +264,6 @@
             dense
             outlined
             label="Biography"
-           
           />
         </q-card-section>
 
@@ -481,7 +494,7 @@ const form_data = () => {
 const createBio = async () => {
   try {
     const response = await api.post("/artists", form_data());
-indow.location.reload();
+    profileInfo.value = response.data;
   } catch (error) {}
 };
 
@@ -490,8 +503,11 @@ const updateBio = async () => {
     if (getProfileResponse.value == "not found") {
       createBio();
     } else {
-      const response = await api.post(`/artist_bio/${user.user_id}`, form_data());
-      window.location.reload();
+      const response = await api.post(
+        `/artist_bio/${user.user_id}`,
+        form_data()
+      );
+      profileInfo.value = response.data;
     }
   } catch (error) {}
 };
@@ -510,7 +526,7 @@ const createInfo = async () => {
       occupations: occupationsString,
       labels: labelsString,
     });
-    window.location.reload();
+    profileInfo.value = response.data;
   } catch (error) {}
 };
 
@@ -518,20 +534,20 @@ const updateInfo = async () => {
   try {
     const occupationsString = JSON.stringify(occupations.value);
     const labelsString = JSON.stringify(labels.value);
-    if(getProfileResponse.value == "not found"){
+    if (getProfileResponse.value == "not found") {
       createInfo();
-    }else{
-    const response = await api.post(`/artist_info/${user.user_id}`, {
-      website: website.value,
-      phone: phone.value,
-      email: email.value,
-      youtube: youtube.value,
-      instagram: instagram.value,
-      twitter: twitter.value,
-      occupations: occupationsString,
-      labels: labelsString,
-    });
-indow.location.reload();
+    } else {
+      const response = await api.post(`/artist_info/${user.user_id}`, {
+        website: website.value,
+        phone: phone.value,
+        email: email.value,
+        youtube: youtube.value,
+        instagram: instagram.value,
+        twitter: twitter.value,
+        occupations: occupationsString,
+        labels: labelsString,
+      });
+      window.location.reload();
     }
   } catch (error) {}
 };
@@ -540,7 +556,7 @@ const getProfile = async () => {
   try {
     const response = await api.get(`/artists/${user.user_id}`);
     profileInfo.value = response.data;
-    } catch (error) {
+  } catch (error) {
     if (error.response && error.response.status === 404) {
       // Profile not found
       getProfileResponse.value = "not found";

@@ -111,10 +111,8 @@ class EventsController extends Controller
         $event->fill(['event_status' => $newStatus]);
         $event->save();
 
-        return response()->json([
-            'message' => 'Event status updated successfully',
-            'status' => Response::HTTP_OK
-        ]);
+        $events = Event::with('genres')->get();
+        return EventResource::collection($events);
     }
 
     /**

@@ -105,6 +105,12 @@
         <template #top-left>
           <p class="text-weight-bolder text-capitalize q-pl-md">Nominees</p>
         </template>
+        <!-- Template for the "Link" column -->
+        <template #body-cell-link="props">
+          <q-td>
+            <a :href="props.row.link" target="_blank">{{ props.row.link }}</a>
+          </q-td>
+        </template>
       </q-table>
     </div>
     <q-dialog v-model="APPROVAL_DIALOG" position="right">
@@ -246,7 +252,6 @@ const getEventStatus = async () => {
   } catch (error) {
     console.log(error);
   }
-
 };
 
 const updateFilters = (filter_value, type) => {
