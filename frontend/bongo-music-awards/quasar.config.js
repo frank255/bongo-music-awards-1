@@ -78,7 +78,7 @@ module.exports = configure(function (ctx ) {
           : "https://bongomusicaward.co.tz",
         STORAGE_URL: ctx.dev
           ? "http://127.0.0.1:8000/storage"
-          : "https://bongomusicaward.co.tz",
+          : "https://bongomusicaward.co.tz/storage",
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
