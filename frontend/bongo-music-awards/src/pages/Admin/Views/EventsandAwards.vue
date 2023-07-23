@@ -19,7 +19,11 @@
       row-key="name"
       :filter="filter"
       class="q-mt-md"
+      :loading="loading"
     >
+      <template #loading>
+        <q-inner-loading showing color="primary" />
+      </template>
       <template #body-cell-status="props">
         <q-td>
           <q-badge
@@ -54,14 +58,23 @@
             size="10px"
             @click="eventDetails(props.row.event_id)"
           >
-            <!-- <q-menu>
+          </q-btn>
+          <q-btn
+            class=""
+            icon="mdi-check-decagram"
+            flat
+            dense
+            color="primary"
+            size="10px"
+          >
+            <q-menu>
               <div class="row no-wrap q-pa-md">
                 <div class="column">
                   <q-select
                     class="q-ma-xs"
                     dense
                     v-model="customer_status"
-                    :options="['active', 'blocked']"
+                    :options="['active', 'closed']"
                   >
                   </q-select>
                   <q-btn
@@ -71,11 +84,11 @@
                     label="Save"
                     push
                     size="sm"
-                    @click="blockCustomer(props.row.customer_id)"
+                    @click="activateEvent(props.row.event_id)"
                   />
                 </div>
               </div>
-            </q-menu> -->
+            </q-menu>
           </q-btn>
         </q-td>
       </template>
@@ -101,8 +114,9 @@ import { onMounted, ref } from "vue";
 import { api } from "boot/axios";
 import { useQuasar } from "quasar";
 import { useRouter } from "vue-router";
+const filter = ref("");
 const router = useRouter();
-
+const EventActivation = ref("");
 const rows = ref([]);
 const columns = ref([
   {
@@ -148,8 +162,14 @@ const getEvents = async () => {
   }
 };
 
-const eventDetails = (event_id) =>
-  router.push(`/admin/event/${event_id}`);
+const activateEvent = async (event_id) => {
+  try {
+    const response = await api.post(`/activateEvent/${event_id}`);
+    rows.value = response.data.data;
+  } catch (error) {}
+};
+
+const eventDetails = (event_id) => router.push(`/admin/event/${event_id}`);
 
 onMounted(() => {
   getEvents();

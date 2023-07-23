@@ -66,12 +66,9 @@ class AlbumController extends Controller
         //     return response(new AlbumResource($album))
         //         ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
         // }
-
-        return response()->json([
-            'album' => $album,
-            'status' => Response::HTTP_CREATED,
-            'message' => "Album stored successfully"
-        ]);
+        $albums = Album::where('user_id', $user->user_id)->get();
+        return response(AlbumResource::collection($albums))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**
@@ -96,9 +93,34 @@ class AlbumController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Album $album)
+    public function update(Request $request, $album_id)
     {
-        //
+        $user = Auth::user();
+
+        $validator = Validator::make($request->all(), [
+            'album_name' => ['string', 'required', 'max:255'],
+            'album_link' => ['string', 'required', 'max:255'],
+            'album_date' => ['string', 'required'],
+            'number_of_tracks' => ['numeric', 'required'],
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['error' => $validator->errors()], 400);
+        }
+
+        // Find the specific album by its album_id and user_id
+        $album = Album::where('album_id', $album_id)
+            ->where('user_id', $user->user_id)
+            ->first();
+
+        if (!$album) {
+            return response()->json(['error' => 'albums not found'], 404);
+        }
+
+        $album->update($request->all());
+        $albums = Album::where('user_id', $user->user_id)->get();
+        return response(AlbumResource::collection($albums))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
     }
 
     /**

@@ -147,10 +147,8 @@ class ArtistProfileController extends Controller
         }
 
         if ($artistProfile->save()) {
-            return response()->json([
-                'status' => Response::HTTP_CREATED,
-                'message' => $message,
-            ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
+            return \response(new ArtistProfileResource($artistProfile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
         }
 
         return response()->json([
@@ -176,10 +174,8 @@ class ArtistProfileController extends Controller
         $artistProfile->labels = $request->input('labels');
 
         if ($artistProfile->save()) {
-            return \response()->json([
-                'status' => Response::HTTP_CREATED,
-                'message' => "Profile updated"
-            ])->setStatusCode(Response::HTTP_CREATED, Response::$statusTexts[Response::HTTP_CREATED]);
+            return \response(new ArtistProfileResource($artistProfile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
         }
 
         return \response()->json([
@@ -245,8 +241,8 @@ class ArtistProfileController extends Controller
         }
 
         if ($artistProfile->save()) {
-            return response(new ArtistProfileResource($artistProfile))
-                ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
+            return \response(new ArtistProfileResource($artistProfile))
+            ->setStatusCode(Response::HTTP_OK, Response::$statusTexts[Response::HTTP_OK]);
         }
 
         return response()->json([

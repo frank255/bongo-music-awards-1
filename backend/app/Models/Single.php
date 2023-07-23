@@ -10,6 +10,7 @@ class Single extends Model
     use HasFactory;
 
     protected $fillable = [
+        'user_id',
         'single_name',
         'single_date',
         'single_link'

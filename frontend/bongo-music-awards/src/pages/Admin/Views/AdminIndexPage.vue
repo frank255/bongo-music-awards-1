@@ -1,6 +1,6 @@
 <template>
   <q-page padding class="q-mt-xl">
-    <div class="row q-gutter-md justify-between">
+    <div class="flex q-gutter-md flex-center justify-evenly">
       <!--card 1-->
       <ArtistCard class="col-xs-12 col-sm-6 col-md-2" />
       <EventsCard class="col-xs-12 col-sm-6 col-md-2" />
@@ -91,62 +91,66 @@
     </div> -->
     <div class="q-mt-xl q-gutter-y-lg">
       <q-table
-      bordered
-      :rows="rows"
-      :columns="columns"
-      row-key="name"
-      :filter="filter"
-      class="q-mt-md"
-    >
-    <template #body-cell-status="props">
-        <q-td>
-          <q-badge
-            v-if="props.row.status === 'closed'"
-            dense
-            color="red"
-            size="10px"
-            label="closed"
-            class="q-ma-xs"
-          >
-          </q-badge>
+        bordered
+        :rows="rows"
+        :columns="columns"
+        row-key="name"
+        :filter="filter"
+        class="q-mt-md"
+        :loading="loading"
+      >
+        <template #loading>
+          <q-inner-loading showing color="primary" />
+        </template>
 
-          <q-badge
-            v-if="props.row.status === 'active'"
+        <template #body-cell-status="props">
+          <q-td>
+            <q-badge
+              v-if="props.row.status === 'closed'"
+              dense
+              color="red"
+              size="10px"
+              label="closed"
+              class="q-ma-xs"
+            >
+            </q-badge>
+
+            <q-badge
+              v-if="props.row.status === 'active'"
+              dense
+              color="green"
+              size="10px"
+              label="Active"
+              class="q-ma-xs"
+            >
+            </q-badge>
+          </q-td>
+        </template>
+        <template #top-right>
+          <q-input
+            outlined
             dense
-            color="green"
-            size="10px"
-            label="Active"
-            class="q-ma-xs"
+            debounce="300"
+            v-model="filter"
+            placeholder="Search"
           >
-          </q-badge>
-        </q-td>
-      </template>
-      <template #top-right>
-        <q-input
-          outlined
-          dense
-          debounce="300"
-          v-model="filter"
-          placeholder="Search"
-        >
-          <template #append>
-            <q-icon name="mdi-magnify" />
-          </template>
-        </q-input>
-      </template>
-      <template #top-left>
+            <template #append>
+              <q-icon name="mdi-magnify" />
+            </template>
+          </q-input>
+        </template>
+        <template #top-left>
           <p class="text-weight-bolder text-capitalize q-pl-md">
             Recent Events
           </p>
         </template>
-    </q-table>
+      </q-table>
     </div>
   </q-page>
 </template>
 
 <script setup>
 import { ref } from "vue";
-
 
 import ArtistCard from "src/pages/Admin/components/ArtistCard.vue";
 import NomineesCard from "src/pages/Admin/components/NomineesCard.vue";

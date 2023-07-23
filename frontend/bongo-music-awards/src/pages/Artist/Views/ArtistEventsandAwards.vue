@@ -2,7 +2,9 @@
   <q-page padding>
     <div class="row items-center q-mt-xl">
       <p class="font-body-small q-pl-md col">
-        <span class="text-weight-bolder text-capitalize text-h6">events and awards</span>
+        <span class="text-weight-bolder text-capitalize text-h6"
+          >events and awards</span
+        >
       </p>
     </div>
     <q-table
@@ -13,10 +15,10 @@
       :filter="filter"
       class="q-mt-md"
     >
-    <template #body-cell-status="props">
+      <template #body-cell-status="props">
         <q-td>
           <q-badge
-            v-if="props.row.status === 'closed'"
+            v-if="props.row.event_status === 'closed'"
             dense
             color="red"
             size="10px"
@@ -26,7 +28,7 @@
           </q-badge>
 
           <q-badge
-            v-if="props.row.status === 'active'"
+            v-if="props.row.event_status === 'active'"
             dense
             color="green"
             size="10px"
@@ -36,7 +38,7 @@
           </q-badge>
         </q-td>
       </template>
-      <template #body-cell-action="">
+      <template #body-cell-action="props">
         <q-td>
           <q-btn
             class=""
@@ -45,30 +47,8 @@
             dense
             color="primary"
             size="10px"
-            to="/artist/awardsnominations"
+            @click="eventDetails(props.row.event_id)"
           >
-            <!-- <q-menu>
-              <div class="row no-wrap q-pa-md">
-                <div class="column">
-                  <q-select
-                    class="q-ma-xs"
-                    dense
-                    v-model="customer_status"
-                    :options="['active', 'blocked']"
-                  >
-                  </q-select>
-                  <q-btn
-                    class="q-ma-xs"
-                    v-close-popup
-                    color="primary"
-                    label="Save"
-                    push
-                    size="sm"
-                    @click="blockCustomer(props.row.customer_id)"
-                  />
-                </div>
-              </div>
-            </q-menu> -->
           </q-btn>
         </q-td>
       </template>
@@ -90,13 +70,18 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { api } from "src/boot/axios";
+import { onMounted, ref } from "vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+const filter = ref("");
+
 const columns = ref([
   {
     name: "event_name",
     label: "Event Name",
     align: "left",
-    field: (row) => row.event_name,
+    field: (row) => row.event_title,
     sortable: true,
   },
   {
@@ -110,12 +95,13 @@ const columns = ref([
     name: "date",
     label: "Date",
     align: "left",
-    field: (row) => row.date,
+    field: (row) => row.event_date,
     sortable: true,
   },
   {
     name: "status",
     label: "Status",
+    field: (row) => row.event_status,
     align: "left",
   },
   {
@@ -124,27 +110,23 @@ const columns = ref([
     align: "left",
   },
 ]);
-const rows = [
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "active",
-  },
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "closed",
-  },
-  {
-    date: "20/10/2022",
-    event_name: "Bongo Music Awards 2022",
-    event_number: "BM22",
-    status: "active",
-  },
-  // Add more rows as needed
-];
+const rows = ref([]);
+
+const getEvents = async () => {
+  try {
+    const response = await api.get("/events");
+    console.log(response.data.data);
+    rows.value = response.data.data;
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+const eventDetails = (event_id) => router.push(`/artist/event/${event_id}`);
+
+onMounted(() => {
+  getEvents();
+});
 </script>
 
 <style lang="scss" scoped></style>
