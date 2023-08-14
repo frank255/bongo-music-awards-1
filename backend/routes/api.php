@@ -8,7 +8,9 @@ use App\Http\Controllers\GenreController;
 use \App\Http\Controllers\CategoryController;
 use \App\Http\Controllers\ArtistProfileController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\NomineesController;
 use App\Http\Controllers\SingleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -57,3 +59,5 @@ Route::get('/genre_categories/{event_id}',[GenreController::class,'getGenreCateg
 //Route::middleware('auth:sanctum')->group( function (Request $request) {
 //    Route::post('/logout',[AuthController::class,'logout']);
 //});
+
+Route::apiResource('/nominees',NomineesController::class);
