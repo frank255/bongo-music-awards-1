@@ -293,7 +293,7 @@ const getNominees = async () => {
   } catch (error) {
     if (error.response && error.response.status === 404) {
       $q.notify({
-        message: "Not Found, Please Add Nominees",
+        message: "Not Found, Please Add New Nominees",
         color: "red",
         icon: "warning",
         position: "top-right",

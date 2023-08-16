@@ -1,1 +1,0 @@
-import{Q as a}from"./QPage.bbff6016.js";import{aM as e,o as t,c as r,w as c,h as o}from"./index.598c9a8d.js";const s={};function n(_,d){return t(),r(a,{padding:""},{default:c(()=>[o(" artist works ")]),_:1})}var m=e(s,[["render",n]]);export{m as default};
