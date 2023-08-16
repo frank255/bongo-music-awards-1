@@ -293,9 +293,9 @@ const getNominees = async () => {
   } catch (error) {
     if (error.response && error.response.status === 404) {
       $q.notify({
-        message: "Bill blala successfully",
-        color: "green",
-        icon: "check",
+        message: "Not Found, Please Add Nominees",
+        color: "red",
+        icon: "warning",
         position: "top-right",
       });
     } else {
