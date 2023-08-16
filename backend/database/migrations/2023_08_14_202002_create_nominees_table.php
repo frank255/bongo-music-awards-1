@@ -16,6 +16,7 @@ return new class extends Migration
             $table->integer("event_id");
             $table->string("artist_name");
             $table->string("genre");
+            $table->string("category");
             $table->string("artwork_name");
             $table->string("link");
             $table->timestamps();

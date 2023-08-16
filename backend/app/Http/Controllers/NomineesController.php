@@ -33,7 +33,7 @@ class NomineesController extends Controller
             'link' => ['required', 'string'],
         ]);
 
-        if ($validator->fails()){
+        if ($validator->fails()) {
             return response()->json([
                 'message' => $validator->messages(),
                 'status' => Response::HTTP_FORBIDDEN,
@@ -51,7 +51,13 @@ class NomineesController extends Controller
      */
     public function show($id)
     {
-        //
+        $nominees = Nominee::where('event_id', $id)->get();
+
+        if ($nominees->isEmpty()) {
+            return response()->json(['error' => 'nominees not found'], 404);
+        }
+
+        return response()->json($nominees->toArray());
     }
 
     /**
@@ -65,11 +71,18 @@ class NomineesController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Nominee $nomenee)
+    public function destroy($nominee_id)
     {
-        $nomenee->delete();
+        $nominee = Nominee::find($nominee_id);
+
+        if (!$nominee) {
+            return response()->json(['error' => 'Nominee not found'], Response::HTTP_NOT_FOUND);
+        }
+
+        $nominee->delete();
+
         return response()->json([
-            'message' => 'Nominee deleted successful',
+            'message' => 'Nominee deleted successfully',
             'status' => Response::HTTP_OK
         ]);
     }

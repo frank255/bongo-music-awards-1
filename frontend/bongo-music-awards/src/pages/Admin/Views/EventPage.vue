@@ -9,84 +9,51 @@
       >
         {{ EventActivation === "active" ? "Close Event" : "Activate Event" }}
       </q-btn>
-      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
-        <q-select
-          bg-color="white"
-          label="Genres"
-          :options="['Bongo Fleva', 'Singeli']"
-          borderless
-          v-model="genres"
-          @update:model-value="updateFilters(genres, 'b')"
-        >
-        </q-select>
-      </q-card>
-      <q-card class="col-xs-12 col-sm-6 col-md-3" flat bordered>
-        <q-select
-          bg-color="white"
-          standout
-          label="Category"
-          :options="['Best song of the year', 'Best artist of the year']"
-          borderless
-          v-model="category"
-          @update:model-value="updateFilters(category, 'd')"
-        >
-        </q-select>
-      </q-card>
-    </div>
-    <div class="q-pa-">
-      <q-banner
-        v-if="filter_changes"
-        inline-actions
-        class="q-ml-xs q-mt-md bordered"
+      <q-select
+        v-model="filterGenre"
+        outlined
+        dense
+        :options="genreoptions"
+        label="Genre"
+        :style="$q.platform.is.desktop ? 'width: 150px' : 'width:200px'"
       >
-        <div>
-          <q-chip
-            v-if="events_data != ''"
-            removable
-            v-model="events_data"
-            color="primary"
-            text-color="white"
-          >
-            {{ events_data }}
-          </q-chip>
-          <q-chip
-            v-if="genre_data != ''"
-            removable
-            v-model="genre_data"
-            color="primary"
-            text-color="white"
-          >
-            {{ genre_data }}
-          </q-chip>
-          <q-chip
-            v-if="category_data != ''"
-            removable
-            v-model="category_data"
-            color="primary"
-            text-color="white"
-          >
-            {{ category_data }}
-          </q-chip>
-        </div>
-        <template v-slot:action>
-          <q-btn
-            class="text-capitalize"
-            color="primary"
-            label="Apply Filter"
-            @click="applyFilter()"
+        <template #prepend>
+          <q-icon
+            name="mdi-close-circle"
+            @click="clearFilter('filterGenre')"
+            v-if="filterGenre"
+            class="q-mr-sm cursor-pointer"
           />
         </template>
-      </q-banner>
-    </div>
+      </q-select>
 
+      <q-select
+        v-model="filterCategory"
+        outlined
+        dense
+        :options="categoryoptions"
+        label="Category"
+        :style="$q.platform.is.desktop ? 'width: 150px' : 'width:200px'"
+      >
+        <template #prepend>
+          <q-icon
+            name="mdi-close-circle"
+            @click="clearFilter('filterCategory')"
+            v-if="filterCategory"
+            class="q-mr-sm cursor-pointer"
+          />
+        </template>
+      </q-select>
+    </div>
     <div class="q-mt-xl">
       <q-table
         bordered
         flat
-        :rows="rows"
+        :rows="filteredItems"
         :columns="columns"
         row-key="name"
         :filter="filter"
+        :filter-method="customFilter"
         class="q-mt-md"
       >
         <template #top-right>
@@ -96,7 +63,7 @@
             color="primary"
             @click="
               // approveLoan(props.row.loan_id);
-              APPROVAL_DIALOG = true
+              newNomineeDialog = true
             "
           >
             Add Nomenees
@@ -111,18 +78,44 @@
             <a :href="props.row.link" target="_blank">{{ props.row.link }}</a>
           </q-td>
         </template>
+        <template #body-cell-action="props">
+          <q-td>
+            <q-btn
+              icon="mdi-delete"
+              flat
+              color="primary"
+              @click="deleteNominee(props.row.nominee_id)"
+            >
+              <q-tooltip>delete</q-tooltip>
+            </q-btn>
+          </q-td>
+        </template>
       </q-table>
     </div>
-    <q-dialog v-model="APPROVAL_DIALOG" position="right">
+    <q-dialog v-model="newNomineeDialog" position="right">
       <q-card style="width: 500px; max-width: 80vw; height: 100vh">
         <q-card-section>
           <div class="text-h6">Fill the form bellow</div>
         </q-card-section>
 
         <q-card-section class="q-pt-none q-gutter-y-md">
-          <q-input v-model="artwork_name" dense outlined label="Artist Name" />
+          <q-select
+            outlined
+            v-model="artist_name"
+            use-input
+            input-debounce="0"
+            label="Artist Name"
+            :options="options"
+            @filter="filterFn"
+          >
+            <template v-slot:no-option>
+              <q-item>
+                <q-item-section class="text-grey"> No results </q-item-section>
+              </q-item>
+            </template>
+          </q-select>
           <q-input v-model="artwork_name" dense outlined label="Artwork Name" />
-          <q-input v-model="artwork_link" dense outlined label="Artwork Link" />
+          <q-input v-model="link" dense outlined label="Artwork Link" />
         </q-card-section>
 
         <q-card-actions>
@@ -131,14 +124,13 @@
             outline
             color="negative"
             label="Cancel"
-            @click="declineLoans()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
           <q-btn
             color="primary"
             label="Submit"
-            @click="approveLoans()"
+            @click="addNominees()"
             class="q-mx-sm text-capitalize"
             v-close-popup
           />
@@ -149,9 +141,14 @@
 </template>
 
 <script setup>
-import { ref, watch, onMounted } from "vue";
+import { ref, watch, onMounted, computed } from "vue";
 import { api } from "src/boot/axios";
 import { useRoute } from "vue-router";
+import { useQuasar } from "quasar";
+const $q = useQuasar();
+const categoryoptions = ["Best Song Of The Year", "Best Artist Of The Year"];
+const genreoptions = ["Bongo Fleva", "Singeli"];
+
 const columns = ref([
   {
     name: "artist_name",
@@ -178,7 +175,7 @@ const columns = ref([
     name: "work_name",
     label: "Artwork Name",
     align: "left",
-    field: (row) => row.work_name,
+    field: (row) => row.artwork_name,
     sortable: true,
   },
   {
@@ -188,41 +185,21 @@ const columns = ref([
     field: (row) => row.link,
     sortable: true,
   },
+  {
+    name: "action",
+    label: "Action",
+    align: "left",
+  },
 ]);
-const rows = [
-  {
-    category: "Best Artist of the Year",
-    artist_name: "Ally kiba",
-    genre: "Song of the year",
-    work_name: "Utu",
-    link: "http://blablablab.com",
-  },
-  {
-    category: "Best Artist of the Year",
-    artist_name: "Harmonize",
-    genre: "Song of the year",
-    work_name: "I'm single",
-    link: "http://blablablab.com",
-  },
-  {
-    category: "Best Artist of the Year",
-    artist_name: "Marioo",
-    genre: "Song of the year",
-    work_name: "Raha",
-    link: "http://blablablab.com",
-  },
-  // Add more rows as needed
-];
+const rows = ref([]);
 const EventActivation = ref("");
-const events = ref("");
-const genres = ref("");
-const category = ref("");
-const filters = ref({});
-const APPROVAL_DIALOG = ref(false);
+const artwork_name = ref("");
+const link = ref("");
+const newNomineeDialog = ref(false);
 // const filter = ref([]);
 const filter_changes = ref(false);
-const events_data = ref("");
-const genre_data = ref("");
+const filterGenre = ref("");
+const filterCategory = ref("");
 const category_data = ref("");
 const route = useRoute();
 
@@ -243,7 +220,33 @@ const sendAPIRequest = async (newStatus) => {
     console.error("Error sending API:", error);
   }
 };
-
+const addNominees = async () => {
+  try {
+    const response = await api.post("/nominees", {
+      event_id: route.params.event_id,
+      genre: filterGenre.value,
+      category: filterCategory.value,
+      artist_name: artist_name.value,
+      artwork_name: artwork_name.value,
+      link: link.value,
+    });
+    window.location.reload();
+    $q.notify({
+      message: "Nominee Added Successfully",
+      color: "green",
+      icon: "check",
+      position: "top-right",
+    });
+  } catch (error) {
+    $q.notify({
+      message: "Please Select Genre and Category",
+      color: "red",
+      icon: "warning",
+      position: "top-right",
+    });
+    console.log(error);
+  }
+};
 const getEventStatus = async () => {
   try {
     const response = await api.get(`/events/${route.params.event_id}`);
@@ -254,32 +257,105 @@ const getEventStatus = async () => {
   }
 };
 
-const updateFilters = (filter_value, type) => {
-  filter_changes.value = true;
-  if (type === "l") {
-    events_data.value = filter_value;
-  } else if (type === "b") {
-    genre_data.value = filter_value;
-  } else if (type === "d") {
-    category_data.value = filter_value;
+const filteredItems = computed(() => {
+  const genre = filterGenre.value.toLowerCase();
+  const category = filterCategory.value.toLowerCase();
+  return rows.value.filter((row) => {
+    // Combine all the filters with logical AND (&&)
+    return (
+      // Filter logic based on your specific requirements
+      (genre === "" || row.genre.toLowerCase().includes(genre)) &&
+      (category === "" || row.category.toLowerCase().includes(category))
+    );
+  });
+});
+const customFilter = (rows, terms) => {
+  if (terms.filterGenre !== undefined) {
+    filterGenre.value = terms.filterGenre;
   }
 
-  filters.value = {
-    events_data: events_data.value,
-    genre_data: genre_data.value,
-    category_data: category_data.value,
-  };
+  if (terms.filterCategory !== undefined) {
+    filterCategory.value = terms.filterCategory;
+  }
+  return filteredRows.value;
+};
+const clearFilter = (filterType) => {
+  if (filterType === "filterGenre") {
+    filterGenre.value = "";
+  } else if (filterType === "filterCategory") {
+    filterCategory.value = "";
+  }
+};
+const getNominees = async () => {
+  try {
+    const response = await api.get(`/nominees/${route.params.event_id}`);
+    rows.value = response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      $q.notify({
+        message: "Bill blala successfully",
+        color: "green",
+        icon: "check",
+        position: "top-right",
+      });
+    } else {
+      // Handle other errors if needed
+      console.error("Error fetching patient records:", error);
+    }
+  }
 };
 
-const applyFilter = () => {
-  console.log(filters.value);
-};
-const removeChips = () => {
-  filters.value.length === 0 ? (filter_changes.value = false) : "";
-};
+const namesOptions = ref([]);
 
+const options = ref(namesOptions);
+const artist_name = ref(null);
+
+const filterFn = (val, update) => {
+  if (val === "") {
+    update(() => {
+      options.value = namesOptions.value;
+    });
+    return;
+  }
+
+  update(() => {
+    const needle = val.toLowerCase();
+    options.value = namesOptions.value.filter(
+      (v) => v.toLowerCase().indexOf(needle) > -1
+    );
+  });
+};
+const fetchArtistNames = async () => {
+  try {
+    const response = await api.get("/artist_list");
+    // Extract the 'name' property from each object in the response data
+    const names = response.data.map((item) => item.name);
+    // Assign the names array to the 'unitofmeasureoptions' ref object
+    namesOptions.value = names;
+    console.log(namesOptions.value);
+  } catch (error) {
+    console.error("Error fetching preferences:", error);
+  }
+};
+const deleteNominee = async (nominee_id) => {
+  try {
+    // Make the API call to delete the item price
+    const response = await api.delete(`/nominees/${nominee_id}`);
+    window.location.reload();
+    $q.notify({
+      message: "Nominee Deleted Successfully",
+      color: "green",
+      icon: "check",
+      position: "top-right",
+    });
+  } catch (error) {
+    console.error("Error deleting item price:", error);
+  }
+};
 onMounted(() => {
   getEventStatus();
+  getNominees();
+  fetchArtistNames();
 });
 </script>
 
