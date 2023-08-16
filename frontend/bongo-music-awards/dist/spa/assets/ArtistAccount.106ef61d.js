@@ -1,0 +1,1 @@
+import{Q as t}from"./QPage.bbff6016.js";import{aM as a,o as e,c,w as r,h as o}from"./index.598c9a8d.js";const s={};function n(_,f){return e(),c(t,{padding:""},{default:r(()=>[o(" artist account ")]),_:1})}var p=a(s,[["render",n]]);export{p as default};
