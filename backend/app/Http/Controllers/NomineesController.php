@@ -76,7 +76,7 @@ class NomineesController extends Controller
         $nominee = Nominee::find($nominee_id);
 
         if (!$nominee) {
-            return response()->json(['error' => 'Nominee not found'], Response::HTTP_NOT_FOUND);
+            return response()->json(['error' => 'Nominee not found select another'], Response::HTTP_NOT_FOUND);
         }
 
         $nominee->delete();
